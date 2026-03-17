@@ -1,0 +1,13 @@
+package com.ingenium.jyps;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class JyPsApplicationTests {
+
+    @Test
+    void contextLoads() {
+    }
+
+}
