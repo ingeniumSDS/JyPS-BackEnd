@@ -26,8 +26,8 @@ public class UsuarioRepositoryAdapter implements UsuarioRepositoryPort {
 
     @Override
     public Optional<Usuario> findByCorreo(String correo) {
-        // Esto lo implementaremos después, ¡enfócate en el save!
-        return Optional.empty();
+        // Busca en BD y si lo encuentra, lo traduce al Dominio usando tu método mapToDomain
+        return repository.findByCorreo(correo).map(this::mapToDomain);
     }
 
     @Override
@@ -94,6 +94,7 @@ public class UsuarioRepositoryAdapter implements UsuarioRepositoryPort {
                     entity.getCuenta().getPassword(),
                     entity.getCuenta().getIntentosFallidos(),
                     entity.getCuenta().getTokenRecuperacion(),
+                    entity.getCuenta().getTokenExpiresAt(),
                     entity.getCuenta().isTokenUsado(),
                     entity.getCuenta().isBloqueada(),
                     entity.getCuenta().isActiva(),

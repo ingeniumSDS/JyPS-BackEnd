@@ -2,6 +2,7 @@ package com.ingenium.jyps.users.domain.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 
@@ -25,11 +26,12 @@ public class Cuenta {
     }
 
     // Constructor 2: EXCLUSIVO PARA REHIDRATAR DESDE BD (Recibe datos)
-    public Cuenta(String password, int intentosFallidos, String tokenRecuperacion,
+    public Cuenta(String password, int intentosFallidos, String tokenRecuperacion, LocalDateTime tokenExpiresAt,
                   boolean tokenUsado, boolean bloqueada, boolean activa, LocalDateTime blockedAt) {
         this.password = password;
         this.intentosFallidos = intentosFallidos;
         this.tokenRecuperacion = tokenRecuperacion;
+        this.tokenExpiresAt = tokenExpiresAt;
         this.tokenUsado = tokenUsado;
         this.bloqueada = bloqueada;
         this.activa = activa;
