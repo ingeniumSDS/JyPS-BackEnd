@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public interface UsuarioRepositoryPort {
 
-   void save(Usuario usuario);
+   Usuario save(Usuario usuario);
 
    Optional<Usuario> findByCorreo(String email);
 

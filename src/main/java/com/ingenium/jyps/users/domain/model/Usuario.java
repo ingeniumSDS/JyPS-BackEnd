@@ -1,10 +1,10 @@
 package com.ingenium.jyps.users.domain.model;
 
+import com.ingenium.jyps.departamentos.domain.model.Departamento;
 import com.ingenium.jyps.users.domain.model.enums.Roles;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -20,6 +20,7 @@ public class Usuario {
     private LocalTime horaEntrada;
     private LocalTime horaSalida;
     private List<Roles> roles;
+    private Departamento departamento;
 
     private Cuenta cuenta;
 
@@ -30,7 +31,8 @@ public class Usuario {
                    String telefono,
                    LocalTime horaEntrada,
                    LocalTime horaSalida,
-                   List<Roles> roles) {
+                   List<Roles> roles,
+                   Departamento departamento) {
 
         validarCampoTexto(nombre, "nombre", 100);
         validarCampoTexto(apellidoPaterno, "apellido paterno", 50);
@@ -38,6 +40,7 @@ public class Usuario {
         validarCorreo(correo);
         validarTelefono(telefono);
         validarRoles(roles);
+        validarDepartamento(departamento);
 
         if (roles.contains(Roles.EMPLEADO)) {
             validarJornada(horaEntrada, horaSalida);
@@ -54,12 +57,13 @@ public class Usuario {
         this.correo = correo.trim().toLowerCase();
         this.telefono = telefono.trim();
         this.roles = roles;
+        this.departamento = departamento;
     }
 
     // Constructor para Rehidratar (recibe el ID y TODO el estado, incluyendo la Cuenta)
     public Usuario(Long id, String nombre, String apellidoPaterno, String apellidoMaterno,
                    String correo, String telefono, LocalTime horaEntrada, LocalTime horaSalida,
-                   List<Roles> roles, Cuenta cuenta) {
+                   List<Roles> roles, Departamento departamento, Cuenta cuenta) {
         this.id = id;
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
@@ -69,6 +73,7 @@ public class Usuario {
         this.horaEntrada = horaEntrada;
         this.horaSalida = horaSalida;
         this.roles = roles;
+        this.departamento = departamento;
         this.cuenta = cuenta;
     }
 
@@ -86,6 +91,12 @@ public class Usuario {
 
         if (nombreCampo.equals("nombre") || nombreCampo.equals("apellido paterno") || nombreCampo.equals("apellido materno")) {
             validarCaracteres(campo, nombreCampo);
+        }
+    }
+
+    private void validarDepartamento(Departamento departamento) {
+        if (departamento == null) {
+            throw new IllegalArgumentException("Debe seleccionar un departamento.");
         }
     }
 

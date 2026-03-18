@@ -1,5 +1,6 @@
 package com.ingenium.jyps.users.application.ports.in;
 
+import com.ingenium.jyps.departamentos.domain.model.Departamento;
 import com.ingenium.jyps.users.domain.model.enums.Roles;
 
 import java.time.LocalTime;
@@ -13,6 +14,7 @@ public record RegistrarUsuarioCommand(
         String telefono,
         LocalTime horaEntrada,
         LocalTime horaSalida,
-        List<Roles> roles
+        List<Roles> roles,
+        Long departamentoId
 ) {
 }
