@@ -37,8 +37,6 @@ public class UsuarioEntity {
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "usuario_roles", joinColumns = @JoinColumn(name = "usuario_id"))
     private List<Roles> roles;
-    @Enumerated(EnumType.STRING)
-
     @ManyToOne(fetch = FetchType.LAZY) // LAZY es buena práctica para no saturar la memoria
     @JoinColumn(name = "departamento_id", nullable = false)
     private DepartamentoEntity departamento;
