@@ -10,6 +10,7 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -43,6 +44,11 @@ public class UsuarioRepositoryAdapter implements UsuarioRepositoryPort {
     @Override
     public Optional<Usuario> findById(Long id) {
        return repository.findById(id).map(this::mapToDomain);
+    }
+
+    @Override
+    public List<Usuario> findAll() {
+        return repository.findAll().stream().map(this::mapToDomain).toList();
     }
 
     @Override

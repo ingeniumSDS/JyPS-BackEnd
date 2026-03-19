@@ -151,4 +151,12 @@ public class Usuario {
     }
 
 
+    // En tu clase Usuario
+    public void actualizarDatosPersonales(String nombre, String apellidoPaterno, String apellidoMaterno, String correo, String telefono) {
+        if (nombre != null && !nombre.isBlank()) this.nombre = nombre;
+        if (apellidoPaterno != null && !apellidoPaterno.isBlank()) this.apellidoPaterno = apellidoPaterno;
+        if (apellidoMaterno != null && !apellidoMaterno.isBlank()) this.apellidoMaterno = apellidoMaterno;
+        if (correo != null && !correo.isBlank()) this.correo = correo;
+        if (telefono != null && !telefono.isBlank()) this.telefono = telefono;
+    }
 }
