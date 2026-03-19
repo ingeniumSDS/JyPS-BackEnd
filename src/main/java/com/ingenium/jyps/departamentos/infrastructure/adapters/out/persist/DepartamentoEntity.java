@@ -1,5 +1,6 @@
 package com.ingenium.jyps.departamentos.infrastructure.adapters.out.persist;
 
+import com.ingenium.jyps.users.infrastructure.adapters.out.persist.UsuarioEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,5 +21,8 @@ public class DepartamentoEntity {
     private String nombre;
     private String descripcion;
     private boolean activo;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_jefe")
+    private UsuarioEntity jefe;
 
 }

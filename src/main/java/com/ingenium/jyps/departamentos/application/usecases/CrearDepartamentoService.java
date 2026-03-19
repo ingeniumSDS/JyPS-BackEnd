@@ -1,4 +1,4 @@
-package com.ingenium.jyps.departamentos.application.services;
+package com.ingenium.jyps.departamentos.application.usecases;
 
 import com.ingenium.jyps.departamentos.application.ports.in.CrearDepartamentoCommand;
 import com.ingenium.jyps.departamentos.application.ports.in.CrearDepartamentoUseCase;
@@ -26,7 +26,8 @@ public class CrearDepartamentoService implements CrearDepartamentoUseCase {
         // 2. Crear la entidad de Dominio (usando tu constructor 1)
         Departamento nuevoDepartamento = new Departamento(
                 command.nombre(),
-                command.descripcion()
+                command.descripcion(),
+                command.jefeId()
         );
 
         // AQUI: Capturamos y retornamos el objeto que ya trae el ID de la base de datos

@@ -45,7 +45,7 @@ public class RegistrarUsuarioService implements RegistrarUsuarioUseCase {
                 command.horaEntrada(),
                 command.horaSalida(),
                 command.roles(),
-                departamento
+                command.departamentoId()
         );
 
         String tokenAcceso = UUID.randomUUID().toString();

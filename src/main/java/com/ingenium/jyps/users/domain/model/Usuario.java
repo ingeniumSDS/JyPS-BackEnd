@@ -20,7 +20,7 @@ public class Usuario {
     private LocalTime horaEntrada;
     private LocalTime horaSalida;
     private List<Roles> roles;
-    private Departamento departamento;
+    private Long departamentoId;
 
     private Cuenta cuenta;
 
@@ -32,7 +32,7 @@ public class Usuario {
                    LocalTime horaEntrada,
                    LocalTime horaSalida,
                    List<Roles> roles,
-                   Departamento departamento) {
+                   Long departamentoId) {
 
         validarCampoTexto(nombre, "nombre", 100);
         validarCampoTexto(apellidoPaterno, "apellido paterno", 50);
@@ -40,7 +40,6 @@ public class Usuario {
         validarCorreo(correo);
         validarTelefono(telefono);
         validarRoles(roles);
-        validarDepartamento(departamento);
 
         if (roles.contains(Roles.EMPLEADO)) {
             validarJornada(horaEntrada, horaSalida);
@@ -57,13 +56,13 @@ public class Usuario {
         this.correo = correo.trim().toLowerCase();
         this.telefono = telefono.trim();
         this.roles = roles;
-        this.departamento = departamento;
+        this.departamentoId = departamentoId;
     }
 
     // Constructor para Rehidratar (recibe el ID y TODO el estado, incluyendo la Cuenta)
     public Usuario(Long id, String nombre, String apellidoPaterno, String apellidoMaterno,
                    String correo, String telefono, LocalTime horaEntrada, LocalTime horaSalida,
-                   List<Roles> roles, Departamento departamento, Cuenta cuenta) {
+                   List<Roles> roles, Long departamentoId, Cuenta cuenta) {
         this.id = id;
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
@@ -73,7 +72,7 @@ public class Usuario {
         this.horaEntrada = horaEntrada;
         this.horaSalida = horaSalida;
         this.roles = roles;
-        this.departamento = departamento;
+        this.departamentoId = departamentoId;
         this.cuenta = cuenta;
     }
 

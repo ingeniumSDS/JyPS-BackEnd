@@ -1,5 +1,7 @@
 package com.ingenium.jyps.departamentos.domain.model;
 
+import com.ingenium.jyps.users.domain.model.Usuario;
+import com.ingenium.jyps.users.infrastructure.adapters.out.persist.UsuarioEntity;
 import lombok.Getter;
 
 @Getter
@@ -8,9 +10,10 @@ public class Departamento {
     private String nombre;
     private String descripcion;
     private boolean activo;
+    private Long jefeId;
 
     // CONSTRUCTOR 1: Para crear un nuevo departamento (Nacimiento)
-    public Departamento(String nombre, String descripcion) {
+    public Departamento(String nombre, String descripcion, Long jefeId) {
         validarCampoObligatorio(nombre, "nombre");
         this.nombre = nombre.trim().toUpperCase(); // Un buen toque es normalizar el nombre
 
@@ -21,15 +24,17 @@ public class Departamento {
             this.descripcion = descripcion.trim();
         }
 
+        this.jefeId = jefeId;
         this.activo = true; // Por defecto nace activo
     }
 
     // CONSTRUCTOR 2: Para rehidratar desde la base de datos (Adaptador)
-    public Departamento(Long id, String nombre, String descripcion, boolean activo) {
+    public Departamento(Long id, String nombre, String descripcion, boolean activo,  Long jefeId) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.activo = activo;
+        this.jefeId = jefeId;
     }
 
     private void validarCampoObligatorio(String campo, String nombreCampo) {
