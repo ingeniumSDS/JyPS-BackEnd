@@ -15,6 +15,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/usuarios")
+@CrossOrigin("*")
 public class UsuarioController {
 
     private final RegistrarUsuarioUseCase registrarUsuarioUseCase;
