@@ -5,7 +5,7 @@ import com.ingenium.jyps.users.domain.model.Usuario;
 import java.util.List;
 import java.util.Optional;
 
-public interface UsuarioRepositoryPort {
+public interface UsuarioRepository {
 
    Usuario save(Usuario usuario);
 

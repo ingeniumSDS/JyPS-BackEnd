@@ -1,12 +1,12 @@
-package com.ingenium.jyps.users.application.usecases;
+package com.ingenium.jyps.users.application.services;
 
 import com.ingenium.jyps.departamentos.domain.model.Departamento;
 import com.ingenium.jyps.departamentos.domain.ports.out.DepartamentoRepositoryPort;
-import com.ingenium.jyps.users.application.ports.in.RegistrarUsuarioCommand;
-import com.ingenium.jyps.users.application.ports.in.RegistrarUsuarioUseCase;
+import com.ingenium.jyps.users.application.ports.in.command.RegistrarUsuarioCommand;
+import com.ingenium.jyps.users.application.ports.in.usecases.RegistrarUsuarioUseCase;
 import com.ingenium.jyps.users.domain.model.Cuenta;
 import com.ingenium.jyps.users.domain.model.Usuario;
-import com.ingenium.jyps.users.domain.ports.out.UsuarioRepositoryPort;
+import com.ingenium.jyps.users.domain.ports.out.UsuarioRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -14,10 +14,10 @@ import java.util.UUID;
 @Service
 public class RegistrarUsuarioService implements RegistrarUsuarioUseCase {
 
-    private final UsuarioRepositoryPort usuarioRepositoryPort;
+    private final UsuarioRepository usuarioRepositoryPort;
     private final DepartamentoRepositoryPort departamentoRepositoryPort;
 
-    public RegistrarUsuarioService(UsuarioRepositoryPort usuarioRepositoryPort, DepartamentoRepositoryPort departamentoRepositoryPort) {
+    public RegistrarUsuarioService(UsuarioRepository usuarioRepositoryPort, DepartamentoRepositoryPort departamentoRepositoryPort) {
         this.usuarioRepositoryPort = usuarioRepositoryPort;
         this.departamentoRepositoryPort = departamentoRepositoryPort;
     }

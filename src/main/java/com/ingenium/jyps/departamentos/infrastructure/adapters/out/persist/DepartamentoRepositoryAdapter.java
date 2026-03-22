@@ -2,8 +2,7 @@ package com.ingenium.jyps.departamentos.infrastructure.adapters.out.persist;
 
 import com.ingenium.jyps.departamentos.domain.model.Departamento;
 import com.ingenium.jyps.departamentos.domain.ports.out.DepartamentoRepositoryPort;
-import com.ingenium.jyps.users.domain.model.Usuario;
-import com.ingenium.jyps.users.infrastructure.adapters.out.persist.UsuarioEntity;
+import com.ingenium.jyps.users.infrastructure.adapters.out.persist.entity.UsuarioEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -42,7 +41,10 @@ public class DepartamentoRepositoryAdapter implements DepartamentoRepositoryPort
 
     @Override
     public List<Departamento> findAll(String nombre) {
-        return List.of();
+        return repository.findAll().stream()
+                .filter(d -> nombre == null || d.getNombre().toUpperCase().contains(nombre.trim().toUpperCase()))
+                .map(this::mapToDomain)
+                .toList();
     }
 
 

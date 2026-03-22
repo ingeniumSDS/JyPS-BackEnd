@@ -1,21 +1,26 @@
 package com.ingenium.jyps.users.infrastructure.adapters.in.web;
 
-import com.ingenium.jyps.departamentos.application.ports.in.CrearDepartamentoCommand;
-import com.ingenium.jyps.departamentos.domain.model.Departamento;
-import com.ingenium.jyps.users.application.ports.in.*;
+import com.ingenium.jyps.users.application.ports.in.command.ObtenerUsuarioPorIdCommand;
+import com.ingenium.jyps.users.application.ports.in.command.RegistrarUsuarioCommand;
+import com.ingenium.jyps.users.application.ports.in.usecases.ObtenerTodosLosUsuariosUseCase;
+import com.ingenium.jyps.users.application.ports.in.usecases.ObtenerUsuarioPorIdUseCase;
+import com.ingenium.jyps.users.application.ports.in.usecases.RegistrarUsuarioUseCase;
 import com.ingenium.jyps.users.domain.model.Usuario;
-import com.ingenium.jyps.users.infrastructure.adapters.out.persist.SpringDataUsuarioRepository;
+import com.ingenium.jyps.users.domain.model.enums.Roles;
+import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.request.CrearUsuarioRequest;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/usuarios")
 @CrossOrigin("*")
+@RestControllerAdvice
 public class UsuarioController {
 
     private final RegistrarUsuarioUseCase registrarUsuarioUseCase;
@@ -28,11 +33,26 @@ public class UsuarioController {
         this.registrarUsuarioUseCase = registrarUsuarioUseCase;
         this.obtenerUsuarioPorIdUseCase = obtenerUsuarioPorIdUseCase;
         this.obtenerTodosLosUsuariosUseCase = obtenerTodosLosUsuariosUseCase;
-
     }
 
     @PostMapping("")
-    public ResponseEntity<Void> registrarUsuario(@RequestBody RegistrarUsuarioCommand command) {
+    public ResponseEntity<Void> registrarUsuario(@Valid @RequestBody CrearUsuarioRequest request) {
+
+        List<Roles> roles = request.roles().stream()
+                .map(Roles::valueOf)
+                .toList();
+
+        RegistrarUsuarioCommand command = new RegistrarUsuarioCommand(
+                request.nombre(),
+                request.apellidoPaterno(),
+                request.apellidoMaterno(),
+                request.correo(),
+                request.telefono(),
+                request.horaEntrada(),
+                request.horaSalida(),
+                roles,
+                request.departamentoId()
+        );
 
         Usuario nuevoUsuario = registrarUsuarioUseCase.registrarUsuario(command);
 
