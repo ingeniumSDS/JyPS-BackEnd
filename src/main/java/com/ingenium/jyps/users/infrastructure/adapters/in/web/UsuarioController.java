@@ -8,13 +8,11 @@ import com.ingenium.jyps.users.application.ports.in.usecases.RegistrarUsuarioUse
 import com.ingenium.jyps.users.domain.model.Usuario;
 import com.ingenium.jyps.users.domain.model.enums.Roles;
 import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.request.CrearUsuarioRequest;
-import jakarta.validation.Valid;
+import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.response.UsuarioResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -36,11 +34,13 @@ public class UsuarioController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Void> registrarUsuario(@Valid @RequestBody CrearUsuarioRequest request) {
+    public ResponseEntity<UsuarioResponse> registrarUsuario(@RequestBody CrearUsuarioRequest request) {
 
         List<Roles> roles = request.roles().stream()
                 .map(Roles::valueOf)
                 .toList();
+
+
 
         RegistrarUsuarioCommand command = new RegistrarUsuarioCommand(
                 request.nombre(),
@@ -56,23 +56,24 @@ public class UsuarioController {
 
         Usuario nuevoUsuario = registrarUsuarioUseCase.registrarUsuario(command);
 
-        URI location = URI.create("/api/v1/usuarios/" + nuevoUsuario.getId());
+        UsuarioResponse response = UsuarioResponse.desdeDominio(nuevoUsuario);
 
-        return ResponseEntity.created(location).build();
+        URI location = URI.create("/api/v1/usuarios/" + response.id());
+
+        return ResponseEntity.created(location).body(response);
     }
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> findById(@PathVariable Long id) {
+    public ResponseEntity<UsuarioResponse> findById(@PathVariable Long id) {
 
-        // 1. Armamos el Command con el ID que extrajimos de la URL
         ObtenerUsuarioPorIdCommand command = new ObtenerUsuarioPorIdCommand(id);
 
-        // 2. Ejecutamos el caso de uso y capturamos al usuario
         Usuario usuario = obtenerUsuarioPorIdUseCase.obtenerUsuarioPorId(command);
 
-        // 3. Devolvemos un 200 OK con el usuario en el cuerpo de la respuesta
-        return ResponseEntity.ok(usuario);
+        UsuarioResponse response = UsuarioResponse.desdeDominio(usuario);
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("")

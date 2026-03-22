@@ -4,6 +4,7 @@ import com.ingenium.jyps.departamentos.infrastructure.adapters.out.persist.Depar
 import com.ingenium.jyps.users.domain.model.Cuenta;
 import com.ingenium.jyps.users.domain.model.Usuario;
 import com.ingenium.jyps.users.domain.ports.out.UsuarioRepository;
+import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.response.UsuarioResponse;
 import com.ingenium.jyps.users.infrastructure.adapters.out.persist.entity.CuentaEmbeddable;
 import com.ingenium.jyps.users.infrastructure.adapters.out.persist.entity.UsuarioEntity;
 import org.jspecify.annotations.NonNull;
