@@ -1,5 +1,5 @@
 package com.ingenium.jyps.users.application.ports.in.command;
 
-public record ObetenerTodosLosUsuariosCommand(
+public record ObtenerTodosLosUsuariosCommand(
 ) {
 }
