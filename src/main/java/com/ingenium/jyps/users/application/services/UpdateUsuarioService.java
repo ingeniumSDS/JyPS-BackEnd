@@ -1,15 +1,15 @@
-package com.ingenium.jyps.users.application.usecases;
+package com.ingenium.jyps.users.application.services;
 
-import com.ingenium.jyps.users.application.ports.in.UpdateUsuarioCommand;
-import com.ingenium.jyps.users.application.ports.in.UpdateUsuarioUseCase;
+import com.ingenium.jyps.users.application.ports.in.command.UpdateUsuarioCommand;
+import com.ingenium.jyps.users.application.ports.in.usecases.UpdateUsuarioUseCase;
 import com.ingenium.jyps.users.domain.model.Usuario;
-import com.ingenium.jyps.users.domain.ports.out.UsuarioRepositoryPort;
+import com.ingenium.jyps.users.domain.ports.out.UsuarioRepository;
 
 public class UpdateUsuarioService implements UpdateUsuarioUseCase {
 
-    private final UsuarioRepositoryPort  usuarioRepositoryPort;
+    private final UsuarioRepository usuarioRepositoryPort;
 
-    public UpdateUsuarioService(UsuarioRepositoryPort usuarioRepositoryPort) {
+    public UpdateUsuarioService(UsuarioRepository usuarioRepositoryPort) {
         this.usuarioRepositoryPort = usuarioRepositoryPort;
     }
 

@@ -1,4 +1,4 @@
-package com.ingenium.jyps.users.infrastructure.adapters.out.persist;
+package com.ingenium.jyps.users.infrastructure.adapters.out.persist.entity;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;

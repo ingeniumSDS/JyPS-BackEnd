@@ -1,7 +1,7 @@
 package com.ingenium.jyps.incidencias.infrastructure.adapters.out.persist;
 
 import com.ingenium.jyps.incidencias.domain.model.enums.EstadosIncidencia;
-import com.ingenium.jyps.users.infrastructure.adapters.out.persist.UsuarioEntity;
+import com.ingenium.jyps.users.infrastructure.adapters.out.persist.entity.UsuarioEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

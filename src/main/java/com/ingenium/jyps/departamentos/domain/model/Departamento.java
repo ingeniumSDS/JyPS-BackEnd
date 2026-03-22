@@ -1,7 +1,5 @@
 package com.ingenium.jyps.departamentos.domain.model;
 
-import com.ingenium.jyps.users.domain.model.Usuario;
-import com.ingenium.jyps.users.infrastructure.adapters.out.persist.UsuarioEntity;
 import lombok.Getter;
 
 @Getter

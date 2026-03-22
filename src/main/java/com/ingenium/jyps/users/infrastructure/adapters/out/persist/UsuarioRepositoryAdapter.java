@@ -3,7 +3,10 @@ package com.ingenium.jyps.users.infrastructure.adapters.out.persist;
 import com.ingenium.jyps.departamentos.infrastructure.adapters.out.persist.DepartamentoEntity;
 import com.ingenium.jyps.users.domain.model.Cuenta;
 import com.ingenium.jyps.users.domain.model.Usuario;
-import com.ingenium.jyps.users.domain.ports.out.UsuarioRepositoryPort;
+import com.ingenium.jyps.users.domain.ports.out.UsuarioRepository;
+import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.response.UsuarioResponse;
+import com.ingenium.jyps.users.infrastructure.adapters.out.persist.entity.CuentaEmbeddable;
+import com.ingenium.jyps.users.infrastructure.adapters.out.persist.entity.UsuarioEntity;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Component;
@@ -12,24 +15,24 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-public class UsuarioRepositoryAdapter implements UsuarioRepositoryPort {
+public class UsuarioRepositoryAdapter implements UsuarioRepository {
 
-    private final SpringDataUsuarioRepository repository;
+    private final SpringDataUsuarioRepository springRepository;
 
-    public UsuarioRepositoryAdapter(SpringDataUsuarioRepository repository) {
-        this.repository = repository;
+    public UsuarioRepositoryAdapter(SpringDataUsuarioRepository springRepository) {
+        this.springRepository = springRepository;
     }
 
     @Override
     public Usuario save(Usuario usuario) {
         UsuarioEntity u = mapToEntity(usuario);
-        UsuarioEntity entidadGuardada = repository.save(u);
+        UsuarioEntity entidadGuardada = springRepository.save(u);
         return mapToDomain(entidadGuardada);
     }
 
     @Override
     public Optional<Usuario> findByCorreo(String correo) {
-        return repository.findByCorreo(correo).map(this::mapToDomain);
+        return springRepository.findByCorreo(correo).map(this::mapToDomain);
     }
 
     @Override
@@ -39,12 +42,12 @@ public class UsuarioRepositoryAdapter implements UsuarioRepositoryPort {
 
     @Override
     public Optional<Usuario> findById(Long id) {
-        return repository.findById(id).map(this::mapToDomain);
+        return springRepository.findById(id).map(this::mapToDomain);
     }
 
     @Override
     public List<Usuario> findAll() {
-        return repository.findAll().stream().map(this::mapToDomain).toList();
+        return springRepository.findAll().stream().map(this::mapToDomain).toList();
     }
 
     @Override
