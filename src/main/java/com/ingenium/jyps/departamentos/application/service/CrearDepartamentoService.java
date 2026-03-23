@@ -1,7 +1,7 @@
-package com.ingenium.jyps.departamentos.application.usecases;
+package com.ingenium.jyps.departamentos.application.service;
 
-import com.ingenium.jyps.departamentos.application.ports.in.CrearDepartamentoCommand;
-import com.ingenium.jyps.departamentos.application.ports.in.CrearDepartamentoUseCase;
+import com.ingenium.jyps.departamentos.application.ports.in.command.CrearDepartamentoCommand;
+import com.ingenium.jyps.departamentos.application.usecase.CrearDepartamentoUseCase;
 import com.ingenium.jyps.departamentos.domain.model.Departamento;
 import com.ingenium.jyps.departamentos.domain.ports.out.DepartamentoRepositoryPort;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,7 @@ public class CrearDepartamentoService implements CrearDepartamentoUseCase {
                 command.jefeId()
         );
 
-        // AQUI: Capturamos y retornamos el objeto que ya trae el ID de la base de datos
+        // AQUÍ: Capturamos y retornamos el objeto que ya trae el ID de la base de datos
         return repositoryPort.save(nuevoDepartamento);
     }
 }
