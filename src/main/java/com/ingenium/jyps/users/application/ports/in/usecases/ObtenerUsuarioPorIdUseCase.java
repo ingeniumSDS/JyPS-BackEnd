@@ -4,5 +4,5 @@ import com.ingenium.jyps.users.application.ports.in.command.ObtenerUsuarioPorIdC
 import com.ingenium.jyps.users.domain.model.Usuario;
 
 public interface ObtenerUsuarioPorIdUseCase {
-    Usuario obtenerUsuarioPorId(ObtenerUsuarioPorIdCommand command);
+    Usuario ejecutar(Long id);
 }

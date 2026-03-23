@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface ObtenerTodosLosUsuariosUseCase {
 
-    List<Usuario> findAll();
+    List<Usuario> ejecutar();
 
 }

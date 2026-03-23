@@ -1,5 +1,6 @@
 package com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.request;
 
+import java.time.LocalTime;
 import java.util.List;
 
 public record UpdateUsuarioRequest(
@@ -8,8 +9,8 @@ public record UpdateUsuarioRequest(
         String apellidoMaterno,
         String correo,
         String telefono,
-        String horaEntrada,
-        String horaSalida,
+        LocalTime horaEntrada,
+        LocalTime horaSalida,
         List<String> roles,
         Long departamentoId
 ) {

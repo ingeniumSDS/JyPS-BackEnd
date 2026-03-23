@@ -45,6 +45,13 @@ public class Departamento {
         }
     }
 
+    public void asignarJefe(Long jefeId) {
+        this.jefeId = jefeId;
+        if (!this.activo) {
+            this.activo = true; // Si se asigna un jefe, el departamento se activa
+        }
+    }
+
     // Métodos de negocio para cambiar el estado (sin usar setters)
     public void desactivar() {
         this.activo = false;
