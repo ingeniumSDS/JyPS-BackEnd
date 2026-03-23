@@ -11,6 +11,8 @@ import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.request.Update
 import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.response.CuentaResponse;
 import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.response.EstadoCuentaResponse;
 import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.response.UsuarioResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/usuarios")
 @CrossOrigin("*")
+@Tag(name = "Usuarios", description = "Operaciones relacionadas con la gestión de usuarios y cuentas")
 public class UsuarioController {
 
     private final GuardarUsuarioUseCase guardarUsuarioUseCase;
@@ -44,7 +47,7 @@ public class UsuarioController {
         this.updateEstadoCuentaUseCase = updateEstadoCuentaUseCase;
     }
 
-
+    @Operation(summary = "Registra un nuevo usuario", description = "Crea un nuevo usuario con la información proporcionada (Ej. Nombre, apellidos, correo, teléfono, horarios, roles y departamento) y devuelve los datos del usuario registrado junto con la ubicación del recurso creado")
     @PostMapping("")
     public ResponseEntity<UsuarioResponse> registrarUsuario(@RequestBody CrearUsuarioRequest request) {
 
@@ -63,6 +66,7 @@ public class UsuarioController {
                 roles,
                 request.departamentoId()
         );
+
 
         Usuario nuevoUsuario = guardarUsuarioUseCase.ejecutar(command);
 
@@ -94,10 +98,10 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Actualizar los datos personales del usuario", description = "Realiza un update de la información del usuario (Ej. Nombre, apellidos, correo, teléfono, horarios, roles y departamento) según su ID y retorna el objeto actualizado con su ubicación")
     public ResponseEntity<UsuarioResponse> actualizarUsuario(@RequestBody UpdateUsuarioRequest request, @PathVariable Long id) {
 
         List<Roles> roles = request.roles().stream().map(Roles::valueOf).toList();
-
 
         UpdateUsuarioCommand command = new UpdateUsuarioCommand(
                 id,
@@ -121,9 +125,11 @@ public class UsuarioController {
     }
 
     //Activa/Inactiva cuenta del usuario según su ID
+    @Operation(summary = "Actualizar estado de la cuenta", description = "Realiza un toggle del estado (Activo/Inactivo) de la cuenta del usuario")
     @PatchMapping("/{id}/estado")
     public ResponseEntity<EstadoCuentaResponse> cambiarEstado(@PathVariable Long id) {
-        Cuenta cuentaActualizada = updateEstadoCuentaUseCase.ejecutar(id);
+
+        updateEstadoCuentaUseCase.ejecutar(id);
 
         Usuario usuario = obtenerUsuarioPorIdUseCase.ejecutar(id);
 
