@@ -4,6 +4,7 @@ import com.ingenium.jyps.users.infrastructure.adapters.out.persist.entity.Usuari
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
-public interface SpringDataUsuarioRepository extends JpaRepository<UsuarioEntity, Long> {
+public interface JpaUsuarioRepository extends JpaRepository<UsuarioEntity, Long> {
     Optional<UsuarioEntity> findByCorreo(String correo);
+    Optional<UsuarioEntity> findByTelefono(String telefono);
 }

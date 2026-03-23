@@ -151,11 +151,15 @@ public class Usuario {
 
 
     // En tu clase Usuario
-    public void actualizarDatosPersonales(String nombre, String apellidoPaterno, String apellidoMaterno, String correo, String telefono) {
+    public void actualizarDatosPersonales(String nombre, String apellidoPaterno, String apellidoMaterno, String correo, String telefono, LocalTime horaEntrada, LocalTime horaSalida, List<Roles> roles, Long departamentoId) {
         if (nombre != null && !nombre.isBlank()) this.nombre = nombre;
         if (apellidoPaterno != null && !apellidoPaterno.isBlank()) this.apellidoPaterno = apellidoPaterno;
         if (apellidoMaterno != null && !apellidoMaterno.isBlank()) this.apellidoMaterno = apellidoMaterno;
         if (correo != null && !correo.isBlank()) this.correo = correo;
         if (telefono != null && !telefono.isBlank()) this.telefono = telefono;
+        if (horaEntrada != null) this.horaEntrada = horaEntrada;
+        if (horaSalida != null) this.horaSalida = horaSalida;
+        if (roles != null && !roles.isEmpty()) this.roles = roles;
+        if (departamentoId != null) this.departamentoId = departamentoId;
     }
 }

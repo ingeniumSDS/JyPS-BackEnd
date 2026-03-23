@@ -11,40 +11,30 @@ import java.util.Optional;
 @Component
 public class DepartamentoRepositoryAdapter implements DepartamentoRepositoryPort {
 
-    private final SpringDataDepartamentoRepository repository;
+    private final JpaDepartamentoRepository departamentoRepository;
 
-    public DepartamentoRepositoryAdapter(SpringDataDepartamentoRepository repository) {
-        this.repository = repository;
+    public DepartamentoRepositoryAdapter(JpaDepartamentoRepository departamentoRepository) {
+        this.departamentoRepository = departamentoRepository;
     }
-
     @Override
     public Departamento save(Departamento departamento) {
         DepartamentoEntity d = mapToEntity(departamento);
-        DepartamentoEntity entidadGuardada = repository.save(d);
+        DepartamentoEntity entidadGuardada = departamentoRepository.save(d);
         return mapToDomain(entidadGuardada);
     }
 
-    @Override
+    public List<Departamento> findAll() {
+        List<DepartamentoEntity> entities = departamentoRepository.findAll();
+        return entities.stream().map(this::mapToDomain).toList();
+    }
+
     public Optional<Departamento> findById(Long id) {
-        return repository.findById(id).map(this::mapToDomain);
+        return departamentoRepository.findById(id).map(this::mapToDomain);
     }
 
     @Override
     public Optional<Departamento> findByNombre(String nombre) {
-        return repository.findByNombre(nombre).map(this::mapToDomain);
-    }
-
-    @Override
-    public boolean delete(Long id) {
-        return false;
-    }
-
-    @Override
-    public List<Departamento> findAll(String nombre) {
-        return repository.findAll().stream()
-                .filter(d -> nombre == null || d.getNombre().toUpperCase().contains(nombre.trim().toUpperCase()))
-                .map(this::mapToDomain)
-                .toList();
+        return departamentoRepository.findByNombre(nombre).map(this::mapToDomain);
     }
 
 
@@ -67,7 +57,7 @@ public class DepartamentoRepositoryAdapter implements DepartamentoRepositoryPort
     }
 
     private Departamento mapToDomain(DepartamentoEntity entity) {
-        // ✨ ¡Mira qué hermoso y simple! Solo sacamos el ID si existe.
+
         Long jefeId = (entity.getJefe() != null) ? entity.getJefe().getId() : null;
 
         return new Departamento(

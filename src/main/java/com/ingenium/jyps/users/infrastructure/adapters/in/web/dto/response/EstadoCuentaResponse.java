@@ -2,22 +2,15 @@ package com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.response;
 
 import com.ingenium.jyps.users.domain.model.Usuario;
 
-import java.time.LocalTime;
 import java.util.List;
 
-public record UsuarioResponse(
-        Long id,
-        String nombreCompleto, // ¡Digerido para la vista!
-        String correo,
-        String telefono,
-        LocalTime horaEntrada,
-        LocalTime horaSalida,
-        List<String> roles, // Devolvemos Strings, no el Enum puro
-        Long departamentoId
+public record EstadoCuentaResponse(
+        String nombreCompleto,
+        boolean activa,
+        String message
 ) {
-
     // 💡 TRUCO SENIOR: Método de fábrica estático (Mapper integrado)
-    public static UsuarioResponse desdeDominio(Usuario usuario) {
+    public static EstadoCuentaResponse desdeDominio(Usuario usuario) {
 
         // Manejo seguro del apellido materno por si es nulo
         String materno = (usuario.getApellidoMaterno() != null && !usuario.getApellidoMaterno().isBlank())
@@ -32,15 +25,10 @@ public record UsuarioResponse(
                 .toList();
 
 
-        return new UsuarioResponse(
-                usuario.getId(),
+        return new EstadoCuentaResponse(
                 nombreCompleto,
-                usuario.getCorreo(),
-                usuario.getTelefono(),
-                usuario.getHoraEntrada(),
-                usuario.getHoraSalida(),
-                rolesString,
-                usuario.getDepartamentoId()
+                usuario.getCuenta().isActiva(),
+                usuario.getCuenta().isActiva() ? "Cuenta activada" : "Cuenta inactivada"
         );
     }
 }

@@ -3,8 +3,7 @@ package com.ingenium.jyps.users.infrastructure.adapters.out.persist;
 import com.ingenium.jyps.departamentos.infrastructure.adapters.out.persist.DepartamentoEntity;
 import com.ingenium.jyps.users.domain.model.Cuenta;
 import com.ingenium.jyps.users.domain.model.Usuario;
-import com.ingenium.jyps.users.domain.ports.out.UsuarioRepository;
-import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.response.UsuarioResponse;
+import com.ingenium.jyps.users.domain.ports.out.UsuarioRepositoryPort;
 import com.ingenium.jyps.users.infrastructure.adapters.out.persist.entity.CuentaEmbeddable;
 import com.ingenium.jyps.users.infrastructure.adapters.out.persist.entity.UsuarioEntity;
 import org.jspecify.annotations.NonNull;
@@ -15,44 +14,63 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-public class UsuarioRepositoryAdapter implements UsuarioRepository {
+public class UsuarioRepositoryAdapter implements UsuarioRepositoryPort {
 
-    private final SpringDataUsuarioRepository springRepository;
+    private final JpaUsuarioRepository jpaUsuarioRepository;
 
-    public UsuarioRepositoryAdapter(SpringDataUsuarioRepository springRepository) {
-        this.springRepository = springRepository;
+
+    public UsuarioRepositoryAdapter(JpaUsuarioRepository jpaUsuarioRepository) {
+        this.jpaUsuarioRepository = jpaUsuarioRepository;
     }
 
     @Override
     public Usuario save(Usuario usuario) {
-        UsuarioEntity u = mapToEntity(usuario);
-        UsuarioEntity entidadGuardada = springRepository.save(u);
+        UsuarioEntity uE = mapToEntity(usuario);
+        // Se encarga de guardar o actualizar la entidad dependiendo si el ID es nulo o no.
+        // Tomado de JpaRepository ya que JpaUsuarioRepository extiende de esta interfaz.
+        UsuarioEntity entidadGuardada = jpaUsuarioRepository.save(uE);
         return mapToDomain(entidadGuardada);
     }
 
     @Override
     public Optional<Usuario> findByCorreo(String correo) {
-        return springRepository.findByCorreo(correo).map(this::mapToDomain);
+        return jpaUsuarioRepository.findByCorreo(correo).map(this::mapToDomain);
     }
 
     @Override
     public Optional<Usuario> findByTelefono(String telefono) {
-        return Optional.empty(); // Ojo: falta implementarlo en SpringDataUsuarioRepository
+        return jpaUsuarioRepository.findByTelefono(telefono).map(this::mapToDomain);
+    }
+
+    @Override
+    public boolean estaActivo(String correo) {
+        Usuario usuario = jpaUsuarioRepository.findByCorreo(correo).map(this::mapToDomain).orElseThrow( () -> new  RuntimeException("Usuario no encontrado"));
+        if (usuario.getCuenta() != null) {
+            Cuenta cuenta = usuario.getCuenta();
+            return cuenta.isActiva();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean existsByCorreo(String correo) {
+        return jpaUsuarioRepository.findByCorreo(correo).isPresent();
+    }
+
+    @Override
+    public boolean existsByTelefono(String telefono) {
+        return jpaUsuarioRepository.findByCorreo(telefono).isPresent();
+
     }
 
     @Override
     public Optional<Usuario> findById(Long id) {
-        return springRepository.findById(id).map(this::mapToDomain);
+        return jpaUsuarioRepository.findById(id).map(this::mapToDomain);
     }
 
     @Override
     public List<Usuario> findAll() {
-        return springRepository.findAll().stream().map(this::mapToDomain).toList();
-    }
-
-    @Override
-    public boolean deleteById(String email) {
-        return false; // Ojo: falta implementar
+        return jpaUsuarioRepository.findAll().stream().map(this::mapToDomain).toList();
     }
 
     private UsuarioEntity mapToEntity(Usuario usuario) {
