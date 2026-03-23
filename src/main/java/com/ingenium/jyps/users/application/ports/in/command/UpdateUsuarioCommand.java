@@ -16,6 +16,6 @@ public record UpdateUsuarioCommand(
     LocalTime horaEntrada,
     LocalTime horaSalida,
     List<Roles> roles,
-    Departamento departamentoId
+    Long departamentoId
 
 ) {}
