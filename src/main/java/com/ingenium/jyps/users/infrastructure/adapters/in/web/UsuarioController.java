@@ -8,6 +8,7 @@ import com.ingenium.jyps.users.application.ports.in.usecases.RegistrarUsuarioUse
 import com.ingenium.jyps.users.domain.model.Usuario;
 import com.ingenium.jyps.users.domain.model.enums.Roles;
 import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.request.CrearUsuarioRequest;
+import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.request.UpdateUsuarioRequest;
 import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.response.UsuarioResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/usuarios")
 @CrossOrigin("*")
-@RestControllerAdvice
 public class UsuarioController {
 
     private final RegistrarUsuarioUseCase registrarUsuarioUseCase;
@@ -80,6 +80,13 @@ public class UsuarioController {
     public ResponseEntity<List<Usuario>> findAll() {
         List<Usuario> usuarios = obtenerTodosLosUsuariosUseCase.findAll();
         return ResponseEntity.ok(usuarios);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UsuarioResponse> actualizarUsuario (@RequestBody UpdateUsuarioRequest request, @PathVariable Long id) {
+
+        Usuario usuarioExistente = obtenerUsuarioPorIdUseCase.obtenerUsuarioPorId(new ObtenerUsuarioPorIdCommand(id));
+        return null;
     }
 
 

@@ -22,8 +22,12 @@ public class Departamento {
             this.descripcion = descripcion.trim();
         }
 
-        this.jefeId = jefeId;
-        this.activo = true; // Por defecto nace activo
+        if  (jefeId == null) {
+            this.activo = false; // Por defecto nace activo
+        } else {
+            this.activo = true;
+            this.jefeId = jefeId;
+        }
     }
 
     // CONSTRUCTOR 2: Para rehidratar desde la base de datos (Adaptador)

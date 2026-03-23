@@ -2,7 +2,6 @@ package com.ingenium.jyps.users.domain.model;
 
 import com.ingenium.jyps.departamentos.domain.model.Departamento;
 import com.ingenium.jyps.users.domain.model.enums.Roles;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -83,10 +82,10 @@ public class Usuario {
             throw new IllegalArgumentException("El " + nombreCampo + " es obligatorio.");
         }
 
-        if (campo.length() <= 2) {
+        if (campo.length() < 2) {
             throw new IllegalArgumentException("El " + nombreCampo + " debe contener al menos 2 caracteres");
         } else if (campo.length() > longitudMaxima) {
-            throw new IllegalArgumentException("El " + nombreCampo + " es debe contener máximo "  + longitudMaxima + " caracteres.");
+            throw new IllegalArgumentException("El " + nombreCampo + " es debe contener como máximo " + longitudMaxima + " caracteres.");
         }
 
         if (nombreCampo.equals("nombre") || nombreCampo.equals("apellido paterno") || nombreCampo.equals("apellido materno")) {
