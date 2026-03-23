@@ -20,6 +20,8 @@ public class Usuario {
     private LocalTime horaEntrada;
     private LocalTime horaSalida;
     private List<Roles> roles;
+    @Setter
+    private String nombreDepartamento;
     private Long departamentoId;
 
     private Cuenta cuenta;
@@ -32,7 +34,8 @@ public class Usuario {
                    LocalTime horaEntrada,
                    LocalTime horaSalida,
                    List<Roles> roles,
-                   Long departamentoId) {
+                   Long departamentoId
+                   ) {
 
         validarCampoTexto(nombre, "nombre", 100);
         validarCampoTexto(apellidoPaterno, "apellido paterno", 50);
