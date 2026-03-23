@@ -12,8 +12,9 @@ public record UsuarioResponse(
         String telefono,
         LocalTime horaEntrada,
         LocalTime horaSalida,
-        List<String> roles, // Devolvemos Strings, no el Enum puro
-        Long departamentoId
+        List<String> roles,
+        Long departamentoId,
+        String nombreDepartamento
 ) {
 
     // 💡 TRUCO SENIOR: Método de fábrica estático (Mapper integrado)
@@ -40,7 +41,8 @@ public record UsuarioResponse(
                 usuario.getHoraEntrada(),
                 usuario.getHoraSalida(),
                 rolesString,
-                usuario.getDepartamentoId()
+                usuario.getDepartamentoId(),
+                usuario.getNombreDepartamento()
         );
     }
 }

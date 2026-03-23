@@ -4,9 +4,11 @@ import com.ingenium.jyps.departamentos.domain.model.Departamento;
 import com.ingenium.jyps.departamentos.domain.ports.out.DepartamentoRepositoryPort;
 import com.ingenium.jyps.users.application.ports.in.command.RegistrarUsuarioCommand;
 import com.ingenium.jyps.users.application.ports.in.usecases.GuardarUsuarioUseCase;
+import com.ingenium.jyps.users.domain.event.UsuarioCreadoEvent;
 import com.ingenium.jyps.users.domain.model.Cuenta;
 import com.ingenium.jyps.users.domain.model.Usuario;
 import com.ingenium.jyps.users.domain.ports.out.UsuarioRepositoryPort;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -16,10 +18,14 @@ public class GuardarUsuarioService implements GuardarUsuarioUseCase {
 
     private final UsuarioRepositoryPort usuarioRepositoryPort;
     private final DepartamentoRepositoryPort departamentoRepositoryPort;
+    private final ApplicationEventPublisher publisher;
 
-    public GuardarUsuarioService(UsuarioRepositoryPort usuarioRepositoryPort, DepartamentoRepositoryPort departamentoRepositoryPort) {
+    public GuardarUsuarioService(UsuarioRepositoryPort usuarioRepositoryPort,
+                                 DepartamentoRepositoryPort departamentoRepositoryPort,
+                                 ApplicationEventPublisher publisher) {
         this.usuarioRepositoryPort = usuarioRepositoryPort;
         this.departamentoRepositoryPort = departamentoRepositoryPort;
+        this.publisher = publisher;
     }
 
     @Override
@@ -36,7 +42,7 @@ public class GuardarUsuarioService implements GuardarUsuarioUseCase {
             throw new IllegalArgumentException("El teléfono: " + command.telefono() + " ya se encuentra registrado.");
         }
 
-        Usuario u = new Usuario(
+        Usuario nuevoUsuario = new Usuario(
                 command.nombre(),
                 command.apellidoPaterno(),
                 command.apellidoMaterno(),
@@ -55,10 +61,18 @@ public class GuardarUsuarioService implements GuardarUsuarioUseCase {
                 120
         );
 
-        u.asignarCuenta(cuenta);
+        nuevoUsuario.setNombreDepartamento(departamento.getNombre());
 
-        return usuarioRepositoryPort.save(u);
+        nuevoUsuario.asignarCuenta(cuenta);
 
+        usuarioRepositoryPort.save(nuevoUsuario);
 
+        publisher.publishEvent(new UsuarioCreadoEvent(
+                nuevoUsuario.getCorreo(),
+                nuevoUsuario.getNombre() + " " + nuevoUsuario.getApellidoPaterno() +  " " + nuevoUsuario.getApellidoMaterno(),
+                tokenAcceso
+        ));
+
+        return nuevoUsuario;
     }
 }

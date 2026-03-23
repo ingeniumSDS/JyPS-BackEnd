@@ -1,5 +1,7 @@
 package com.ingenium.jyps.users.application.services;
 
+import com.ingenium.jyps.departamentos.domain.model.Departamento;
+import com.ingenium.jyps.departamentos.domain.ports.out.DepartamentoRepositoryPort;
 import com.ingenium.jyps.users.application.ports.in.usecases.ObtenerTodosLosUsuariosUseCase;
 import com.ingenium.jyps.users.domain.model.Usuario;
 import com.ingenium.jyps.users.domain.ports.out.UsuarioRepositoryPort;
@@ -11,13 +13,23 @@ import java.util.List;
 public class ObtenerTodosLosUsuariosService implements ObtenerTodosLosUsuariosUseCase {
     private final UsuarioRepositoryPort usuarioRepositoryPort;
 
-    public ObtenerTodosLosUsuariosService(UsuarioRepositoryPort usuarioRepositoryPort) {
+    private final DepartamentoRepositoryPort departamentoRepositoryPort;
+
+    public ObtenerTodosLosUsuariosService(UsuarioRepositoryPort usuarioRepositoryPort, DepartamentoRepositoryPort departamentoRepositoryPort) {
         this.usuarioRepositoryPort = usuarioRepositoryPort;
+        this.departamentoRepositoryPort = departamentoRepositoryPort;
     }
 
     @Override
     public List<Usuario> ejecutar() {
-        return usuarioRepositoryPort.findAll();
+        List<Usuario> usuarios = usuarioRepositoryPort.findAll();
+
+        usuarios.forEach(u -> {
+            Departamento departamento = departamentoRepositoryPort.findById(u.getDepartamentoId())
+                    .orElseThrow(() -> new IllegalArgumentException("El departamento con ese ID no existe"));
+            u.setNombreDepartamento(departamento.getNombre());
+        });
+        return usuarios;
     }
 }
 

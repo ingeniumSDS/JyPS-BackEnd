@@ -63,10 +63,17 @@ public class UpdateUsuarioService implements UpdateUsuarioUseCase {
                 command.horaEntrada(),
                 command.horaSalida(),
                 command.roles(),
-                command.departamentoId() // Ya viene verificado
+                command.departamentoId()
         );
 
+        u.setNombreDepartamento(
+                departamentoRepositoryPort.findById(command.departamentoId())
+                        .orElseThrow(() -> new IllegalArgumentException("Departamento no encontrado"))
+                        .getNombre()
+        );
+
+        usuarioRepositoryPort.save(u);
         // 6. Guardar los cambios
-        return usuarioRepositoryPort.save(u);
+        return u;
     }
 }

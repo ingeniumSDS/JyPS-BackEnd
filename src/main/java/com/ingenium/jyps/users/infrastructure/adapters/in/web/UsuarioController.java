@@ -47,8 +47,8 @@ public class UsuarioController {
         this.updateEstadoCuentaUseCase = updateEstadoCuentaUseCase;
     }
 
-    @Operation(summary = "Registra un nuevo usuario", description = "Crea un nuevo usuario con la información proporcionada (Ej. Nombre, apellidos, correo, teléfono, horarios, roles y departamento) y devuelve los datos del usuario registrado junto con la ubicación del recurso creado")
     @PostMapping("")
+    @Operation(summary = "Registra un nuevo usuario", description = "Crea un nuevo usuario con la información proporcionada (Ej. Nombre, apellidos, correo, teléfono, horarios, roles y departamento) y devuelve los datos del usuario registrado junto con la ubicación del recurso creado")
     public ResponseEntity<UsuarioResponse> registrarUsuario(@RequestBody CrearUsuarioRequest request) {
 
         List<Roles> roles = request.roles().stream()
@@ -77,8 +77,8 @@ public class UsuarioController {
         return ResponseEntity.created(location).body(response);
     }
 
-
     @GetMapping("/{id}")
+    @Operation(summary = "Obtener usuario por ID", description = "Recupera los datos de un usuario específico según su ID")
     public ResponseEntity<UsuarioResponse> findById(@PathVariable Long id) {
         Usuario usuario = obtenerUsuarioPorIdUseCase.ejecutar(id);
         UsuarioResponse response = UsuarioResponse.desdeDominio(usuario);
@@ -86,6 +86,7 @@ public class UsuarioController {
     }
 
     @GetMapping("")
+    @Operation(summary = "Obtener todos los usuarios", description = "Recupera una lista de todos los usuarios registrados en el sistema")
     public ResponseEntity<List<UsuarioResponse>> findAll() {
 
         List<Usuario> usuarios = obtenerTodosLosUsuariosUseCase.ejecutar();
@@ -125,8 +126,8 @@ public class UsuarioController {
     }
 
     //Activa/Inactiva cuenta del usuario según su ID
-    @Operation(summary = "Actualizar estado de la cuenta", description = "Realiza un toggle del estado (Activo/Inactivo) de la cuenta del usuario")
     @PatchMapping("/{id}/estado")
+    @Operation(summary = "Actualizar estado de la cuenta", description = "Realiza un toggle del estado (Activo/Inactivo) de la cuenta del usuario")
     public ResponseEntity<EstadoCuentaResponse> cambiarEstado(@PathVariable Long id) {
 
         updateEstadoCuentaUseCase.ejecutar(id);
@@ -139,6 +140,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/{id}/cuenta")
+    @Operation(summary = "Obtener datos de la cuenta del usuario", description = "Recupera los datos de la cuenta de un usuario específico según su ID")
     public ResponseEntity<CuentaResponse> getCuenta(@PathVariable Long id) {
         Usuario usuario = obtenerUsuarioPorIdUseCase.ejecutar(id);
         CuentaResponse response = CuentaResponse.desdeDominio(usuario);
