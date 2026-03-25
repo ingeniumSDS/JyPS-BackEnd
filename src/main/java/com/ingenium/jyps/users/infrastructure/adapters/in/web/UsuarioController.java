@@ -77,7 +77,7 @@ public class UsuarioController {
 
         Usuario nuevoUsuario = guardarUsuarioUseCase.ejecutar(command);
 
-        System.out.println(nuevoUsuario.getId());
+
 
         UsuarioResponse response = UsuarioResponse.desdeDominio(nuevoUsuario);
 
