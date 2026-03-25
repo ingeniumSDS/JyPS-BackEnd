@@ -1,4 +1,4 @@
-package com.ingenium.jyps.users.domain.ports.out;
+package com.ingenium.jyps.users.application.ports.out;
 
 import com.ingenium.jyps.users.domain.model.Usuario;
 
@@ -24,13 +24,15 @@ public interface UsuarioRepositoryPort {
 
     Optional<Usuario> findByCorreo(String email);
 
-    Optional<Usuario> findByTelefono(String email);
+    Optional<Usuario> findByTelefono(String telefono);
+
+    Optional<Usuario> findByToken(String token);
 
 
     boolean estaActivo(String correo);
 
     boolean existsByCorreo(String correo);
 
-    boolean existsByTelefono(String correo);
+    boolean existsByTelefono(String telefono);
 
 }

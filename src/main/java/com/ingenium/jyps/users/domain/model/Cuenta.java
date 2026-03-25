@@ -2,12 +2,14 @@ package com.ingenium.jyps.users.domain.model;
 
 import lombok.Getter;
 
+import java.rmi.server.UID;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
 public class Cuenta {
     private int intentosFallidos;
-    private String tokenRecuperacion;
+    private String tokenAcceso;
     private LocalDateTime tokenExpiresAt;
     private boolean tokenUsado, bloqueada, activa;
     private LocalDateTime blockedAt;
@@ -20,15 +22,15 @@ public class Cuenta {
         this.bloqueada = false;
         this.activa = false;
         this.tokenExpiresAt = LocalDateTime.now().plusMinutes(tiempoTokenEnMinutos);
-        this.tokenRecuperacion = tokenAcceso;
+        this.tokenAcceso = tokenAcceso;
     }
 
     // Constructor 2: EXCLUSIVO PARA REHIDRATAR DESDE BD (Recibe datos)
-    public Cuenta(String password, int intentosFallidos, String tokenRecuperacion, LocalDateTime tokenExpiresAt,
+    public Cuenta(String password, int intentosFallidos, String tokenAcceso, LocalDateTime tokenExpiresAt,
                   boolean tokenUsado, boolean bloqueada, boolean activa, LocalDateTime blockedAt) {
         this.password = password;
         this.intentosFallidos = intentosFallidos;
-        this.tokenRecuperacion = tokenRecuperacion;
+        this.tokenAcceso = tokenAcceso;
         this.tokenExpiresAt = tokenExpiresAt;
         this.tokenUsado = tokenUsado;
         this.bloqueada = bloqueada;
@@ -36,16 +38,16 @@ public class Cuenta {
         this.blockedAt = blockedAt;
     }
 
-    public void generarTokenAcceso(String tokenAcceso, int minutosValidez) {
-        this.tokenRecuperacion = tokenAcceso;
-        this.tokenExpiresAt = LocalDateTime.now().plusMinutes(minutosValidez);
+    public void generarTokenAcceso() {
+        this.tokenAcceso = UUID.randomUUID().toString();
+        this.tokenExpiresAt = LocalDateTime.now().plusMinutes(120);
         this.tokenUsado = false;
 
     }
 
     public void usarToken() {
         this.tokenUsado = true;
-        this.tokenRecuperacion = null;
+        this.tokenAcceso = null;
     }
 
     public void bloquearCuenta() {
@@ -94,6 +96,18 @@ public class Cuenta {
             activarCuenta();
         }
         usarToken();
+    }
+
+    public void validarToken() {
+
+        if (this.tokenUsado) {
+            throw new IllegalStateException("El token ya ha sido utilizado. Solicite uno nuevo.");
+        }
+
+        if (LocalDateTime.now().isAfter(this.tokenExpiresAt)) {
+            throw new IllegalStateException("El token ha expirado. Solicite uno nuevo.");
+        }
+
     }
 
 }
