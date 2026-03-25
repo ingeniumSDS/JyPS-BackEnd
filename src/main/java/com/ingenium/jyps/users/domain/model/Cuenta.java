@@ -37,8 +37,17 @@ public class Cuenta {
         this.blockedAt = blockedAt;
     }
 
+    public boolean primerInicio() {
+        if (password == null) {
+            return true;
+        }
+        return false;
+    }
+
     public void generarTokenAcceso() {
-        estaInactiva();
+        if (!primerInicio()) {
+            estaInactiva();
+        }
         this.tokenAcceso = UUID.randomUUID().toString();
         this.tokenExpiresAt = LocalDateTime.now().plusMinutes(120);
         this.tokenUsado = false;
@@ -58,12 +67,13 @@ public class Cuenta {
     public void inactivarCuenta() {
         this.activa = false;
     }
+
     public void activarCuenta() {
         this.activa = true;
     }
 
-    public void estaInactiva(){
-        if(!this.activa){
+    public void estaInactiva() {
+        if (!this.activa) {
             throw new IllegalStateException("La cuenta no está activa. Si cree que se trata de un error contacte al administrador del sistema..");
         }
     }
@@ -97,9 +107,8 @@ public class Cuenta {
 
     public void establecerPassword(String passwordHash) {
         this.password = passwordHash;
-        if (!this.activa) {
-            activarCuenta();
-        }
+        activarCuenta();
+        resetIntentoFallido();
         usarToken();
     }
 

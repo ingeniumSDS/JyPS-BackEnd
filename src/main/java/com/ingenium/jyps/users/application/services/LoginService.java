@@ -31,6 +31,7 @@ public class LoginService implements LoginUseCase {
             throw new IllegalArgumentException("Correo y contraseña no pueden ser nulos");
         }
 
+
         // 1. Buscamos al usuario (Si no existe, lanzamos el error genérico)
         Usuario usuario = usuarioRepositoryPort.findByCorreo(correo)
                 .orElseThrow(() -> new IllegalArgumentException("Credenciales incorrectas"));

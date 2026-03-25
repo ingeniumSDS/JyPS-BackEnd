@@ -29,4 +29,5 @@ public class OpenApiConfig {
                                 .name("Apache 2.0")
                                 .url("http://springdoc.org")));
     }
+
 }
