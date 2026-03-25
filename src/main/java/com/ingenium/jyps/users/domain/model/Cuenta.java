@@ -90,6 +90,7 @@ public class Cuenta {
         this.blockedAt = null;
     }
 
+
     public void establecerPassword(String passwordHash) {
         this.password = passwordHash;
         if (!this.activa) {
@@ -124,6 +125,21 @@ public class Cuenta {
         }
 
         return true; // Login exitoso
+    }
+
+    public boolean esPasswordSegura(String passwordPlana) {
+
+        String passwordRegex = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[#$!@%^&*()_+={}\\[\\]|\\\\:;\"'<>,.?/~`]).{12,}$";
+
+        if (passwordPlana.length() < 12) {
+            throw new IllegalArgumentException("La contraseña debe tener al menos 12 caracteres.");
+        }
+
+        if (!passwordPlana.matches(passwordRegex)) {
+            throw new IllegalArgumentException("La contraseña debe contener al menos una letra mayúscula, una letra minúscula, un número y un carácter especial.");
+        }
+
+        return true;
     }
 
 }

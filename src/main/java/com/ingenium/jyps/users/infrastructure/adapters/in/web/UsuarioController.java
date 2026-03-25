@@ -166,7 +166,7 @@ public class UsuarioController {
 
     @PostMapping("/setup")
     @Operation(summary = "Ruta que recibe la nueva contraseña", description = "Valida el token de acceso proporcionado, establece la contraseña para la cuenta del usuario asociado al token y devuelve los datos actualizados de la cuenta. Este endpoint se utiliza tanto para configurar la contraseña por primera vez después del registro como para restablecerla en caso de olvido.")
-    public ResponseEntity<CuentaResponse> establecerPassword(@RequestBody ValidarTokenRequest request) {
+    public ResponseEntity<CuentaResponse> establecerPassword(@RequestBody EstablecerPasswordRequest request) {
         Usuario usuario = establecerPasswordUseCase.ejecutar(request);
         CuentaResponse cuentaResponse = CuentaResponse.desdeDominio(usuario);
         return ResponseEntity.ok(cuentaResponse);
