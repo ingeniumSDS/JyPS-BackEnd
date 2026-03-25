@@ -67,6 +67,8 @@ public class GuardarUsuarioService implements GuardarUsuarioUseCase {
 
         usuarioRepositoryPort.save(nuevoUsuario);
 
+        nuevoUsuario.setId(usuarioRepositoryPort.findByCorreo(command.correo()).orElseThrow().getId());
+
         publisher.publishEvent(new UsuarioCreadoEvent(
                 nuevoUsuario.getCorreo(),
                 nuevoUsuario.getNombre() + " " + nuevoUsuario.getApellidoPaterno() +  " " + nuevoUsuario.getApellidoMaterno(),
