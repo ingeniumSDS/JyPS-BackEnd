@@ -8,6 +8,11 @@ import com.ingenium.jyps.users.domain.model.Cuenta;
 import com.ingenium.jyps.users.domain.model.Usuario;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
+
 
 @Service
 public class LoginService implements LoginUseCase {
@@ -15,9 +20,7 @@ public class LoginService implements LoginUseCase {
     private final UsuarioRepositoryPort usuarioRepositoryPort;
     private final PasswordEncoderPort passwordEncoderPort;
 
-
-    public LoginService(UsuarioRepositoryPort usuarioRepositoryPort, PasswordEncoderPort passwordEncoderPort,
-                        JwtProviderPort jwtProviderPort) {
+    public LoginService(UsuarioRepositoryPort usuarioRepositoryPort, PasswordEncoderPort passwordEncoderPort) {
         this.usuarioRepositoryPort = usuarioRepositoryPort;
         this.passwordEncoderPort = passwordEncoderPort;
     }
@@ -32,6 +35,7 @@ public class LoginService implements LoginUseCase {
         Usuario usuario = usuarioRepositoryPort.findByCorreo(correo)
                 .orElseThrow(() -> new IllegalArgumentException("Credenciales incorrectas"));
 
+
         // 2. Comparamos la contraseña plana con el Hash de la Base de Datos
         boolean esPasswordCorrecta = passwordEncoderPort.validarPassword(
                 password,
@@ -39,13 +43,15 @@ public class LoginService implements LoginUseCase {
         );
 
         if (!esPasswordCorrecta) {
-            // TODO en el futuro: Sumar un intento fallido para bloquear la cuenta tras 3 errores
-            throw new IllegalArgumentException("Credenciales incorrectas");
+            usuario.getCuenta().registrarIntentoFallido();
+            usuarioRepositoryPort.save(usuario);
+            throw new IllegalArgumentException("Credenciales incorrectas.");
         }
 
         // 3. Ejecutamos las reglas de negocio del Dominio (Revisa que esté activa, no bloqueada, etc.)
         usuario.getCuenta().login();
 
+        usuarioRepositoryPort.save(usuario);
         // 4. Todo un éxito, retornamos la cuenta
         return usuario;
     }
