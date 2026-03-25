@@ -3,7 +3,7 @@ package com.ingenium.jyps.users.infrastructure.adapters.out.persist;
 import com.ingenium.jyps.departamentos.infrastructure.adapters.out.persist.DepartamentoEntity;
 import com.ingenium.jyps.users.domain.model.Cuenta;
 import com.ingenium.jyps.users.domain.model.Usuario;
-import com.ingenium.jyps.users.domain.ports.out.UsuarioRepositoryPort;
+import com.ingenium.jyps.users.application.ports.out.UsuarioRepositoryPort;
 import com.ingenium.jyps.users.infrastructure.adapters.out.persist.entity.CuentaEmbeddable;
 import com.ingenium.jyps.users.infrastructure.adapters.out.persist.entity.UsuarioEntity;
 import org.jspecify.annotations.NonNull;
@@ -43,6 +43,11 @@ public class UsuarioRepositoryAdapter implements UsuarioRepositoryPort {
     }
 
     @Override
+    public Optional<Usuario> findByToken(String token) {
+        return jpaUsuarioRepository.findByCuenta_TokenRecuperacion(token).map(this::mapToDomain);
+    }
+
+    @Override
     public boolean estaActivo(String correo) {
         Usuario usuario = jpaUsuarioRepository.findByCorreo(correo).map(this::mapToDomain).orElseThrow( () -> new  RuntimeException("Usuario no encontrado"));
         if (usuario.getCuenta() != null) {
@@ -59,9 +64,10 @@ public class UsuarioRepositoryAdapter implements UsuarioRepositoryPort {
 
     @Override
     public boolean existsByTelefono(String telefono) {
-        return jpaUsuarioRepository.findByCorreo(telefono).isPresent();
-
+        return jpaUsuarioRepository.findByTelefono(telefono).isPresent();
     }
+
+
 
     @Override
     public Optional<Usuario> findById(Long id) {
@@ -131,7 +137,7 @@ public class UsuarioRepositoryAdapter implements UsuarioRepositoryPort {
         CuentaEmbeddable cuentaEmb = new CuentaEmbeddable();
         cuentaEmb.setPassword(usuario.getCuenta().getPassword());
         cuentaEmb.setIntentosFallidos(usuario.getCuenta().getIntentosFallidos());
-        cuentaEmb.setTokenRecuperacion(usuario.getCuenta().getTokenRecuperacion());
+        cuentaEmb.setTokenRecuperacion(usuario.getCuenta().getTokenAcceso());
         cuentaEmb.setTokenExpiresAt(usuario.getCuenta().getTokenExpiresAt());
         cuentaEmb.setTokenUsado(usuario.getCuenta().isTokenUsado());
         cuentaEmb.setBloqueada(usuario.getCuenta().isBloqueada());
