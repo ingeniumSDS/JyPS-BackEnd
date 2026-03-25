@@ -6,6 +6,9 @@ import com.ingenium.jyps.departamentos.application.usecase.CrearDepartamentoUseC
 import com.ingenium.jyps.departamentos.domain.model.Departamento;
 import com.ingenium.jyps.departamentos.infrastructure.adapters.in.web.dto.request.CrearDepartamentoRequest;
 import com.ingenium.jyps.departamentos.infrastructure.adapters.in.web.dto.response.DepartamentoResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.tags.Tags;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/departamentos")
-@CrossOrigin("*")
+@Tag(name = "Departamentos", description = "Operaciones relacionadas con la gestión de departamentos")
 public class DepartamentoController {
 
     private final CrearDepartamentoUseCase crearDepartamentoUseCase;
@@ -25,7 +28,7 @@ public class DepartamentoController {
         this.crearDepartamentoUseCase = crearDepartamentoUseCase;
         this.listarDepartamentosUseCase = listarDepartamentosUseCase;
     }
-
+    @Operation(summary = "Crear un nuevo departamento", description = "Crea un nuevo departamento con la información proporcionada (Ej. Nombre, descripción y jefe) y devuelve los datos del departamento registrado junto con la ubicación del recurso creado")
     @PostMapping("")
     public ResponseEntity<DepartamentoResponse> crear(@RequestBody CrearDepartamentoRequest request) {
 
@@ -45,6 +48,7 @@ public class DepartamentoController {
     }
 
     @GetMapping("")
+    @Operation(summary = "Listar departamentos", description = "Obtiene una lista de todos los departamentos registrados en el sistema, incluyendo su nombre, descripción y jefe")
     public ResponseEntity<List<DepartamentoResponse>> findAll() {
 
         List<Departamento> departamentos = listarDepartamentosUseCase.ejecutar();
