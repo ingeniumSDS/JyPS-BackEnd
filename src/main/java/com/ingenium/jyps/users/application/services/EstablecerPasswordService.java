@@ -4,7 +4,7 @@ import com.ingenium.jyps.users.application.ports.in.usecases.EstablecerPasswordU
 import com.ingenium.jyps.users.application.ports.out.PasswordEncoderPort;
 import com.ingenium.jyps.users.domain.model.Usuario;
 import com.ingenium.jyps.users.application.ports.out.UsuarioRepositoryPort;
-import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.request.ValidarTokenRequest;
+import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.request.EstablecerPasswordRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -21,10 +21,10 @@ public class EstablecerPasswordService implements EstablecerPasswordUseCase {
     }
 
     @Override
-    public Usuario ejecutar(ValidarTokenRequest request) {
+    public Usuario ejecutar(EstablecerPasswordRequest request) {
         Usuario usuario = usuarioRepositoryPort.findByToken(request.token())
                 .orElseThrow(() -> new IllegalArgumentException("Token no válido"));
-
+        usuario.getCuenta().esPasswordSegura(request.password());
         usuario.getCuenta().validarToken();
 
         usuario.getCuenta().establecerPassword(passwordEncoderPort.codificar(request.password()));
