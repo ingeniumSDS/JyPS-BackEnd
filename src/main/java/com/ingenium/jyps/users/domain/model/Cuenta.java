@@ -97,9 +97,8 @@ public class Cuenta {
 
     public void establecerPassword(String passwordHash) {
         this.password = passwordHash;
-        if (!this.activa) {
-            activarCuenta();
-        }
+        activarCuenta();
+        resetIntentoFallido();
         usarToken();
     }
 
