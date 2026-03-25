@@ -1,0 +1,50 @@
+package com.ingenium.jyps.users.infrastructure.adapters.out.security;
+
+import com.ingenium.jyps.users.application.ports.out.JwtProviderPort;
+import com.ingenium.jyps.users.domain.model.Usuario;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import javax.crypto.SecretKey;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+
+
+@Component
+public class JwtProviderAdapter implements JwtProviderPort {
+
+    private final String SECRET_KEY;
+    private final SecretKey key; // La declaramos, pero NO la inicializamos aquí
+
+    // Todo ocurre de forma segura dentro del constructor
+    public JwtProviderAdapter(@Value("${jwt.secret.key}") String secretKey) {
+        this.SECRET_KEY = secretKey;
+        // Ahora sí, ya tenemos el texto, podemos construir la llave criptográfica
+        this.key = Keys.hmacShaKeyFor(this.SECRET_KEY.getBytes());
+    }
+
+    @Override
+    public String generarToken(Usuario usuario) {
+
+        // Convertimos la lista de Roles (Enums) a lista de Strings para guardarla en el token
+        List<String> rolesStr = usuario.getRoles().stream()
+                .map(Enum::name)
+                .collect(Collectors.toList());
+
+        // Tiempo de vida del token (Ej: 24 horas)
+        long tiempoExpiracion = 1000 * 60 * 60 * 24;
+
+        return Jwts.builder()
+                .subject(usuario.getCorreo()) // El "sujeto" principal del token (suele ser el correo o ID)
+                .claim("id", usuario.getId()) // Datos extra (claims)
+                .claim("nombre", usuario.getNombre())
+                .claim("roles", rolesStr) // ¡Súper importante para los permisos después!
+                .issuedAt(new Date()) // Fecha de emisión
+                .expiration(new Date(System.currentTimeMillis() + tiempoExpiracion)) // Fecha de caducidad
+                .signWith(key) // Sellamos el gafete con la firma del Chef
+                .compact(); // Construimos el String final
+    }
+}

@@ -110,4 +110,20 @@ public class Cuenta {
 
     }
 
+    public boolean login() {
+        if (estaBloqueada()) {
+            throw new IllegalStateException("La cuenta está bloqueada. Intente nuevamente más tarde.");
+        }
+
+        if (!this.activa) {
+            throw new IllegalStateException("La cuenta no está activa. Por favor, active su cuenta antes de iniciar sesión.");
+        }
+
+        if (this.password == null) {
+            throw new IllegalStateException("La cuenta no tiene una contraseña establecida. Por favor, establezca una contraseña antes de iniciar sesión.");
+        }
+
+        return true; // Login exitoso
+    }
+
 }

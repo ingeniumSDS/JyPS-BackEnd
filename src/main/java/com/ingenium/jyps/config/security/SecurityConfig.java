@@ -1,4 +1,4 @@
-package com.ingenium.jyps.users.infrastructure.config.security;
+package com.ingenium.jyps.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
