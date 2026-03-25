@@ -28,7 +28,13 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         // Aquí pones tus rutas públicas (las que NO necesitan token)
-                        .requestMatchers("/api/v1/usuarios/login", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/api/v1/usuarios/login",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/api/v1/usuarios/token",
+                                "/api/v1/usuarios/setup/validar",
+                                "/api/v1/usuarios/setup")
+                        .permitAll()
                         // Todo lo demás sí o sí necesita token
                         .anyRequest().authenticated()
                 )
