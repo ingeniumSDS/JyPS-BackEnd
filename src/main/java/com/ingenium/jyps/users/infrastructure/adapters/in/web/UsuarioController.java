@@ -3,25 +3,27 @@ package com.ingenium.jyps.users.infrastructure.adapters.in.web;
 import com.ingenium.jyps.users.application.ports.in.command.RegistrarUsuarioCommand;
 import com.ingenium.jyps.users.application.ports.in.command.UpdateUsuarioCommand;
 import com.ingenium.jyps.users.application.ports.in.usecases.*;
-import com.ingenium.jyps.users.domain.model.Cuenta;
 import com.ingenium.jyps.users.domain.model.Usuario;
 import com.ingenium.jyps.users.domain.model.enums.Roles;
 import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.request.CrearUsuarioRequest;
+import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.request.GenerarTokenRequest;
 import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.request.UpdateUsuarioRequest;
+import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.request.ValidarTokenRequest;
 import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.response.CuentaResponse;
 import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.response.EstadoCuentaResponse;
+import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.response.GenerarTokenResponse;
 import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.response.UsuarioResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityReturnValueHandler;
 
 import java.net.URI;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/usuarios")
-@CrossOrigin("*")
 @Tag(name = "Usuarios", description = "Operaciones relacionadas con la gestión de usuarios y cuentas")
 public class UsuarioController {
 
@@ -30,22 +32,27 @@ public class UsuarioController {
     private final ObtenerTodosLosUsuariosUseCase obtenerTodosLosUsuariosUseCase;
     private final UpdateUsuarioUseCase updateUsuarioUseCase;
     private final UpdateEstadoCuentaUseCase updateEstadoCuentaUseCase;
+    private final EstablecerPasswordUseCase establecerPasswordUseCase;
+    private final GenerarTokenUseCase generarTokenUseCase;
 
     public UsuarioController(GuardarUsuarioUseCase guardarUsuarioUseCase,
                              ObtenerUsuarioPorIdUseCase obtenerUsuarioPorIdUseCase,
                              ObtenerTodosLosUsuariosUseCase obtenerTodosLosUsuariosUseCase,
-                             UpdateUsuarioUseCase updateUsuarioUseCase, UpdateEstadoCuentaUseCase updateEstadoCuentaUseCase) {
+                             UpdateUsuarioUseCase updateUsuarioUseCase,
+                             UpdateEstadoCuentaUseCase updateEstadoCuentaUseCase,
+                             EstablecerPasswordUseCase establecerPasswordUseCase,
+                             GenerarTokenUseCase generarTokenUseCase
+    ) {
 
         this.guardarUsuarioUseCase = guardarUsuarioUseCase;
-
         this.obtenerUsuarioPorIdUseCase = obtenerUsuarioPorIdUseCase;
-
         this.obtenerTodosLosUsuariosUseCase = obtenerTodosLosUsuariosUseCase;
-
         this.updateUsuarioUseCase = updateUsuarioUseCase;
-
         this.updateEstadoCuentaUseCase = updateEstadoCuentaUseCase;
+        this.establecerPasswordUseCase = establecerPasswordUseCase;
+        this.generarTokenUseCase = generarTokenUseCase;
     }
+
 
     @PostMapping("")
     @Operation(summary = "Registra un nuevo usuario", description = "Crea un nuevo usuario con la información proporcionada (Ej. Nombre, apellidos, correo, teléfono, horarios, roles y departamento) y devuelve los datos del usuario registrado junto con la ubicación del recurso creado")
@@ -69,6 +76,8 @@ public class UsuarioController {
 
 
         Usuario nuevoUsuario = guardarUsuarioUseCase.ejecutar(command);
+
+        System.out.println(nuevoUsuario.getId());
 
         UsuarioResponse response = UsuarioResponse.desdeDominio(nuevoUsuario);
 
@@ -145,6 +154,34 @@ public class UsuarioController {
         Usuario usuario = obtenerUsuarioPorIdUseCase.ejecutar(id);
         CuentaResponse response = CuentaResponse.desdeDominio(usuario);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/setup/validar")
+    @Operation(summary = "Control de acceso a formulario",  description = "Valida el token de acceso proporcionado y devuelve el token de acceso asociado a la cuenta del usuario si el token es válido. Este endpoint se utiliza para verificar la validez del token antes de permitir al usuario establecer o restablecer su contraseña.")
+    public ResponseEntity<String> validarTokenAcceso(@RequestParam String token) {
+        Usuario usuario = establecerPasswordUseCase.validarToken(token);
+        return ResponseEntity.ok(usuario.getCuenta().getTokenAcceso());
+    }
+
+    @PostMapping("/setup")
+    @Operation(summary = "Ruta que recibe la nueva contraseña",description = "Valida el token de acceso proporcionado, establece la contraseña para la cuenta del usuario asociado al token y devuelve los datos actualizados de la cuenta. Este endpoint se utiliza tanto para configurar la contraseña por primera vez después del registro como para restablecerla en caso de olvido.")
+    public ResponseEntity<CuentaResponse> establecerPassword(@RequestBody ValidarTokenRequest request) {
+        Usuario usuario = establecerPasswordUseCase.ejecutar(request);
+        CuentaResponse cuentaResponse = CuentaResponse.desdeDominio(usuario);
+        return ResponseEntity.ok(cuentaResponse);
+    }
+
+    @PostMapping("/token")
+    @Operation(summary = "Token para recuperar contraseña", description = "Genera un nuevo token de acceso para el usuario asociado al correo proporcionado y lo envía por correo electrónico. Este token es de un solo uso y recuperar la contraseña.")
+    public ResponseEntity<GenerarTokenResponse> generarToken(@RequestBody GenerarTokenRequest request) {
+
+        if (request.correo() == null || request.correo().isEmpty()) {
+            return ResponseEntity.badRequest().body(new GenerarTokenResponse("El correo es obligatorio"));
+        }
+
+        generarTokenUseCase.ejecutar(request.correo());
+
+        return ResponseEntity.ok(new GenerarTokenResponse("Token generado y enviado al correo: " + request.correo()));
     }
 
 

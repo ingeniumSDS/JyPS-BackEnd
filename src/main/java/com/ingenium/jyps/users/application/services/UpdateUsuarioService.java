@@ -4,7 +4,7 @@ import com.ingenium.jyps.departamentos.domain.ports.out.DepartamentoRepositoryPo
 import com.ingenium.jyps.users.application.ports.in.command.UpdateUsuarioCommand;
 import com.ingenium.jyps.users.application.ports.in.usecases.UpdateUsuarioUseCase;
 import com.ingenium.jyps.users.domain.model.Usuario;
-import com.ingenium.jyps.users.domain.ports.out.UsuarioRepositoryPort;
+import com.ingenium.jyps.users.application.ports.out.UsuarioRepositoryPort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -73,6 +73,8 @@ public class UpdateUsuarioService implements UpdateUsuarioUseCase {
         );
 
         usuarioRepositoryPort.save(u);
+
+        u.setId(command.id());
         // 6. Guardar los cambios
         return u;
     }

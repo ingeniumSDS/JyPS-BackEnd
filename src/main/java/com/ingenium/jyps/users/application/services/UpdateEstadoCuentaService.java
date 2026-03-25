@@ -3,7 +3,7 @@ package com.ingenium.jyps.users.application.services;
 import com.ingenium.jyps.users.application.ports.in.usecases.UpdateEstadoCuentaUseCase;
 import com.ingenium.jyps.users.domain.model.Cuenta;
 import com.ingenium.jyps.users.domain.model.Usuario;
-import com.ingenium.jyps.users.domain.ports.out.UsuarioRepositoryPort;
+import com.ingenium.jyps.users.application.ports.out.UsuarioRepositoryPort;
 import org.springframework.stereotype.Service;
 
 @Service
