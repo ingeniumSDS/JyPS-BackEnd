@@ -3,16 +3,12 @@ package com.ingenium.jyps.users.infrastructure.adapters.in.web;
 import com.ingenium.jyps.users.application.ports.in.command.RegistrarUsuarioCommand;
 import com.ingenium.jyps.users.application.ports.in.command.UpdateUsuarioCommand;
 import com.ingenium.jyps.users.application.ports.in.usecases.*;
+import com.ingenium.jyps.users.application.ports.out.JwtProviderPort;
 import com.ingenium.jyps.users.domain.model.Usuario;
 import com.ingenium.jyps.users.domain.model.enums.Roles;
-import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.request.CrearUsuarioRequest;
-import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.request.GenerarTokenRequest;
-import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.request.UpdateUsuarioRequest;
-import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.request.ValidarTokenRequest;
-import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.response.CuentaResponse;
-import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.response.EstadoCuentaResponse;
-import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.response.GenerarTokenResponse;
-import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.response.UsuarioResponse;
+import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.request.*;
+import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.response.*;
+import io.jsonwebtoken.Jwts;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +30,8 @@ public class UsuarioController {
     private final UpdateEstadoCuentaUseCase updateEstadoCuentaUseCase;
     private final EstablecerPasswordUseCase establecerPasswordUseCase;
     private final GenerarTokenUseCase generarTokenUseCase;
+    private final LoginUseCase loginUseCase;
+    private final JwtProviderPort jwtProviderPort;
 
     public UsuarioController(GuardarUsuarioUseCase guardarUsuarioUseCase,
                              ObtenerUsuarioPorIdUseCase obtenerUsuarioPorIdUseCase,
@@ -41,7 +39,9 @@ public class UsuarioController {
                              UpdateUsuarioUseCase updateUsuarioUseCase,
                              UpdateEstadoCuentaUseCase updateEstadoCuentaUseCase,
                              EstablecerPasswordUseCase establecerPasswordUseCase,
-                             GenerarTokenUseCase generarTokenUseCase
+                             GenerarTokenUseCase generarTokenUseCase,
+                             LoginUseCase loginUseCase,
+                             JwtProviderPort jwtProviderPort
     ) {
 
         this.guardarUsuarioUseCase = guardarUsuarioUseCase;
@@ -51,6 +51,8 @@ public class UsuarioController {
         this.updateEstadoCuentaUseCase = updateEstadoCuentaUseCase;
         this.establecerPasswordUseCase = establecerPasswordUseCase;
         this.generarTokenUseCase = generarTokenUseCase;
+        this.loginUseCase = loginUseCase;
+        this.jwtProviderPort = jwtProviderPort;
     }
 
 
@@ -76,7 +78,6 @@ public class UsuarioController {
 
 
         Usuario nuevoUsuario = guardarUsuarioUseCase.ejecutar(command);
-
 
 
         UsuarioResponse response = UsuarioResponse.desdeDominio(nuevoUsuario);
@@ -157,14 +158,14 @@ public class UsuarioController {
     }
 
     @GetMapping("/setup/validar")
-    @Operation(summary = "Control de acceso a formulario",  description = "Valida el token de acceso proporcionado y devuelve el token de acceso asociado a la cuenta del usuario si el token es válido. Este endpoint se utiliza para verificar la validez del token antes de permitir al usuario establecer o restablecer su contraseña.")
+    @Operation(summary = "Control de acceso a formulario", description = "Valida el token de acceso proporcionado y devuelve el token de acceso asociado a la cuenta del usuario si el token es válido. Este endpoint se utiliza para verificar la validez del token antes de permitir al usuario establecer o restablecer su contraseña.")
     public ResponseEntity<String> validarTokenAcceso(@RequestParam String token) {
         Usuario usuario = establecerPasswordUseCase.validarToken(token);
         return ResponseEntity.ok(usuario.getCuenta().getTokenAcceso());
     }
 
     @PostMapping("/setup")
-    @Operation(summary = "Ruta que recibe la nueva contraseña",description = "Valida el token de acceso proporcionado, establece la contraseña para la cuenta del usuario asociado al token y devuelve los datos actualizados de la cuenta. Este endpoint se utiliza tanto para configurar la contraseña por primera vez después del registro como para restablecerla en caso de olvido.")
+    @Operation(summary = "Ruta que recibe la nueva contraseña", description = "Valida el token de acceso proporcionado, establece la contraseña para la cuenta del usuario asociado al token y devuelve los datos actualizados de la cuenta. Este endpoint se utiliza tanto para configurar la contraseña por primera vez después del registro como para restablecerla en caso de olvido.")
     public ResponseEntity<CuentaResponse> establecerPassword(@RequestBody ValidarTokenRequest request) {
         Usuario usuario = establecerPasswordUseCase.ejecutar(request);
         CuentaResponse cuentaResponse = CuentaResponse.desdeDominio(usuario);
@@ -182,6 +183,26 @@ public class UsuarioController {
         generarTokenUseCase.ejecutar(request.correo());
 
         return ResponseEntity.ok(new GenerarTokenResponse("Token generado y enviado al correo: " + request.correo()));
+    }
+
+    @PostMapping("/login")
+    @Operation(summary = "Login de usuario", description = "Valida las credenciales proporcionadas (correo y contraseña) y devuelve los datos del usuario junto con un token de acceso si las credenciales son correctas. Este endpoint se utiliza para autenticar a los usuarios y permitirles acceder a los recursos protegidos del sistema.")
+    public ResponseEntity<UsuarioLogeadoResponse> login(@RequestBody LoginRequest request) {
+        if (request.correo() == null || request.correo().isEmpty()) {
+            throw new IllegalArgumentException("El correo es obligatorio");
+        }
+
+        if (request.password() == null || request.password().isEmpty()) {
+            throw new IllegalArgumentException("La contraseña es obligatoria");
+        }
+
+
+        Usuario usuario = loginUseCase.ejecutar(request.correo(), request.password());
+        String tokenJwt = jwtProviderPort.generarToken(usuario);
+
+        UsuarioLogeadoResponse response = UsuarioLogeadoResponse.desdeDominio(usuario, tokenJwt);
+
+        return ResponseEntity.ok(response);
     }
 
 
