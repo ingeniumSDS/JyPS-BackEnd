@@ -1,12 +1,11 @@
-package com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.response;
+package com.ingenium.jyps.users.infrastructure.adapters.out.web.response;
 
-import com.ingenium.jyps.users.domain.model.Cuenta;
 import com.ingenium.jyps.users.domain.model.Usuario;
 
 import java.time.LocalTime;
 import java.util.List;
 
-public record UsuarioLogeadoResponse(
+public record UsuarioResponse(
         Long id,
         String nombreCompleto, // ¡Digerido para la vista!
         String correo,
@@ -15,13 +14,11 @@ public record UsuarioLogeadoResponse(
         LocalTime horaSalida,
         List<String> roles,
         Long departamentoId,
-        String nombreDepartamento,
-        Cuenta cuenta,
-        String tokenJwt
+        String nombreDepartamento
 ) {
 
     // 💡 TRUCO SENIOR: Método de fábrica estático (Mapper integrado)
-    public static UsuarioLogeadoResponse desdeDominio(Usuario usuario, String tokenJwt) {
+    public static UsuarioResponse desdeDominio(Usuario usuario) {
 
         // Manejo seguro del apellido materno por si es nulo
         String materno = (usuario.getApellidoMaterno() != null && !usuario.getApellidoMaterno().isBlank())
@@ -36,7 +33,7 @@ public record UsuarioLogeadoResponse(
                 .toList();
 
 
-        return new UsuarioLogeadoResponse(
+        return new UsuarioResponse(
                 usuario.getId(),
                 nombreCompleto,
                 usuario.getCorreo(),
@@ -45,9 +42,7 @@ public record UsuarioLogeadoResponse(
                 usuario.getHoraSalida(),
                 rolesString,
                 usuario.getDepartamentoId(),
-                usuario.getNombreDepartamento(),
-                usuario.getCuenta(),
-                tokenJwt
+                usuario.getNombreDepartamento()
         );
     }
 }

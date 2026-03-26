@@ -1,4 +1,4 @@
-package com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.response;
+package com.ingenium.jyps.users.infrastructure.adapters.out.web.response;
 
 import com.ingenium.jyps.users.domain.model.Usuario;
 
