@@ -3,6 +3,7 @@ package com.ingenium.jyps.config.security;
 import com.ingenium.jyps.users.infrastructure.adapters.in.web.filter.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -35,6 +36,11 @@ public class SecurityConfig {
                                 "/api/v1/usuarios/setup/validar",
                                 "/api/v1/usuarios/setup")
                         .permitAll()
+//                        .requestMatchers(HttpMethod.GET, "/api/v1/usuarios").hasRole("ADMINISTRADOR")
+//                        .requestMatchers(HttpMethod.POST, "/api/v1/usuarios").hasRole("ADMINISTRADOR")
+//                        .requestMatchers(HttpMethod.PUT, "/api/v1/usuarios/*").hasRole("ADMINISTRADOR")
+//                        .requestMatchers(HttpMethod.POST, "/api/v1/departamentos").hasRole("ADMINISTRADOR")
+//                        .requestMatchers(HttpMethod.GET, "/api/v1/departamentos").hasRole("ADMINISTRADOR")
                         // Todo lo demás sí o sí necesita token
                         .anyRequest().authenticated()
                 )
