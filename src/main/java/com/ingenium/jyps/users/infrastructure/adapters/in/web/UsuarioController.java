@@ -9,13 +9,17 @@ import com.ingenium.jyps.users.domain.model.enums.Roles;
 import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.request.*;
 import com.ingenium.jyps.users.infrastructure.adapters.out.web.response.*;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
 
+@EnableMethodSecurity
 @RestController
 @RequestMapping("/api/v1/usuarios")
 @Tag(name = "Usuarios", description = "Operaciones relacionadas con la gestión de usuarios y cuentas")
@@ -53,8 +57,9 @@ public class UsuarioController {
         this.jwtProviderPort = jwtProviderPort;
     }
 
-
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     @PostMapping("")
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Registra un nuevo usuario", description = "Crea un nuevo usuario con la información proporcionada (Ej. Nombre, apellidos, correo, teléfono, horarios, roles y departamento) y devuelve los datos del usuario registrado junto con la ubicación del recurso creado")
     public ResponseEntity<UsuarioResponse> registrarUsuario(@RequestBody CrearUsuarioRequest request) {
 
@@ -85,6 +90,8 @@ public class UsuarioController {
         return ResponseEntity.created(location).body(response);
     }
 
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/{id}")
     @Operation(summary = "Obtener usuario por ID", description = "Recupera los datos de un usuario específico según su ID")
     public ResponseEntity<UsuarioResponse> findById(@PathVariable Long id) {
@@ -93,7 +100,9 @@ public class UsuarioController {
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     @GetMapping("")
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Obtener todos los usuarios", description = "Recupera una lista de todos los usuarios registrados en el sistema")
     public ResponseEntity<List<UsuarioResponse>> findAll() {
 
