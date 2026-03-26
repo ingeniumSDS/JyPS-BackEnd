@@ -7,13 +7,11 @@ import com.ingenium.jyps.users.application.ports.out.JwtProviderPort;
 import com.ingenium.jyps.users.domain.model.Usuario;
 import com.ingenium.jyps.users.domain.model.enums.Roles;
 import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.request.*;
-import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.response.*;
-import io.jsonwebtoken.Jwts;
+import com.ingenium.jyps.users.infrastructure.adapters.out.web.response.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityReturnValueHandler;
 
 import java.net.URI;
 import java.util.List;
@@ -187,7 +185,7 @@ public class UsuarioController {
 
     @PostMapping("/login")
     @Operation(summary = "Login de usuario", description = "Valida las credenciales proporcionadas (correo y contraseña) y devuelve los datos del usuario junto con un token de acceso si las credenciales son correctas. Este endpoint se utiliza para autenticar a los usuarios y permitirles acceder a los recursos protegidos del sistema.")
-    public ResponseEntity<UsuarioLogeadoResponse> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<JWTResponse> login(@RequestBody LoginRequest request) {
         if (request.correo() == null || request.correo().isEmpty()) {
             throw new IllegalArgumentException("El correo es obligatorio");
         }
@@ -200,7 +198,7 @@ public class UsuarioController {
         Usuario usuario = loginUseCase.ejecutar(request.correo(), request.password());
         String tokenJwt = jwtProviderPort.generarToken(usuario);
 
-        UsuarioLogeadoResponse response = UsuarioLogeadoResponse.desdeDominio(usuario, tokenJwt);
+        JWTResponse response = JWTResponse.desdeDominio(tokenJwt);
 
         return ResponseEntity.ok(response);
     }

@@ -19,10 +19,8 @@ public class JwtProviderAdapter implements JwtProviderPort {
     private final String SECRET_KEY;
     private final SecretKey key; // La declaramos, pero NO la inicializamos aquí
 
-    // Todo ocurre de forma segura dentro del constructor
     public JwtProviderAdapter(@Value("${jwt.secret.key}") String secretKey) {
         this.SECRET_KEY = secretKey;
-        // Ahora sí, ya tenemos el texto, podemos construir la llave criptográfica
         this.key = Keys.hmacShaKeyFor(this.SECRET_KEY.getBytes());
     }
 
@@ -41,7 +39,12 @@ public class JwtProviderAdapter implements JwtProviderPort {
                 .subject(usuario.getCorreo()) // El "sujeto" principal del token (suele ser el correo o ID)
                 .claim("id", usuario.getId()) // Datos extra (claims)
                 .claim("nombre", usuario.getNombre())
+                .claim("apellidoPaterno", usuario.getApellidoPaterno())
+                .claim("apellidoMaterno", usuario.getApellidoMaterno())
+                .claim("telefono", usuario.getTelefono())
+                .claim("nombreDepartamento", usuario.getNombreDepartamento())
                 .claim("roles", rolesStr) // ¡Súper importante para los permisos después!
+                .claim("easter", "Luis Travesti")
                 .issuedAt(new Date()) // Fecha de emisión
                 .expiration(new Date(System.currentTimeMillis() + tiempoExpiracion)) // Fecha de caducidad
                 .signWith(key) // Sellamos el gafete con la firma del Chef

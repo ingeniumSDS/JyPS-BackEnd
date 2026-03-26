@@ -1,5 +1,6 @@
 package com.ingenium.jyps.users.application.services; // Asegúrate del paquete correcto
 
+import com.ingenium.jyps.departamentos.domain.ports.out.DepartamentoRepositoryPort;
 import com.ingenium.jyps.users.application.ports.in.usecases.LoginUseCase;
 import com.ingenium.jyps.users.application.ports.out.JwtProviderPort;
 import com.ingenium.jyps.users.application.ports.out.PasswordEncoderPort;
@@ -19,10 +20,13 @@ public class LoginService implements LoginUseCase {
 
     private final UsuarioRepositoryPort usuarioRepositoryPort;
     private final PasswordEncoderPort passwordEncoderPort;
+    private final DepartamentoRepositoryPort departamentoRepositoryPort;
 
-    public LoginService(UsuarioRepositoryPort usuarioRepositoryPort, PasswordEncoderPort passwordEncoderPort) {
+    public LoginService(UsuarioRepositoryPort usuarioRepositoryPort, PasswordEncoderPort passwordEncoderPort, DepartamentoRepositoryPort departamentoRepositoryPort) {
         this.usuarioRepositoryPort = usuarioRepositoryPort;
         this.passwordEncoderPort = passwordEncoderPort;
+        this.departamentoRepositoryPort = departamentoRepositoryPort;
+
     }
 
     @Override
@@ -49,10 +53,17 @@ public class LoginService implements LoginUseCase {
             throw new IllegalArgumentException("Credenciales incorrectas.");
         }
 
+
         // 3. Ejecutamos las reglas de negocio del Dominio (Revisa que esté activa, no bloqueada, etc.)
         usuario.getCuenta().login();
 
         usuarioRepositoryPort.save(usuario);
+
+        usuario.setNombreDepartamento(
+                departamentoRepositoryPort.findById(usuario.getDepartamentoId())
+                        .orElseThrow(() -> new IllegalArgumentException("El departamento con ese ID no existe"))
+                        .getNombre()
+        );
         // 4. Todo un éxito, retornamos la cuenta
         return usuario;
     }
