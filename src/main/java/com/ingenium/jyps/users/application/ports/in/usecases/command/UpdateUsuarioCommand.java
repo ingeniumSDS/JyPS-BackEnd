@@ -1,4 +1,4 @@
-package com.ingenium.jyps.users.application.ports.in.command;
+package com.ingenium.jyps.users.application.ports.in.usecases.command;
 
 import com.ingenium.jyps.departamentos.domain.model.Departamento;
 import com.ingenium.jyps.users.domain.model.enums.Roles;
