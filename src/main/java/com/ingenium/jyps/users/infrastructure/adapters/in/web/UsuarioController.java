@@ -1,6 +1,7 @@
 package com.ingenium.jyps.users.infrastructure.adapters.in.web;
 
 import com.ingenium.jyps.users.application.ports.in.usecases.command.EstablecerPasswordCommand;
+import com.ingenium.jyps.users.application.ports.in.usecases.command.LoginCommand;
 import com.ingenium.jyps.users.application.ports.in.usecases.command.RegistrarUsuarioCommand;
 import com.ingenium.jyps.users.application.ports.in.usecases.command.UpdateUsuarioCommand;
 import com.ingenium.jyps.users.application.ports.in.usecases.*;
@@ -198,6 +199,12 @@ public class UsuarioController {
     @PostMapping("/login")
     @Operation(summary = "Login de usuario", description = "Valida las credenciales proporcionadas (correo y contraseña) y devuelve los datos del usuario junto con un token de acceso si las credenciales son correctas. Este endpoint se utiliza para autenticar a los usuarios y permitirles acceder a los recursos protegidos del sistema.")
     public ResponseEntity<JWTResponse> login(@RequestBody LoginRequest request) {
+
+        LoginCommand command = new LoginCommand(
+                request.correo(),
+                request.password()
+        );
+
         if (request.correo() == null || request.correo().isEmpty()) {
             throw new IllegalArgumentException("El correo es obligatorio");
         }
@@ -207,7 +214,7 @@ public class UsuarioController {
         }
 
 
-        Usuario usuario = loginUseCase.ejecutar(request.correo(), request.password());
+        Usuario usuario = loginUseCase.ejecutar(command);
         String tokenJwt = jwtProviderPort.generarToken(usuario);
 
         JWTResponse response = JWTResponse.desdeDominio(tokenJwt);
