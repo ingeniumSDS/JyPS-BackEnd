@@ -2,7 +2,7 @@ package com.ingenium.jyps.users.application.services;
 
 import com.ingenium.jyps.departamentos.domain.model.Departamento;
 import com.ingenium.jyps.departamentos.domain.ports.out.DepartamentoRepositoryPort;
-import com.ingenium.jyps.users.application.ports.in.command.RegistrarUsuarioCommand;
+import com.ingenium.jyps.users.application.ports.in.usecases.command.RegistrarUsuarioCommand;
 import com.ingenium.jyps.users.domain.event.UsuarioCreadoEvent;
 import com.ingenium.jyps.users.domain.model.Cuenta;
 import com.ingenium.jyps.users.domain.model.Usuario;
