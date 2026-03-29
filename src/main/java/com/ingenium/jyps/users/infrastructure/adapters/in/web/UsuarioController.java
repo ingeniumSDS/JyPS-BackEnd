@@ -1,13 +1,14 @@
 package com.ingenium.jyps.users.infrastructure.adapters.in.web;
 
-import com.ingenium.jyps.users.application.ports.in.command.RegistrarUsuarioCommand;
-import com.ingenium.jyps.users.application.ports.in.command.UpdateUsuarioCommand;
+import com.ingenium.jyps.users.application.ports.in.usecases.command.EstablecerPasswordCommand;
+import com.ingenium.jyps.users.application.ports.in.usecases.command.RegistrarUsuarioCommand;
+import com.ingenium.jyps.users.application.ports.in.usecases.command.UpdateUsuarioCommand;
 import com.ingenium.jyps.users.application.ports.in.usecases.*;
 import com.ingenium.jyps.users.application.ports.out.JwtProviderPort;
 import com.ingenium.jyps.users.domain.model.Usuario;
 import com.ingenium.jyps.users.domain.model.enums.Roles;
 import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.request.*;
-import com.ingenium.jyps.users.infrastructure.adapters.out.web.response.*;
+import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.response.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -170,7 +171,13 @@ public class UsuarioController {
     @PostMapping("/setup")
     @Operation(summary = "Ruta que recibe la nueva contraseña", description = "Valida el token de acceso proporcionado, establece la contraseña para la cuenta del usuario asociado al token y devuelve los datos actualizados de la cuenta. Este endpoint se utiliza tanto para configurar la contraseña por primera vez después del registro como para restablecerla en caso de olvido.")
     public ResponseEntity<CuentaResponse> establecerPassword(@RequestBody EstablecerPasswordRequest request) {
-        Usuario usuario = establecerPasswordUseCase.ejecutar(request);
+
+        EstablecerPasswordCommand command = new EstablecerPasswordCommand(
+                request.token(),
+                request.password()
+        );
+
+        Usuario usuario = establecerPasswordUseCase.ejecutar(command);
         CuentaResponse cuentaResponse = CuentaResponse.desdeDominio(usuario);
         return ResponseEntity.ok(cuentaResponse);
     }

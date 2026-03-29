@@ -46,4 +46,5 @@ public class ConsultarUsuariosimpl implements ConsultarUsuariosUseCase {
         });
         return usuarios;
     }
+
 }

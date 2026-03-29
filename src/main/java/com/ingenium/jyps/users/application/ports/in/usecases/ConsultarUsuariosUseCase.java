@@ -10,9 +10,4 @@ public interface ConsultarUsuariosUseCase {
 
     List<Usuario> obtenerTodos();
 
-
-
-
-
-
 }

@@ -1,4 +1,4 @@
-package com.ingenium.jyps.users.infrastructure.adapters.out.web.response;
+package com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.response;
 
 public record JWTResponse(
         String tokenJwt
