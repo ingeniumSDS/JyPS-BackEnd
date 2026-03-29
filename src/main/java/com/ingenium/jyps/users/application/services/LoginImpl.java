@@ -1,6 +1,7 @@
 package com.ingenium.jyps.users.application.services; // Asegúrate del paquete correcto
 
 import com.ingenium.jyps.departamentos.domain.ports.out.DepartamentoRepositoryPort;
+import com.ingenium.jyps.users.application.ports.in.usecases.command.LoginCommand;
 import com.ingenium.jyps.users.application.ports.out.PasswordEncoderPort;
 import com.ingenium.jyps.users.application.ports.out.UsuarioRepositoryPort;
 import com.ingenium.jyps.users.domain.model.Usuario;
@@ -21,7 +22,11 @@ public class LoginImpl implements com.ingenium.jyps.users.application.ports.in.u
     }
 
     @Override
-    public Usuario ejecutar(String correo, String password) {
+    public Usuario ejecutar(LoginCommand loginCommand) {
+
+        String correo = loginCommand.correo();
+        String password = loginCommand.password();
+
         if (correo == null || password == null) {
             throw new IllegalArgumentException("Correo y contraseña no pueden ser nulos");
         }
