@@ -13,7 +13,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -26,35 +25,32 @@ import java.util.List;
 public class UsuarioController {
 
     private final GuardarUsuarioUseCase guardarUsuarioUseCase;
-    private final ObtenerUsuarioPorIdUseCase obtenerUsuarioPorIdUseCase;
-    private final ObtenerTodosLosUsuariosUseCase obtenerTodosLosUsuariosUseCase;
     private final UpdateUsuarioUseCase updateUsuarioUseCase;
     private final UpdateEstadoCuentaUseCase updateEstadoCuentaUseCase;
     private final EstablecerPasswordUseCase establecerPasswordUseCase;
     private final GenerarTokenUseCase generarTokenUseCase;
     private final LoginUseCase loginUseCase;
     private final JwtProviderPort jwtProviderPort;
+    private final ConsultarUsuariosUseCase consultarUsuariosUseCase;
 
     public UsuarioController(GuardarUsuarioUseCase guardarUsuarioUseCase,
-                             ObtenerUsuarioPorIdUseCase obtenerUsuarioPorIdUseCase,
-                             ObtenerTodosLosUsuariosUseCase obtenerTodosLosUsuariosUseCase,
                              UpdateUsuarioUseCase updateUsuarioUseCase,
                              UpdateEstadoCuentaUseCase updateEstadoCuentaUseCase,
                              EstablecerPasswordUseCase establecerPasswordUseCase,
                              GenerarTokenUseCase generarTokenUseCase,
                              LoginUseCase loginUseCase,
-                             JwtProviderPort jwtProviderPort
+                             JwtProviderPort jwtProviderPort,
+                             ConsultarUsuariosUseCase consultarUsuariosUseCase
     ) {
 
         this.guardarUsuarioUseCase = guardarUsuarioUseCase;
-        this.obtenerUsuarioPorIdUseCase = obtenerUsuarioPorIdUseCase;
-        this.obtenerTodosLosUsuariosUseCase = obtenerTodosLosUsuariosUseCase;
         this.updateUsuarioUseCase = updateUsuarioUseCase;
         this.updateEstadoCuentaUseCase = updateEstadoCuentaUseCase;
         this.establecerPasswordUseCase = establecerPasswordUseCase;
         this.generarTokenUseCase = generarTokenUseCase;
         this.loginUseCase = loginUseCase;
         this.jwtProviderPort = jwtProviderPort;
+        this.consultarUsuariosUseCase = consultarUsuariosUseCase;
     }
 
     @PreAuthorize("hasRole('ADMINISTRADOR')")
@@ -95,7 +91,7 @@ public class UsuarioController {
     @GetMapping("/{id}")
     @Operation(summary = "Obtener usuario por ID", description = "Recupera los datos de un usuario específico según su ID")
     public ResponseEntity<UsuarioResponse> findById(@PathVariable Long id) {
-        Usuario usuario = obtenerUsuarioPorIdUseCase.ejecutar(id);
+        Usuario usuario = consultarUsuariosUseCase.obtenerPorId(id);
         UsuarioResponse response = UsuarioResponse.desdeDominio(usuario);
         return ResponseEntity.ok(response);
     }
@@ -106,7 +102,7 @@ public class UsuarioController {
     @Operation(summary = "Obtener todos los usuarios", description = "Recupera una lista de todos los usuarios registrados en el sistema")
     public ResponseEntity<List<UsuarioResponse>> findAll() {
 
-        List<Usuario> usuarios = obtenerTodosLosUsuariosUseCase.ejecutar();
+        List<Usuario> usuarios = consultarUsuariosUseCase.obtenerTodos();
 
         List<UsuarioResponse> response = usuarios.stream()
                 .map(UsuarioResponse::desdeDominio)
@@ -149,7 +145,7 @@ public class UsuarioController {
 
         updateEstadoCuentaUseCase.ejecutar(id);
 
-        Usuario usuario = obtenerUsuarioPorIdUseCase.ejecutar(id);
+        Usuario usuario = consultarUsuariosUseCase.obtenerPorId(id);
 
         EstadoCuentaResponse response = EstadoCuentaResponse.desdeDominio(usuario);
 
@@ -159,7 +155,7 @@ public class UsuarioController {
     @GetMapping("/{id}/cuenta")
     @Operation(summary = "Obtener datos de la cuenta del usuario", description = "Recupera los datos de la cuenta de un usuario específico según su ID")
     public ResponseEntity<CuentaResponse> getCuenta(@PathVariable Long id) {
-        Usuario usuario = obtenerUsuarioPorIdUseCase.ejecutar(id);
+        Usuario usuario = consultarUsuariosUseCase.obtenerPorId(id);
         CuentaResponse response = CuentaResponse.desdeDominio(usuario);
         return ResponseEntity.ok(response);
     }
