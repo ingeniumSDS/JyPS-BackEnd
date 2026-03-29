@@ -1,21 +1,18 @@
 package com.ingenium.jyps.users.application.services;
 
-import com.ingenium.jyps.users.application.ports.in.usecases.EstablecerPasswordUseCase;
 import com.ingenium.jyps.users.application.ports.out.PasswordEncoderPort;
 import com.ingenium.jyps.users.domain.model.Usuario;
 import com.ingenium.jyps.users.application.ports.out.UsuarioRepositoryPort;
 import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.request.EstablecerPasswordRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
-public class EstablecerPasswordService implements EstablecerPasswordUseCase {
+public class EstablecerPasswordImpl implements com.ingenium.jyps.users.application.ports.in.usecases.EstablecerPasswordUseCase {
 
     private final UsuarioRepositoryPort usuarioRepositoryPort;
     private final PasswordEncoderPort passwordEncoderPort;
 
-    public EstablecerPasswordService(UsuarioRepositoryPort usuarioRepositoryPort, PasswordEncoderPort passwordEncoderPort) {
+    public EstablecerPasswordImpl(UsuarioRepositoryPort usuarioRepositoryPort, PasswordEncoderPort passwordEncoderPort) {
         this.usuarioRepositoryPort = usuarioRepositoryPort;
         this.passwordEncoderPort = passwordEncoderPort;
     }

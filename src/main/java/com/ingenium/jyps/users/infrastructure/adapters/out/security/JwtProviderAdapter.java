@@ -2,6 +2,7 @@ package com.ingenium.jyps.users.infrastructure.adapters.out.security;
 
 import com.ingenium.jyps.users.application.ports.out.JwtProviderPort;
 import com.ingenium.jyps.users.domain.model.Usuario;
+import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,16 +13,18 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.lang.Long.parseLong;
+
 
 @Component
 public class JwtProviderAdapter implements JwtProviderPort {
 
-    private final String SECRET_KEY;
     private final SecretKey key; // La declaramos, pero NO la inicializamos aquí
 
+
     public JwtProviderAdapter(@Value("${jwt.secret.key}") String secretKey) {
-        this.SECRET_KEY = secretKey;
-        this.key = Keys.hmacShaKeyFor(this.SECRET_KEY.getBytes());
+        this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
+
     }
 
     @Override
@@ -32,9 +35,8 @@ public class JwtProviderAdapter implements JwtProviderPort {
                 .map(Enum::name)
                 .collect(Collectors.toList());
 
-        // Tiempo de vida del token (Ej: 24 horas)
-        long tiempoExpiracion = 1000 * 60 * 60 * 24;
-
+        long tiempoExpiracion = 24 * 60 * 60 * 1000L;
+        // Tiempo de vida del token (Ej.: 24 horas)
         return Jwts.builder()
                 .subject(usuario.getCorreo()) // El "sujeto" principal del token (suele ser el correo o ID)
                 .claim("id", usuario.getId()) // Datos extra (claims)
@@ -43,7 +45,7 @@ public class JwtProviderAdapter implements JwtProviderPort {
                 .claim("apellidoMaterno", usuario.getApellidoMaterno())
                 .claim("telefono", usuario.getTelefono())
                 .claim("nombreDepartamento", usuario.getNombreDepartamento())
-                .claim("roles", rolesStr) // ¡Súper importante para los permisos después!
+                .claim("roles", rolesStr) // ¡Súperimportante para los permisos después!
                 .claim("easter", "Luis Travesti")
                 .issuedAt(new Date()) // Fecha de emisión
                 .expiration(new Date(System.currentTimeMillis() + tiempoExpiracion)) // Fecha de caducidad
