@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
 
-@EnableMethodSecurity
 @RestController
 @RequestMapping("/api/v1/usuarios")
+@CrossOrigin("*")
 @Tag(name = "Usuarios", description = "Operaciones relacionadas con la gestión de usuarios y cuentas")
 public class UsuarioController {
 

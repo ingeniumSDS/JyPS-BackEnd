@@ -1,4 +1,4 @@
-package com.ingenium.jyps.incidencias.infrastructure.adapters.out.persist;
+package com.ingenium.jyps.incidencias.infrastructure.adapters.out.persist.entity;
 
 import com.ingenium.jyps.incidencias.domain.model.enums.EstadosIncidencia;
 import com.ingenium.jyps.users.infrastructure.adapters.out.persist.entity.UsuarioEntity;
@@ -9,14 +9,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
-@Table(name = "justificantes")
-public class JustificanteEntity {
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "pases_de_salida")
+public class PaseDeSalidaEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,17 +31,14 @@ public class JustificanteEntity {
     @JoinColumn(name = "id_jefe", nullable = false)
     private UsuarioEntity jefe;
 
-    @Column(name = "fecha_solicitada", nullable = false)
-    private LocalDate fechaSolicitada;
+    @Column(name = "hora_solicitada", nullable = false)
+    private LocalTime horaSolicitada;
 
     @Column(name = "fecha_solicitud", nullable = false)
     private LocalDate fechaSolicitud;
 
     @Column(name = "detalles", length = 500)
     private String detalles;
-
-    @Column(name = "archivos")
-    private String archivos;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "estado", nullable = false)

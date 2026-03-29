@@ -42,7 +42,7 @@ public class SecurityConfig {
 //                        .requestMatchers(HttpMethod.POST, "/api/v1/departamentos").hasRole("ADMINISTRADOR")
 //                        .requestMatchers(HttpMethod.GET, "/api/v1/departamentos").hasRole("ADMINISTRADOR")
                         // Todo lo demás sí o sí necesita token
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

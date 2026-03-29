@@ -8,13 +8,13 @@ import com.ingenium.jyps.users.application.ports.out.UsuarioRepositoryPort;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ObtenerUsuarioPorIdService implements ObtenerUsuarioPorIdUseCase {
+public class ObtenerUsuarioPorIdImpl implements ObtenerUsuarioPorIdUseCase {
 
     private final UsuarioRepositoryPort usuarioRepositoryPort;
 
     private final DepartamentoRepositoryPort departamentoRepositoryPort;
 
-    public ObtenerUsuarioPorIdService(UsuarioRepositoryPort usuarioRepositoryPort, DepartamentoRepositoryPort departamentoRepositoryPort) {
+    public ObtenerUsuarioPorIdImpl(UsuarioRepositoryPort usuarioRepositoryPort, DepartamentoRepositoryPort departamentoRepositoryPort) {
         this.usuarioRepositoryPort = usuarioRepositoryPort;
         this.departamentoRepositoryPort = departamentoRepositoryPort;
     }
