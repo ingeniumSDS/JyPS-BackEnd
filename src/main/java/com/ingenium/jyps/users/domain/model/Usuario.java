@@ -1,12 +1,12 @@
 package com.ingenium.jyps.users.domain.model;
 
-import com.ingenium.jyps.departamentos.domain.model.Departamento;
 import com.ingenium.jyps.users.domain.model.enums.Roles;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalTime;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Getter
 public class Usuario {
@@ -26,6 +26,9 @@ public class Usuario {
 
     private Cuenta cuenta;
 
+    private static final Pattern PATTERN = Pattern.compile("^[\\p{L}+$]", Pattern.UNICODE_CHARACTER_CLASS);
+
+
     public Usuario(String nombre,
                    String apellidoPaterno,
                    String apellidoMaterno,
@@ -37,11 +40,12 @@ public class Usuario {
                    Long departamentoId
                    ) {
 
-        validarCampoTexto(nombre, "nombre", 100);
+        validarCampoTexto(nombre, "nombre", 50);
         validarCampoTexto(apellidoPaterno, "apellido paterno", 50);
         validarCampoTexto(apellidoMaterno, "apellido materno", 50);
         validarCorreo(correo);
         validarTelefono(telefono);
+        validarDepartamento(departamentoId);
         validarRoles(roles);
 
         if (roles.contains(Roles.EMPLEADO)) {
@@ -66,6 +70,7 @@ public class Usuario {
     public Usuario(Long id, String nombre, String apellidoPaterno, String apellidoMaterno,
                    String correo, String telefono, LocalTime horaEntrada, LocalTime horaSalida,
                    List<Roles> roles, Long departamentoId, Cuenta cuenta) {
+
         this.id = id;
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
@@ -77,6 +82,7 @@ public class Usuario {
         this.roles = roles;
         this.departamentoId = departamentoId;
         this.cuenta = cuenta;
+
     }
 
     private void validarCampoTexto(String campo, String nombreCampo, int longitudMaxima) {
@@ -85,9 +91,9 @@ public class Usuario {
             throw new IllegalArgumentException("El " + nombreCampo + " es obligatorio.");
         }
 
-        if (campo.length() < 2) {
+        if (campo.trim().length() < 2) {
             throw new IllegalArgumentException("El " + nombreCampo + " debe contener al menos 2 caracteres");
-        } else if (campo.length() > longitudMaxima) {
+        } else if (campo.trim().length() > longitudMaxima) {
             throw new IllegalArgumentException("El " + nombreCampo + " es debe contener como máximo " + longitudMaxima + " caracteres.");
         }
 
@@ -96,15 +102,16 @@ public class Usuario {
         }
     }
 
-    private void validarDepartamento(Departamento departamento) {
-        if (departamento == null) {
+    private void validarDepartamento(Long departamentoId) {
+        if (departamentoId == null) {
             throw new IllegalArgumentException("Debe seleccionar un departamento.");
         }
     }
 
     private void validarCaracteres(String campo, String nombreCampo) {
-        if (!campo.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$")) {
-            throw new IllegalArgumentException("El campo no admite caracteres especiales.");
+
+        if (!PATTERN.matcher(campo).matches()) {
+            throw new IllegalArgumentException("El campo " + nombreCampo + "  admite caracteres especiales.");
         }
     }
 
@@ -114,7 +121,8 @@ public class Usuario {
 
         if (!correo.matches("^[a-zA-Z0-9.]+@utez\\.edu\\.mx$")) {
             throw new IllegalArgumentException("El correo debe pertenecer al dominio @utez.edu.mx");
-
+        } else if (correo.trim().length() < 20) {
+            throw new IllegalArgumentException("El correo es demasiado corto.");
         }
 
     }

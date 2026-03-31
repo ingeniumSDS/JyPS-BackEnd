@@ -14,19 +14,12 @@ import java.util.List;
 public class Justificante {
 
     private Long id;
-
     private Long empleadoId;
-
     private Long jefeId;
-
     private LocalDate fechaSolicitada;
-
     private LocalDate fechaSolicitud;
-
-    private String detalles;
-
+    private String descripcion;
     private List<String> archivos;
-
     private EstadosIncidencia estado;
 
     // Constructor para mandar a crear un nuevo justificante, sin el ID que se genera automáticamente.
@@ -34,13 +27,13 @@ public class Justificante {
             Long empleadoId,
             Long jefeId,
             LocalDate fechaSolicitada,
-            String detalles,
+            String descripcion,
             List<String> archivos
     ) {
 
         // Validación de los campos (El Modelo se defiende solo)
 
-        validarDetalles(detalles);
+        validarDescripcion(descripcion);
         tieneEmpleado(empleadoId);
         tieneJefe(jefeId);
         validarFechaSolicitada(fechaSolicitada);
@@ -49,12 +42,12 @@ public class Justificante {
         this.jefeId = jefeId;
         this.fechaSolicitada = fechaSolicitada;
         this.fechaSolicitud = LocalDate.now();
-        this.detalles = detalles;
+        this.descripcion = descripcion;
         this.archivos = archivos;
         this.estado = EstadosIncidencia.PENDIENTE;
     }
 
-    private void validarDetalles(String descripcion) {
+    private void validarDescripcion(String descripcion) {
         if (descripcion == null || descripcion.isEmpty()) {
             throw new IllegalArgumentException("La descripción no puede estar vacía");
         } else if (descripcion.trim().length() < 25) {
@@ -78,7 +71,6 @@ public class Justificante {
             throw new IllegalArgumentException("El justificante no puede ser anterior a 3 días hábiles.");
         }
     }
-
 
     private void tieneJefe(Long jefeId) {
         if (jefeId == null) {
