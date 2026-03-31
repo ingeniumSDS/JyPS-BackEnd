@@ -1,4 +1,4 @@
-package com.ingenium.jyps.incidencias.infrastructure.adapters.out.persist;
+package com.ingenium.jyps.incidencias.infrastructure.adapters.out.persist.entity;
 
 import com.ingenium.jyps.incidencias.domain.model.enums.EstadosIncidencia;
 import com.ingenium.jyps.users.infrastructure.adapters.out.persist.entity.UsuarioEntity;
@@ -24,11 +24,11 @@ public class PaseDeSalidaEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_empleado", nullable = false)
+    @JoinColumn(name = "id_empleado", nullable = false, foreignKey = @ForeignKey(name = "FK_PASE_EMPLEADO"))
     private UsuarioEntity empleado;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_jefe", nullable = false)
+    @JoinColumn(name = "id_jefe", nullable = false, foreignKey = @ForeignKey(name = "FK_PASE_JEFE"))
     private UsuarioEntity jefe;
 
     @Column(name = "hora_solicitada", nullable = false)

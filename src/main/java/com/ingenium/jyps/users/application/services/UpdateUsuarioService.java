@@ -1,7 +1,7 @@
 package com.ingenium.jyps.users.application.services;
 
 import com.ingenium.jyps.departamentos.domain.ports.out.DepartamentoRepositoryPort;
-import com.ingenium.jyps.users.application.ports.in.command.UpdateUsuarioCommand;
+import com.ingenium.jyps.users.application.ports.in.usecases.command.UpdateUsuarioCommand;
 import com.ingenium.jyps.users.application.ports.in.usecases.UpdateUsuarioUseCase;
 import com.ingenium.jyps.users.domain.model.Usuario;
 import com.ingenium.jyps.users.application.ports.out.UsuarioRepositoryPort;

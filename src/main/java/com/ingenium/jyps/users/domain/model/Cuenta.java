@@ -2,7 +2,6 @@ package com.ingenium.jyps.users.domain.model;
 
 import lombok.Getter;
 
-import java.rmi.server.UID;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -38,7 +37,17 @@ public class Cuenta {
         this.blockedAt = blockedAt;
     }
 
+    public boolean primerInicio() {
+        if (password == null) {
+            return true;
+        }
+        return false;
+    }
+
     public void generarTokenAcceso() {
+        if (!primerInicio()) {
+            estaInactiva();
+        }
         this.tokenAcceso = UUID.randomUUID().toString();
         this.tokenExpiresAt = LocalDateTime.now().plusMinutes(120);
         this.tokenUsado = false;
@@ -59,25 +68,30 @@ public class Cuenta {
         this.activa = false;
     }
 
-
     public void activarCuenta() {
         this.activa = true;
     }
 
-    public boolean estaBloqueada() {
-        if (this.bloqueada) {
-            // ¿Ya pasaron 2 minutos desde que se bloqueó?
-            if (this.blockedAt != null && LocalDateTime.now().isAfter(this.blockedAt.plusMinutes(2))) {
-                resetIntentoFallido(); // Esto quita el bloqueo y resetea los intentos
-                return false; // Ya no está bloqueada
-            }
-            return true; // Sigue bloqueada
+    public void estaInactiva() {
+        if (!this.activa) {
+            throw new IllegalStateException("La cuenta no está activa. Si cree que se trata de un error contacte al administrador del sistema..");
         }
-        return false; // Nunca estuvo bloqueada
+    }
+
+    public void estaBloqueada() {
+        if (this.bloqueada) {
+            if (this.blockedAt != null && LocalDateTime.now().isAfter(this.blockedAt.plusMinutes(2))) {
+                resetIntentoFallido();// Esto quita el bloqueo y resetea los intentos
+            } else {
+                throw new IllegalStateException("La cuenta está bloqueada debido a múltiples intentos fallidos. Por favor, inténtelo de nuevo más tarde.");
+            }
+        }
     }
 
 
     public void registrarIntentoFallido() {
+        estaBloqueada();
+        estaInactiva();
         this.intentosFallidos++;
         if (this.intentosFallidos >= 3) {
             bloquearCuenta();
@@ -90,11 +104,11 @@ public class Cuenta {
         this.blockedAt = null;
     }
 
+
     public void establecerPassword(String passwordHash) {
         this.password = passwordHash;
-        if (!this.activa) {
-            activarCuenta();
-        }
+        activarCuenta();
+        resetIntentoFallido();
         usarToken();
     }
 
@@ -110,20 +124,29 @@ public class Cuenta {
 
     }
 
-    public boolean login() {
-        if (estaBloqueada()) {
-            throw new IllegalStateException("La cuenta está bloqueada. Intente nuevamente más tarde.");
-        }
-
-        if (!this.activa) {
-            throw new IllegalStateException("La cuenta no está activa. Por favor, active su cuenta antes de iniciar sesión.");
-        }
+    public void login() {
 
         if (this.password == null) {
-            throw new IllegalStateException("La cuenta no tiene una contraseña establecida. Por favor, establezca una contraseña antes de iniciar sesión.");
+            throw new IllegalStateException("La cuenta no tiene contraseña establecida. Por favor, revise su correo institucional.");
         }
 
-        return true; // Login exitoso
+        estaBloqueada();
+        estaInactiva();
+        resetIntentoFallido();
+    }
+
+    public void esPasswordSegura(String passwordPlana) {
+
+        String passwordRegex = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[#$!@%^&*()_+={}\\[\\]|\\\\:;\"'<>,.?/~`]).{12,}$";
+
+        if (passwordPlana.length() < 12) {
+            throw new IllegalArgumentException("La contraseña debe tener al menos 12 caracteres.");
+        }
+
+        if (!passwordPlana.matches(passwordRegex)) {
+            throw new IllegalArgumentException("La contraseña debe contener al menos una letra mayúscula, una letra minúscula, un número y un carácter especial.");
+        }
+
     }
 
 }

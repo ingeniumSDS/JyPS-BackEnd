@@ -1,62 +1,63 @@
 package com.ingenium.jyps.users.infrastructure.adapters.in.web;
 
-import com.ingenium.jyps.users.application.ports.in.command.RegistrarUsuarioCommand;
-import com.ingenium.jyps.users.application.ports.in.command.UpdateUsuarioCommand;
+import com.ingenium.jyps.users.application.ports.in.usecases.command.EstablecerPasswordCommand;
+import com.ingenium.jyps.users.application.ports.in.usecases.command.LoginCommand;
+import com.ingenium.jyps.users.application.ports.in.usecases.command.RegistrarUsuarioCommand;
+import com.ingenium.jyps.users.application.ports.in.usecases.command.UpdateUsuarioCommand;
 import com.ingenium.jyps.users.application.ports.in.usecases.*;
 import com.ingenium.jyps.users.application.ports.out.JwtProviderPort;
 import com.ingenium.jyps.users.domain.model.Usuario;
 import com.ingenium.jyps.users.domain.model.enums.Roles;
 import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.request.*;
 import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.response.*;
-import io.jsonwebtoken.Jwts;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityReturnValueHandler;
 
 import java.net.URI;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/usuarios")
+@CrossOrigin("*")
 @Tag(name = "Usuarios", description = "Operaciones relacionadas con la gestión de usuarios y cuentas")
 public class UsuarioController {
 
     private final GuardarUsuarioUseCase guardarUsuarioUseCase;
-    private final ObtenerUsuarioPorIdUseCase obtenerUsuarioPorIdUseCase;
-    private final ObtenerTodosLosUsuariosUseCase obtenerTodosLosUsuariosUseCase;
     private final UpdateUsuarioUseCase updateUsuarioUseCase;
     private final UpdateEstadoCuentaUseCase updateEstadoCuentaUseCase;
     private final EstablecerPasswordUseCase establecerPasswordUseCase;
     private final GenerarTokenUseCase generarTokenUseCase;
     private final LoginUseCase loginUseCase;
     private final JwtProviderPort jwtProviderPort;
+    private final ConsultarUsuariosUseCase consultarUsuariosUseCase;
 
     public UsuarioController(GuardarUsuarioUseCase guardarUsuarioUseCase,
-                             ObtenerUsuarioPorIdUseCase obtenerUsuarioPorIdUseCase,
-                             ObtenerTodosLosUsuariosUseCase obtenerTodosLosUsuariosUseCase,
                              UpdateUsuarioUseCase updateUsuarioUseCase,
                              UpdateEstadoCuentaUseCase updateEstadoCuentaUseCase,
                              EstablecerPasswordUseCase establecerPasswordUseCase,
                              GenerarTokenUseCase generarTokenUseCase,
                              LoginUseCase loginUseCase,
-                             JwtProviderPort jwtProviderPort
+                             JwtProviderPort jwtProviderPort,
+                             ConsultarUsuariosUseCase consultarUsuariosUseCase
     ) {
 
         this.guardarUsuarioUseCase = guardarUsuarioUseCase;
-        this.obtenerUsuarioPorIdUseCase = obtenerUsuarioPorIdUseCase;
-        this.obtenerTodosLosUsuariosUseCase = obtenerTodosLosUsuariosUseCase;
         this.updateUsuarioUseCase = updateUsuarioUseCase;
         this.updateEstadoCuentaUseCase = updateEstadoCuentaUseCase;
         this.establecerPasswordUseCase = establecerPasswordUseCase;
         this.generarTokenUseCase = generarTokenUseCase;
         this.loginUseCase = loginUseCase;
         this.jwtProviderPort = jwtProviderPort;
+        this.consultarUsuariosUseCase = consultarUsuariosUseCase;
     }
 
-
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     @PostMapping("")
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Registra un nuevo usuario", description = "Crea un nuevo usuario con la información proporcionada (Ej. Nombre, apellidos, correo, teléfono, horarios, roles y departamento) y devuelve los datos del usuario registrado junto con la ubicación del recurso creado")
     public ResponseEntity<UsuarioResponse> registrarUsuario(@RequestBody CrearUsuarioRequest request) {
 
@@ -87,19 +88,23 @@ public class UsuarioController {
         return ResponseEntity.created(location).body(response);
     }
 
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/{id}")
     @Operation(summary = "Obtener usuario por ID", description = "Recupera los datos de un usuario específico según su ID")
     public ResponseEntity<UsuarioResponse> findById(@PathVariable Long id) {
-        Usuario usuario = obtenerUsuarioPorIdUseCase.ejecutar(id);
+        Usuario usuario = consultarUsuariosUseCase.obtenerPorId(id);
         UsuarioResponse response = UsuarioResponse.desdeDominio(usuario);
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     @GetMapping("")
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Obtener todos los usuarios", description = "Recupera una lista de todos los usuarios registrados en el sistema")
     public ResponseEntity<List<UsuarioResponse>> findAll() {
 
-        List<Usuario> usuarios = obtenerTodosLosUsuariosUseCase.ejecutar();
+        List<Usuario> usuarios = consultarUsuariosUseCase.obtenerTodos();
 
         List<UsuarioResponse> response = usuarios.stream()
                 .map(UsuarioResponse::desdeDominio)
@@ -142,7 +147,7 @@ public class UsuarioController {
 
         updateEstadoCuentaUseCase.ejecutar(id);
 
-        Usuario usuario = obtenerUsuarioPorIdUseCase.ejecutar(id);
+        Usuario usuario = consultarUsuariosUseCase.obtenerPorId(id);
 
         EstadoCuentaResponse response = EstadoCuentaResponse.desdeDominio(usuario);
 
@@ -152,7 +157,7 @@ public class UsuarioController {
     @GetMapping("/{id}/cuenta")
     @Operation(summary = "Obtener datos de la cuenta del usuario", description = "Recupera los datos de la cuenta de un usuario específico según su ID")
     public ResponseEntity<CuentaResponse> getCuenta(@PathVariable Long id) {
-        Usuario usuario = obtenerUsuarioPorIdUseCase.ejecutar(id);
+        Usuario usuario = consultarUsuariosUseCase.obtenerPorId(id);
         CuentaResponse response = CuentaResponse.desdeDominio(usuario);
         return ResponseEntity.ok(response);
     }
@@ -166,8 +171,14 @@ public class UsuarioController {
 
     @PostMapping("/setup")
     @Operation(summary = "Ruta que recibe la nueva contraseña", description = "Valida el token de acceso proporcionado, establece la contraseña para la cuenta del usuario asociado al token y devuelve los datos actualizados de la cuenta. Este endpoint se utiliza tanto para configurar la contraseña por primera vez después del registro como para restablecerla en caso de olvido.")
-    public ResponseEntity<CuentaResponse> establecerPassword(@RequestBody ValidarTokenRequest request) {
-        Usuario usuario = establecerPasswordUseCase.ejecutar(request);
+    public ResponseEntity<CuentaResponse> establecerPassword(@RequestBody EstablecerPasswordRequest request) {
+
+        EstablecerPasswordCommand command = new EstablecerPasswordCommand(
+                request.token(),
+                request.password()
+        );
+
+        Usuario usuario = establecerPasswordUseCase.ejecutar(command);
         CuentaResponse cuentaResponse = CuentaResponse.desdeDominio(usuario);
         return ResponseEntity.ok(cuentaResponse);
     }
@@ -187,7 +198,13 @@ public class UsuarioController {
 
     @PostMapping("/login")
     @Operation(summary = "Login de usuario", description = "Valida las credenciales proporcionadas (correo y contraseña) y devuelve los datos del usuario junto con un token de acceso si las credenciales son correctas. Este endpoint se utiliza para autenticar a los usuarios y permitirles acceder a los recursos protegidos del sistema.")
-    public ResponseEntity<UsuarioLogeadoResponse> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<JWTResponse> login(@RequestBody LoginRequest request) {
+
+        LoginCommand command = new LoginCommand(
+                request.correo(),
+                request.password()
+        );
+
         if (request.correo() == null || request.correo().isEmpty()) {
             throw new IllegalArgumentException("El correo es obligatorio");
         }
@@ -197,10 +214,10 @@ public class UsuarioController {
         }
 
 
-        Usuario usuario = loginUseCase.ejecutar(request.correo(), request.password());
+        Usuario usuario = loginUseCase.ejecutar(command);
         String tokenJwt = jwtProviderPort.generarToken(usuario);
 
-        UsuarioLogeadoResponse response = UsuarioLogeadoResponse.desdeDominio(usuario, tokenJwt);
+        JWTResponse response = JWTResponse.desdeDominio(tokenJwt);
 
         return ResponseEntity.ok(response);
     }
