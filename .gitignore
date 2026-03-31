@@ -36,6 +36,8 @@ out/
 /dist/
 /nbdist/
 /.nb-gradle/
+**/src/main/resources/wallet/
 
 ### VS Code ###
 .vscode/
+./.env
