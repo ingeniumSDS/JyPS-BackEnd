@@ -23,11 +23,11 @@ public class JustificanteEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_empleado", nullable = false)
+    @JoinColumn(name = "id_empleado", nullable = false, foreignKey = @ForeignKey(name = "FK_JUSTIFICANTE_EMPLEADO"))
     private UsuarioEntity empleado;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_jefe", nullable = false)
+    @JoinColumn(name = "id_jefe", nullable = false, foreignKey = @ForeignKey(name = "FK_JUSTIFICANTE_JEFE"))
     private UsuarioEntity jefe;
 
     @Column(name = "fecha_solicitada", nullable = false)

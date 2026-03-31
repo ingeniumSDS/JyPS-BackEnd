@@ -7,7 +7,6 @@ import java.util.List;
 public interface ConsultarUsuariosUseCase {
 
     Usuario obtenerPorId(Long id);
-
     List<Usuario> obtenerTodos();
 
 }

@@ -22,7 +22,7 @@ public class DepartamentoEntity {
     private String descripcion;
     private boolean activo;
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_jefe")
+    @JoinColumn(name = "id_jefe", foreignKey = @ForeignKey(name = "FK_DEPARTAMENTO_JEFE"))
     private UsuarioEntity jefe;
 
 }

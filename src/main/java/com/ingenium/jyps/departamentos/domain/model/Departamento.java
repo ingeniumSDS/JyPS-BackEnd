@@ -12,7 +12,8 @@ public class Departamento {
 
     // CONSTRUCTOR 1: Para crear un nuevo departamento (Nacimiento)
     public Departamento(String nombre, String descripcion, Long jefeId) {
-        validarCampoObligatorio(nombre, "nombre");
+
+        validarCampoObligatorio(nombre);
         this.nombre = nombre.trim().toUpperCase(); // Un buen toque es normalizar el nombre
 
         // Manejamos la descripción opcional
@@ -39,9 +40,9 @@ public class Departamento {
         this.jefeId = jefeId;
     }
 
-    private void validarCampoObligatorio(String campo, String nombreCampo) {
+    private void validarCampoObligatorio(String campo) {
         if (campo == null || campo.trim().isEmpty()) {
-            throw new IllegalArgumentException("El campo " + nombreCampo + " no puede estar vacío.");
+            throw new IllegalArgumentException("El nombre no puede estar vacío.");
         }
     }
 
