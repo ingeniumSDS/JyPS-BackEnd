@@ -2,7 +2,6 @@ package com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.response;
 
 import com.ingenium.jyps.users.domain.model.Usuario;
 
-import java.util.List;
 
 public record EstadoCuentaResponse(
         String nombreCompleto,
@@ -18,12 +17,6 @@ public record EstadoCuentaResponse(
                 : "";
 
         String nombreCompleto = usuario.getNombre() + " " + usuario.getApellidoPaterno() + materno;
-
-        // Convertimos la lista de Enums a lista de Strings
-        List<String> rolesString = usuario.getRoles().stream()
-                .map(Enum::name)
-                .toList();
-
 
         return new EstadoCuentaResponse(
                 nombreCompleto,

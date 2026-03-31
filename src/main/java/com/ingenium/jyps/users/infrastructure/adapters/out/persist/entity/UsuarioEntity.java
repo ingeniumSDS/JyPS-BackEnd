@@ -35,10 +35,10 @@ public class UsuarioEntity {
     private LocalTime horaSalida;
     @ElementCollection
     @Enumerated(EnumType.STRING)
-    @CollectionTable(name = "usuario_roles", joinColumns = @JoinColumn(name = "usuario_id"))
+    @CollectionTable(name = "usuario_roles", joinColumns = @JoinColumn(name = "usuario_id"), foreignKey = @ForeignKey(name = "FK_ROLES_USAURIO"))
     private List<Roles> roles;
     @ManyToOne(fetch = FetchType.LAZY) // LAZY es buena práctica para no saturar la memoria
-    @JoinColumn(name = "departamento_id", nullable = false)
+    @JoinColumn(name = "departamento_id", nullable = false, foreignKey = @ForeignKey(name = "FK_USUARIO_DEPARTAMENTO"))
     private DepartamentoEntity departamento;
 
     @Embedded

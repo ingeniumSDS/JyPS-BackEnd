@@ -1,4 +1,4 @@
-# 🏢 JyPS - Sistema de Gestión de Usuarios e Incidencias
+# 🏢 JyPS - Sistema de Gestión de Usuarios e Incidencias Laborales
 
 ## 📖 Descripción General
 JyPS es una API RESTful diseñada para gestionar el personal de la institución/empresa, su asignación a departamentos y el control de sus incidencias laborales (pases de salida y justificantes).

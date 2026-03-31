@@ -18,7 +18,6 @@ public class UsuarioRepositoryAdapter implements UsuarioRepositoryPort {
 
     private final JpaUsuarioRepository jpaUsuarioRepository;
 
-
     public UsuarioRepositoryAdapter(JpaUsuarioRepository jpaUsuarioRepository) {
         this.jpaUsuarioRepository = jpaUsuarioRepository;
     }
@@ -27,7 +26,7 @@ public class UsuarioRepositoryAdapter implements UsuarioRepositoryPort {
     public Usuario save(Usuario usuario) {
         UsuarioEntity uE = mapToEntity(usuario);
         // Se encarga de guardar o actualizar la entidad dependiendo si el ID es nulo o no.
-        // Tomado de JpaRepository ya que JpaUsuarioRepository extiende de esta interfaz.
+        // Tomado de Jpa Repository, ya que JpaUsuarioRepository extiende de esta interfaz.
         UsuarioEntity entidadGuardada = jpaUsuarioRepository.save(uE);
         return mapToDomain(entidadGuardada);
     }
@@ -49,7 +48,8 @@ public class UsuarioRepositoryAdapter implements UsuarioRepositoryPort {
 
     @Override
     public boolean estaActivo(String correo) {
-        Usuario usuario = jpaUsuarioRepository.findByCorreo(correo).map(this::mapToDomain).orElseThrow( () -> new  RuntimeException("Usuario no encontrado"));
+        Usuario usuario = jpaUsuarioRepository.findByCorreo(correo).map(this::mapToDomain).orElseThrow( () ->
+                new  RuntimeException("Usuario no encontrado"));
         if (usuario.getCuenta() != null) {
             Cuenta cuenta = usuario.getCuenta();
             return cuenta.isActiva();
@@ -66,8 +66,6 @@ public class UsuarioRepositoryAdapter implements UsuarioRepositoryPort {
     public boolean existsByTelefono(String telefono) {
         return jpaUsuarioRepository.findByTelefono(telefono).isPresent();
     }
-
-
 
     @Override
     public Optional<Usuario> findById(Long id) {
