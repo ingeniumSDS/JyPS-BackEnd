@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class RecuperarPasswordListener {
 
     private final EmailSenderPort emailSenderPort;
-    @Value("${FRONTEND_URL}")
+    @Value("${front.end.url}")
     private String frontURL;
 
 
