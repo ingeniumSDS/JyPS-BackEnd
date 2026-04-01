@@ -3,6 +3,7 @@ package com.ingenium.jyps.users.infrastructure.adapters.out.email;
 import com.ingenium.jyps.users.application.ports.out.EmailSenderPort;
 import com.ingenium.jyps.users.domain.event.TokenSolicitadoEvent;
 import com.ingenium.jyps.users.domain.event.UsuarioCreadoEvent;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -11,6 +12,9 @@ import org.springframework.stereotype.Component;
 public class RecuperarPasswordListener {
 
     private final EmailSenderPort emailSenderPort;
+    @Value("${FRONTEND_URL}")
+    private String frontURL;
+
 
     public RecuperarPasswordListener(EmailSenderPort emailSenderPort) {
         this.emailSenderPort = emailSenderPort;
@@ -20,7 +24,7 @@ public class RecuperarPasswordListener {
     @EventListener
     public void alSolicitarToken(TokenSolicitadoEvent event) {
 
-        String deepLink = "http://localhost:5173/establecer-contrasena/:token=" + event.tokenAcceso();
+        String deepLink = frontURL + event.tokenAcceso();
 
         // Delegamos el trabajo pesado al adaptador
         emailSenderPort.enviarCorreoRecuperacion(
