@@ -20,7 +20,7 @@ public class RecuperarPasswordListener {
     @EventListener
     public void alSolicitarToken(TokenSolicitadoEvent event) {
 
-        String deepLink = "jypsapp://auth/setup?token=" + event.tokenAcceso();
+        String deepLink = "http://localhost:5173/establecer-contrasena/:token=" + event.tokenAcceso();
 
         // Delegamos el trabajo pesado al adaptador
         emailSenderPort.enviarCorreoRecuperacion(
