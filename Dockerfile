@@ -1,16 +1,24 @@
 # Etapa 1: Construcción (Build)
-# Usamos una imagen de Gradle con Java 21 (o la versión que estés usando)
-FROM gradle:8.5-jdk21 AS build
-COPY --chown=gradle:gradle . /home/gradle/src
+FROM gradle:8.14-jdk21 AS build
 WORKDIR /home/gradle/src
-# Ejecutamos el build de Gradle saltando los tests para acelerar el despliegue
-RUN gradle build -x test --no-daemon
+COPY --chown=gradle:gradle . .
 
+# Usamos bootJar para asegurar que el manifest esté correcto
+RUN gradle bootJar -x test --no-daemon
+
+# Etapa 2: Ejecución (Runtime)
 FROM eclipse-temurin:21-jre-jammy
 WORKDIR /app
-# Copiamos el wallet a una ruta segura dentro del contenedor
+
+# Wallet de Oracle
 COPY src/main/resources/wallet /app/wallet
+
+# --- CAMBIO CLAVE ---
+# Usamos un comodín para capturar el JAR ejecutable sin importar el nombre exacto
+# pero evitando el -plain.jar
 COPY --from=build /home/gradle/src/build/libs/*.jar app.jar
 
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+
+# Aseguramos que el archivo tenga permisos de lectura
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]

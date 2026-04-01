@@ -3,6 +3,7 @@ package com.ingenium.jyps.users.infrastructure.adapters.out.email;
 import com.ingenium.jyps.users.application.ports.out.EmailSenderPort;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Component;
 public class JavaMailSenderAdapter implements EmailSenderPort {
 
     private final JavaMailSender mailSender; // 🔌 Inyectamos la herramienta de Spring
+    @Value("${spring.mail.username}")
+    private String remitente;
 
     public JavaMailSenderAdapter(JavaMailSender mailSender) {
         this.mailSender = mailSender;
@@ -23,7 +26,7 @@ public class JavaMailSenderAdapter implements EmailSenderPort {
             // Usamos MimeMessage para poder enviar HTML, no solo texto plano
             MimeMessage mensaje = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mensaje, true, "UTF-8");
-
+            helper.setFrom(remitente);
             helper.setTo(destinatario);
             helper.setSubject("¡Bienvenido a JYPS! Completa tu registro 🚀");
 
@@ -83,7 +86,7 @@ public class JavaMailSenderAdapter implements EmailSenderPort {
         try {
             MimeMessage mensaje = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mensaje, true, "UTF-8");
-
+            helper.setFrom(remitente);
             helper.setTo(destinatario);
             helper.setSubject("🔑 Recuperación de contraseña - JyPS");
 
