@@ -4,6 +4,8 @@ services:
     container_name: jyps_backend
     ports:
       - "8081:8081"
+    env_file:
+      - .env
     environment:
       - SERVER_PORT=${SERVER_PORT}
       - DB_URL=${DOCKER_DB_URL}
@@ -24,4 +26,4 @@ services:
       - JWT_SECRET_KEY=${JWT_SECRET_KEY}
 
       - DISCORD_WEBHOOK_URL=${DISCORD_WEBHOOK_URL}
-      - FRONTEND_URL=${FRONTEND_URL}
+      - FRONTEND_URL=${FRONT_END_URL}
