@@ -26,7 +26,8 @@ public class Usuario {
 
     private Cuenta cuenta;
 
-    private static final Pattern PATTERN = Pattern.compile("^[\\p{L}+$]", Pattern.UNICODE_CHARACTER_CLASS);
+    // Busca cualquier cosa que NO sea una letra de cualquier alfabeto o un espacio
+    private static final Pattern ESPECIALES_PATTERN = Pattern.compile("[^\\p{L}\\s]", Pattern.UNICODE_CHARACTER_CLASS);
 
     // Constructor para crear un nuevo usuario, no se incluye ID ya que es generado automáticamente por la base de datos, y no se incluye la Cuenta ya que se asigna posteriormente.
     public Usuario(String nombre,
@@ -115,8 +116,8 @@ public class Usuario {
     // Impide ingresar caracteres especiales al campo validado.
     private void validarCaracteres(String campo, String nombreCampo) {
 
-        if (!PATTERN.matcher(campo).matches()) {
-            throw new IllegalArgumentException("El campo " + nombreCampo + "  admite caracteres especiales.");
+        if (ESPECIALES_PATTERN.matcher(campo).matches()) {
+            throw new IllegalArgumentException("El campo " + nombreCampo + "no  admite caracteres especiales.");
         }
 
     }
