@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -40,7 +41,7 @@ public class JustificanteEntity {
     private String detalles;
 
     @Column(name = "archivos")
-    private String archivos;
+    private List<String> archivos;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "estado", nullable = false)

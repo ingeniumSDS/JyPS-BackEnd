@@ -1,9 +1,6 @@
-package com.ingenium.jyps.users.infrastructure.adapters.out.persist;
+package com.ingenium.jyps.users.infrastructure.adapters.out.persist.repository;
 
-import aj.org.objectweb.asm.commons.Remapper;
 import com.ingenium.jyps.users.infrastructure.adapters.out.persist.entity.UsuarioEntity;
-import org.springframework.data.domain.Limit;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
