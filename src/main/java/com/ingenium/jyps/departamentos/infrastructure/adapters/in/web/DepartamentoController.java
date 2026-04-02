@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping("api/v1/departamentos")
 @Tag(name = "Departamentos", description = "Operaciones relacionadas con la gestión de departamentos")
 public class DepartamentoController {
