@@ -14,7 +14,8 @@ public record UsuarioResponse(
         LocalTime horaSalida,
         List<String> roles,
         Long departamentoId,
-        String nombreDepartamento
+        String nombreDepartamento,
+        boolean activo
 ) {
 
     // 💡 TRUCO SENIOR: Método de fábrica estático (Mapper integrado)
@@ -42,7 +43,8 @@ public record UsuarioResponse(
                 usuario.getHoraSalida(),
                 rolesString,
                 usuario.getDepartamentoId(),
-                usuario.getNombreDepartamento()
+                usuario.getNombreDepartamento(),
+                usuario.getCuenta().isActiva()
         );
     }
 }
