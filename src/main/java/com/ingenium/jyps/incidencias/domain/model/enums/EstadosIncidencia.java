@@ -4,5 +4,7 @@ public enum EstadosIncidencia {
     PENDIENTE,
     APROBADO,
     RECHAZADO,
-    CADUCADO
+    CADUCADO,
+    A_TIEMPO,
+    RETARDO
 }
