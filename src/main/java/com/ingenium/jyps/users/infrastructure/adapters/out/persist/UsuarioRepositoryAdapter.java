@@ -5,7 +5,7 @@ import com.ingenium.jyps.users.domain.model.Usuario;
 import com.ingenium.jyps.users.application.ports.out.UsuarioRepositoryPort;
 import com.ingenium.jyps.users.infrastructure.adapters.out.persist.entity.UsuarioEntity;
 import com.ingenium.jyps.users.infrastructure.adapters.out.persist.repository.JpaUsuarioRepository;
-import com.ingenium.jyps.utils.mappers.UsuarioMapper;
+import com.ingenium.jyps.users.infrastructure.adapters.out.persist.mapper.UsuarioMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -23,7 +23,7 @@ public class UsuarioRepositoryAdapter implements UsuarioRepositoryPort {
     }
 
     @Override
-    public Usuario save(Usuario usuario) {
+    public Usuario guardar(Usuario usuario) {
         UsuarioEntity uE = usuarioMapper.toEntity(usuario);
         UsuarioEntity entidadGuardada = jpaUsuarioRepository.save(uE);
         return usuarioMapper.toDomain(entidadGuardada);
@@ -71,7 +71,7 @@ public class UsuarioRepositoryAdapter implements UsuarioRepositoryPort {
     }
 
     @Override
-    public List<Usuario> findAll() {
+    public List<Usuario> buscarTodos() {
         return jpaUsuarioRepository.findAll().stream().map(usuarioMapper::toDomain).toList();
     }
 }

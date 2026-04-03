@@ -1,4 +1,4 @@
-package com.ingenium.jyps.utils.mappers;
+package com.ingenium.jyps.users.infrastructure.adapters.out.persist.mapper;
 
 import com.ingenium.jyps.departamentos.infrastructure.adapters.out.persist.DepartamentoEntity;
 import com.ingenium.jyps.users.domain.model.Cuenta;

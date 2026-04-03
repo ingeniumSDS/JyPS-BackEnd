@@ -5,7 +5,7 @@ import com.ingenium.jyps.departamentos.domain.model.Departamento;
 import java.util.List;
 import java.util.Optional;
 
-public interface DepartamentoRepositoryPort {
+public interface DepartamentoRepositoryPort{
 
     List<Departamento> findAll();
 

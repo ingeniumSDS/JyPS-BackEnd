@@ -27,7 +27,7 @@ public class EstablecerPasswordImpl implements com.ingenium.jyps.users.applicati
 
         usuario.getCuenta().establecerPassword(passwordEncoderPort.codificar(command.password()));
 
-        usuarioRepositoryPort.save(usuario);
+        usuarioRepositoryPort.guardar(usuario);
 
         return usuario;
     }

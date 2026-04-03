@@ -1,5 +1,6 @@
 package com.ingenium.jyps.incidencias.infrastructure.adapters.out.persist.entity;
 
+import com.ingenium.jyps.incidencias.domain.model.Justificante;
 import com.ingenium.jyps.incidencias.domain.model.enums.EstadosIncidencia;
 import com.ingenium.jyps.users.infrastructure.adapters.out.persist.entity.UsuarioEntity;
 import jakarta.persistence.*;
@@ -9,7 +10,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 @AllArgsConstructor
@@ -31,17 +34,21 @@ public class JustificanteEntity {
     @JoinColumn(name = "id_jefe", nullable = false, foreignKey = @ForeignKey(name = "FK_JUSTIFICANTE_JEFE"))
     private UsuarioEntity jefe;
 
-    @Column(name = "fecha_solicitada", nullable = false)
+    @Column(name = "fecha_solicitada", nullable = false, unique = true)
     private LocalDate fechaSolicitada;
 
     @Column(name = "fecha_solicitud", nullable = false)
     private LocalDate fechaSolicitud;
 
+
     @Column(name = "detalles", length = 500)
     private String detalles;
 
-    @Column(name = "archivos")
-    private List<String> archivos;
+
+    @ElementCollection
+    @CollectionTable(name = "justificante_evidencias", joinColumns = @JoinColumn(name = "justificante_id", foreignKey = @ForeignKey(name = "FK_JUSTIFICANTE_EVIDENCIAS")))
+    @Column(name = "ruta_archivo", length = 512)
+    private List<String> archivos = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     @Column(name = "estado", nullable = false)
