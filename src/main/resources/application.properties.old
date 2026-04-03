@@ -29,6 +29,6 @@ spring.mail.properties.mail.smtp.starttls.enable=${MAIL_SMTP_STARTTLS_ENABLE}
 jwt.secret.key=${JWT_SECRET_KEY}
 
 # Discord Webhook Configuration
-discord.webhook.url=${DISCORD_WEBHOOK_URL}
+#discord.webhook.url=${DISCORD_WEBHOOK_URL}
 
 front.end.url=${FRONT_END_URL}

@@ -6,10 +6,10 @@ import org.springframework.scheduling.annotation.EnableAsync;
 
 @SpringBootApplication
 @EnableAsync
-public class JyPsApplication {
+public class JyPsAPI {
 
     public static void main(String[] args) {
-        SpringApplication.run(JyPsApplication.class, args);
+        SpringApplication.run(JyPsAPI.class, args);
     }
 
 }

@@ -16,8 +16,8 @@ import java.util.Optional;
 
 public interface UsuarioRepositoryPort {
 
-    Usuario save(Usuario usuario);
-    List<Usuario> findAll();
+    Usuario guardar(Usuario usuario);
+    List<Usuario> buscarTodos();
     Optional<Usuario> findById(Long id);
     Optional<Usuario> findByCorreo(String email);
     Optional<Usuario> findByTelefono(String telefono);

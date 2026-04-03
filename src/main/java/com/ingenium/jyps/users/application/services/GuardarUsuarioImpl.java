@@ -64,7 +64,7 @@ public class GuardarUsuarioImpl implements com.ingenium.jyps.users.application.p
 
         nuevoUsuario.asignarCuenta(cuenta);
 
-        usuarioRepositoryPort.save(nuevoUsuario);
+        usuarioRepositoryPort.guardar(nuevoUsuario);
 
         nuevoUsuario.setId(usuarioRepositoryPort.findByCorreo(command.correo()).orElseThrow().getId());
 

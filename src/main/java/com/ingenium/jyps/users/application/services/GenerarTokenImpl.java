@@ -27,7 +27,7 @@ public class GenerarTokenImpl implements com.ingenium.jyps.users.application.por
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
         usuario.getCuenta().generarTokenAcceso();
-        usuarioRepository.save(usuario);
+        usuarioRepository.guardar(usuario);
 
         publisher.publishEvent(new TokenSolicitadoEvent(
                 usuario.getNombre() + " " + usuario.getApellidoPaterno() +  " " + usuario.getApellidoMaterno(),

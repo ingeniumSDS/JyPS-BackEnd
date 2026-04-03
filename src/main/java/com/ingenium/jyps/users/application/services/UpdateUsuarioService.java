@@ -72,7 +72,7 @@ public class UpdateUsuarioService implements UpdateUsuarioUseCase {
                         .getNombre()
         );
 
-        usuarioRepositoryPort.save(u);
+        usuarioRepositoryPort.guardar(u);
 
         u.setId(command.id());
         // 6. Guardar los cambios

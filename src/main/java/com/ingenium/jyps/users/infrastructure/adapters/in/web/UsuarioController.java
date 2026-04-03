@@ -13,6 +13,7 @@ import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.response.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +24,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/usuarios")
 @CrossOrigin("*")
+@RequiredArgsConstructor
 @Tag(name = "Usuarios", description = "Operaciones relacionadas con la gestión de usuarios y cuentas")
 public class UsuarioController {
 
@@ -35,25 +37,7 @@ public class UsuarioController {
     private final JwtProviderPort jwtProviderPort;
     private final ConsultarUsuariosUseCase consultarUsuariosUseCase;
 
-    public UsuarioController(GuardarUsuarioUseCase guardarUsuarioUseCase,
-                             UpdateUsuarioUseCase updateUsuarioUseCase,
-                             UpdateEstadoCuentaUseCase updateEstadoCuentaUseCase,
-                             EstablecerPasswordUseCase establecerPasswordUseCase,
-                             GenerarTokenUseCase generarTokenUseCase,
-                             LoginUseCase loginUseCase,
-                             JwtProviderPort jwtProviderPort,
-                             ConsultarUsuariosUseCase consultarUsuariosUseCase
-    ) {
 
-        this.guardarUsuarioUseCase = guardarUsuarioUseCase;
-        this.updateUsuarioUseCase = updateUsuarioUseCase;
-        this.updateEstadoCuentaUseCase = updateEstadoCuentaUseCase;
-        this.establecerPasswordUseCase = establecerPasswordUseCase;
-        this.generarTokenUseCase = generarTokenUseCase;
-        this.loginUseCase = loginUseCase;
-        this.jwtProviderPort = jwtProviderPort;
-        this.consultarUsuariosUseCase = consultarUsuariosUseCase;
-    }
 
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     @PostMapping("")
@@ -79,10 +63,7 @@ public class UsuarioController {
 
 
         Usuario nuevoUsuario = guardarUsuarioUseCase.ejecutar(command);
-
-
         UsuarioResponse response = UsuarioResponse.desdeDominio(nuevoUsuario);
-
         URI location = URI.create("/api/v1/usuarios/" + response.id());
 
         return ResponseEntity.created(location).body(response);

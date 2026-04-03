@@ -29,7 +29,7 @@ public class UpdateEstadoCuentaService implements UpdateEstadoCuentaUseCase {
             cuenta.activarCuenta();
         }
 
-        usuarioRepositoryPort.save(usuario);
+        usuarioRepositoryPort.guardar(usuario);
         return cuenta; // Devolvemos el objeto actualizado
     }
 

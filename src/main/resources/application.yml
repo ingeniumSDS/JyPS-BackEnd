@@ -1,0 +1,50 @@
+spring:
+  application:
+    name: JyPS
+
+  # Database Configuration
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: ${DB_DRIVER_CLASS_NAME}
+    hikari:
+      connection-timeout: 30000
+      max-lifetime: 120000
+      idle-timeout: 60000
+      keepalive-time: 30000
+
+  # JPA Configuration
+  jpa:
+    show-sql: ${JPA_SHOW_SQL}
+    hibernate:
+      ddl-auto: ${JPA_HIBERNATE_DDL_AUTO}
+
+  # E-mail Configuration
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail.smtp.auth: ${MAIL_SMTP_AUTH}
+      mail.smtp.starttls.enable: ${MAIL_SMTP_STARTTLS_ENABLE}
+
+  servlet:
+    multipart:
+      max-request-size: 10MB
+      max-file-size: 3MB
+
+server:
+  port: ${SERVER_PORT:8080}
+
+  # JWT Configuration
+jwt:
+  secret.key: ${JWT_SECRET_KEY}
+
+frontend:
+  url: ${FRONT_END_URL}
+
+# Discord Webhook Configuration
+#discord.webhook.url=${DISCORD_WEBHOOK_URL}
+

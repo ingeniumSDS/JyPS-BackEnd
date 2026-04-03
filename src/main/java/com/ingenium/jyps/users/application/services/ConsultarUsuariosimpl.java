@@ -37,7 +37,7 @@ public class ConsultarUsuariosimpl implements ConsultarUsuariosUseCase {
 
     @Override
     public List<Usuario> obtenerTodos() {
-        List<Usuario> usuarios = usuarioRepositoryPort.findAll();
+        List<Usuario> usuarios = usuarioRepositoryPort.buscarTodos();
 
         usuarios.forEach(u -> {
             Departamento departamento = departamentoRepositoryPort.findById(u.getDepartamentoId())
