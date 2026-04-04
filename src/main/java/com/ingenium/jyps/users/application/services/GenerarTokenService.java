@@ -8,14 +8,14 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class GenerarTokenImpl implements com.ingenium.jyps.users.application.ports.in.usecases.GenerarTokenUseCase {
+public class GenerarTokenService implements com.ingenium.jyps.users.application.ports.in.usecases.GenerarTokenUseCase {
 
     private final UsuarioRepositoryPort usuarioRepository;
     private final ApplicationEventPublisher publisher;
 
 
-    public GenerarTokenImpl(UsuarioRepositoryPort usuarioRepository,
-                            ApplicationEventPublisher publisher) {
+    public GenerarTokenService(UsuarioRepositoryPort usuarioRepository,
+                               ApplicationEventPublisher publisher) {
         this.usuarioRepository = usuarioRepository;
         this.publisher = publisher;
     }

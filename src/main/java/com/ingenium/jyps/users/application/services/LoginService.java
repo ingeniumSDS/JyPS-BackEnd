@@ -9,13 +9,13 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class LoginImpl implements com.ingenium.jyps.users.application.ports.in.usecases.LoginUseCase {
+public class LoginService implements com.ingenium.jyps.users.application.ports.in.usecases.LoginUseCase {
 
     private final UsuarioRepositoryPort usuarioRepositoryPort;
     private final PasswordEncoderPort passwordEncoderPort;
     private final DepartamentoRepositoryPort departamentoRepositoryPort;
 
-    public LoginImpl(UsuarioRepositoryPort usuarioRepositoryPort, PasswordEncoderPort passwordEncoderPort, DepartamentoRepositoryPort departamentoRepositoryPort) {
+    public LoginService(UsuarioRepositoryPort usuarioRepositoryPort, PasswordEncoderPort passwordEncoderPort, DepartamentoRepositoryPort departamentoRepositoryPort) {
         this.usuarioRepositoryPort = usuarioRepositoryPort;
         this.passwordEncoderPort = passwordEncoderPort;
         this.departamentoRepositoryPort = departamentoRepositoryPort;

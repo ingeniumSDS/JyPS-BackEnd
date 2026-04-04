@@ -7,12 +7,12 @@ import com.ingenium.jyps.users.application.ports.out.UsuarioRepositoryPort;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EstablecerPasswordImpl implements com.ingenium.jyps.users.application.ports.in.usecases.EstablecerPasswordUseCase {
+public class EstablecerPasswordService implements com.ingenium.jyps.users.application.ports.in.usecases.EstablecerPasswordUseCase {
 
     private final UsuarioRepositoryPort usuarioRepositoryPort;
     private final PasswordEncoderPort passwordEncoderPort;
 
-    public EstablecerPasswordImpl(UsuarioRepositoryPort usuarioRepositoryPort, PasswordEncoderPort passwordEncoderPort) {
+    public EstablecerPasswordService(UsuarioRepositoryPort usuarioRepositoryPort, PasswordEncoderPort passwordEncoderPort) {
         this.usuarioRepositoryPort = usuarioRepositoryPort;
         this.passwordEncoderPort = passwordEncoderPort;
     }
