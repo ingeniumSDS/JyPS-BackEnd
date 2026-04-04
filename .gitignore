@@ -6,7 +6,7 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 **/main/resources/application-local.properties
-**/main/resources/application-dev.properties
+**/main/resources/application-dev.yml
 **/main/java/infrastructure/config/CorsConfig.java
 
 ### STS ###
