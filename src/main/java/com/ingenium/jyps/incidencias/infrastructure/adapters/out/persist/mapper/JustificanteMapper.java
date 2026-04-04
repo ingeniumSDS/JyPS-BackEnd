@@ -15,7 +15,7 @@ public class JustificanteMapper {
     private final UsuarioMapper usuarioMapper;
 
 
-    public JustificanteEntity toEntity(Justificante justificante, Usuario u, Usuario jefe, Departamento d) {
+    public JustificanteEntity toEntity(Justificante justificante, Usuario u, Usuario jefe) {
 
 
         JustificanteEntity justificanteEntity = new JustificanteEntity();
@@ -26,7 +26,6 @@ public class JustificanteMapper {
         justificanteEntity.setFechaSolicitada(justificante.getFechaSolicitada());
         justificanteEntity.setFechaSolicitud(justificante.getFechaSolicitud());
         justificanteEntity.setEstado(justificante.getEstado());
-        justificanteEntity.setArchivos(justificante.getArchivos());
 
 
 
@@ -42,7 +41,6 @@ public class JustificanteMapper {
                 justificanteEntity.getFechaSolicitada(),
                 justificanteEntity.getFechaSolicitud(),
                 justificanteEntity.getDetalles(),
-                justificanteEntity.getArchivos(),
                 justificanteEntity.getEstado()
         );
     }

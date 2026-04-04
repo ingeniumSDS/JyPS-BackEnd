@@ -6,7 +6,6 @@ import lombok.Setter;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.List;
 
 @Getter
 public class Justificante {
@@ -18,7 +17,6 @@ public class Justificante {
     private LocalDate fechaSolicitada;
     private LocalDate fechaSolicitud;
     private String descripcion;
-    private List<String> archivos;
     private EstadosIncidencia estado;
 
     // Constructor para mandar a crear un nuevo justificante, sin el ID que se genera automáticamente.
@@ -26,8 +24,7 @@ public class Justificante {
             Long empleadoId,
             Long jefeId,
             LocalDate fechaSolicitada,
-            String descripcion,
-            List<String> archivos
+            String descripcion
     ) {
 
         // Validación de los campos (El Modelo se defiende solo)
@@ -42,7 +39,6 @@ public class Justificante {
         this.fechaSolicitada = fechaSolicitada;
         this.fechaSolicitud = LocalDate.now();
         this.descripcion = descripcion.trim();
-        this.archivos = archivos;
         this.estado = EstadosIncidencia.PENDIENTE;
     }
 
@@ -54,7 +50,6 @@ public class Justificante {
             LocalDate fechaSolicitada,
             LocalDate fechaSolicitud,
             String descripcion,
-            List<String> archivos,
             EstadosIncidencia estado
     ) {
         this.id = id;
@@ -63,7 +58,6 @@ public class Justificante {
         this.fechaSolicitada = fechaSolicitada;
         this.fechaSolicitud = fechaSolicitud;
         this.descripcion = descripcion;
-        this.archivos = archivos;
         this.estado = estado;
     }
 
