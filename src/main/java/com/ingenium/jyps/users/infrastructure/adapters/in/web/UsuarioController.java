@@ -10,6 +10,7 @@ import com.ingenium.jyps.users.domain.model.Usuario;
 import com.ingenium.jyps.users.domain.model.enums.Roles;
 import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.request.*;
 import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.response.*;
+import com.ingenium.jyps.users.infrastructure.adapters.out.persist.mapper.UsuarioMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -36,6 +37,7 @@ public class UsuarioController {
     private final LoginUseCase loginUseCase;
     private final JwtProviderPort jwtProviderPort;
     private final ConsultarUsuariosUseCase consultarUsuariosUseCase;
+    private final UsuarioMapper usuarioMapper;
 
 
 
@@ -45,22 +47,7 @@ public class UsuarioController {
     @Operation(summary = "Registra un nuevo usuario", description = "Crea un nuevo usuario con la información proporcionada (Ej. Nombre, apellidos, correo, teléfono, horarios, roles y departamento) y devuelve los datos del usuario registrado junto con la ubicación del recurso creado")
     public ResponseEntity<UsuarioResponse> registrarUsuario(@RequestBody CrearUsuarioRequest request) {
 
-        List<Roles> roles = request.roles().stream()
-                .map(Roles::valueOf)
-                .toList();
-
-        RegistrarUsuarioCommand command = new RegistrarUsuarioCommand(
-                request.nombre(),
-                request.apellidoPaterno(),
-                request.apellidoMaterno(),
-                request.correo(),
-                request.telefono(),
-                request.horaEntrada(),
-                request.horaSalida(),
-                roles,
-                request.departamentoId()
-        );
-
+        RegistrarUsuarioCommand command = usuarioMapper.toCommand(request);
 
         Usuario nuevoUsuario = guardarUsuarioUseCase.ejecutar(command);
         UsuarioResponse response = UsuarioResponse.desdeDominio(nuevoUsuario);
