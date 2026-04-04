@@ -6,21 +6,19 @@ import com.ingenium.jyps.users.application.ports.out.UsuarioRepositoryPort;
 import com.ingenium.jyps.users.infrastructure.adapters.out.persist.entity.UsuarioEntity;
 import com.ingenium.jyps.users.infrastructure.adapters.out.persist.repository.JpaUsuarioRepository;
 import com.ingenium.jyps.utils.mappers.UsuarioMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 
 @Component
+@RequiredArgsConstructor
 public class UsuarioRepositoryAdapter implements UsuarioRepositoryPort {
 
     private final JpaUsuarioRepository jpaUsuarioRepository;
     private final UsuarioMapper usuarioMapper;
 
-    public UsuarioRepositoryAdapter(JpaUsuarioRepository jpaUsuarioRepository, UsuarioMapper usuarioMapper) {
-        this.jpaUsuarioRepository = jpaUsuarioRepository;
-        this.usuarioMapper = usuarioMapper;
-    }
 
     @Override
     public Usuario save(Usuario usuario) {
