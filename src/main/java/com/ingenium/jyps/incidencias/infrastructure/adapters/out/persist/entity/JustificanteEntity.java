@@ -41,6 +41,8 @@ public class JustificanteEntity {
     private String detalles;
 
     @Column(name = "archivos")
+    @ElementCollection
+    @CollectionTable(name = "justificante_evidencias", joinColumns = @JoinColumn(name = "justificante_id"), foreignKey = @ForeignKey(name = "FK_JUSTIFICANTE_ARCHIVOS"))
     private List<String> archivos;
 
     @Enumerated(EnumType.STRING)
