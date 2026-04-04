@@ -28,7 +28,7 @@ public class JustificanteRepositoryAdapter implements JustificanteRepositoryPort
     @Override
     public Optional<Justificante> recuperar(LocalDate fechaSolicitada, Long id) {
         return jpaJustificanteRepositoy.findByFechaSolicitadaAndEmpleado_Id
-                (fechaSolicitada, id)
+                        (fechaSolicitada, id)
                 .map(justificanteMapper::toDomain);
     }
 
@@ -41,14 +41,14 @@ public class JustificanteRepositoryAdapter implements JustificanteRepositoryPort
     @Override
     public Justificante solicitar(Justificante justificante) {
 
-        Usuario u = usuarioRepositoryPort.findById(justificante.getEmpleadoId()).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        Departamento d = departamentoRepositoryPort.findById(u.getDepartamentoId()).orElseThrow(() -> new RuntimeException("Departamento no encontrado"));
-        Long idJefe = d.getJefeId();
+        Usuario usuario = usuarioRepositoryPort.findById(justificante.getEmpleadoId()).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        Departamento departamento = departamentoRepositoryPort.findById(usuario.getDepartamentoId()).orElseThrow(() -> new RuntimeException("Departamento no encontrado"));
+        Long idJefe = departamento.getJefeId();
         Usuario jefe = usuarioRepositoryPort.findById(idJefe).orElseThrow(() -> new RuntimeException("Jefe no encontrado"));
 
-        JustificanteEntity justificanteEntity = justificanteMapper.toEntity(justificante, u, jefe, d);
+        JustificanteEntity justificanteEntity = justificanteMapper.toEntity(justificante, usuario, jefe);
 
-        JustificanteEntity justificanteGuardado =  jpaJustificanteRepositoy.save(justificanteEntity);
+        JustificanteEntity justificanteGuardado = jpaJustificanteRepositoy.save(justificanteEntity);
 
         return justificanteMapper.toDomain(justificanteGuardado);
     }

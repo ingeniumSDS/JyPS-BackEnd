@@ -26,8 +26,7 @@ public class SolicitarJustificanteImpl implements SolicitarJustificanteUseCase {
                 command.empleadoId(),
                 command.jefeId(),
                 command.fechaSolicitada(),
-                command.descripcion(),
-                command.archivos()
+                command.descripcion()
         );
 
 

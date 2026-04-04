@@ -25,8 +25,7 @@ public class JustificanteController {
                 request.idEmpleado(),
                 request.idJefe(),
                 request.fechaSolicitada(),
-                request.descripcion(),
-                request.archivos()
+                request.descripcion()
         );
 
         Justificante justificante = solicitarJustificanteUseCase.ejecutar(command);
@@ -38,7 +37,6 @@ public class JustificanteController {
                 justificante.getFechaSolicitada(),
                 justificante.getFechaSolicitud(),
                 justificante.getDescripcion(),
-                justificante.getArchivos(),
                 justificante.getEstado()
         );
 
