@@ -15,7 +15,6 @@ public class RecuperarPasswordListener {
     @Value("${front.end.url}")
     private String frontURL;
 
-
     public RecuperarPasswordListener(EmailSenderPort emailSenderPort) {
         this.emailSenderPort = emailSenderPort;
     }
@@ -24,7 +23,8 @@ public class RecuperarPasswordListener {
     @EventListener
     public void alSolicitarToken(TokenSolicitadoEvent event) {
 
-        String deepLink = frontURL + event.tokenAcceso();
+        String recuperacionRuta = "establecer-contrasena/";
+        String deepLink = frontURL  + recuperacionRuta + event.tokenAcceso();
 
         // Delegamos el trabajo pesado al adaptador
         emailSenderPort.enviarCorreoRecuperacion(
