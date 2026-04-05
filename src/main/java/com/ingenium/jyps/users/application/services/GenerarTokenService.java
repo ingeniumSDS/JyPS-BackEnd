@@ -3,31 +3,25 @@ package com.ingenium.jyps.users.application.services;
 import com.ingenium.jyps.users.application.ports.out.UsuarioRepositoryPort;
 import com.ingenium.jyps.users.domain.event.TokenSolicitadoEvent;
 import com.ingenium.jyps.users.domain.model.Usuario;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 
 @Service
-public class GenerarTokenImpl implements com.ingenium.jyps.users.application.ports.in.usecases.GenerarTokenUseCase {
+@RequiredArgsConstructor
+public class GenerarTokenService implements com.ingenium.jyps.users.application.ports.in.usecases.GenerarTokenUseCase {
 
     private final UsuarioRepositoryPort usuarioRepository;
     private final ApplicationEventPublisher publisher;
 
-
-    public GenerarTokenImpl(UsuarioRepositoryPort usuarioRepository,
-                            ApplicationEventPublisher publisher) {
-        this.usuarioRepository = usuarioRepository;
-        this.publisher = publisher;
-    }
-
-
     @Override
     public Usuario ejecutar(String correo) {
-        Usuario usuario = usuarioRepository.findByCorreo(correo)
+        Usuario usuario = usuarioRepository.buscarPorCorreo(correo)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
         usuario.getCuenta().generarTokenAcceso();
-        usuarioRepository.save(usuario);
+        usuarioRepository.crear(usuario);
 
         publisher.publishEvent(new TokenSolicitadoEvent(
                 usuario.getNombre() + " " + usuario.getApellidoPaterno() +  " " + usuario.getApellidoMaterno(),

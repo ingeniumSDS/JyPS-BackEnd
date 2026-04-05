@@ -16,14 +16,13 @@ import java.util.Optional;
 
 public interface UsuarioRepositoryPort {
 
-    Usuario save(Usuario usuario);
-    List<Usuario> findAll();
-    Optional<Usuario> findById(Long id);
-    Optional<Usuario> findByCorreo(String email);
-    Optional<Usuario> findByTelefono(String telefono);
-    Optional<Usuario> findByToken(String token);
+    Usuario crear(Usuario usuario);
+    List<Usuario> buscarTodos();
+    Optional<Usuario> buscarPorId(Long id);
+    Optional<Usuario> buscarPorCorreo(String email);
+    Optional<Usuario> buscarPorTelefono(String telefono);
+    Optional<Usuario> buscarPorToken(String token);
 
-    boolean estaActivo(String correo);
     boolean existsByCorreo(String correo);
     boolean existsByTelefono(String telefono);
 }

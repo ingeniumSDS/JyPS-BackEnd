@@ -1,7 +1,7 @@
 package com.ingenium.jyps.users.infrastructure.adapters.out.persist.entity;
 
 
-import com.ingenium.jyps.departamentos.infrastructure.adapters.out.persist.DepartamentoEntity;
+import com.ingenium.jyps.departamentos.infrastructure.adapters.out.persist.entity.DepartamentoEntity;
 import com.ingenium.jyps.users.domain.model.enums.Roles;
 import jakarta.persistence.*;
 import lombok.*;

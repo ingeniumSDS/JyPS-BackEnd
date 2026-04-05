@@ -4,20 +4,18 @@ import com.ingenium.jyps.users.application.ports.in.usecases.UpdateEstadoCuentaU
 import com.ingenium.jyps.users.domain.model.Cuenta;
 import com.ingenium.jyps.users.domain.model.Usuario;
 import com.ingenium.jyps.users.application.ports.out.UsuarioRepositoryPort;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class UpdateEstadoCuentaService implements UpdateEstadoCuentaUseCase {
 
     private final UsuarioRepositoryPort usuarioRepositoryPort;
 
-    UpdateEstadoCuentaService(UsuarioRepositoryPort usuarioRepositoryPort) {
-        this.usuarioRepositoryPort = usuarioRepositoryPort;
-    }
-
     @Override
     public Cuenta ejecutar(Long usuarioId) { // Recibe el ID
-        Usuario usuario = usuarioRepositoryPort.findById(usuarioId)
+        Usuario usuario = usuarioRepositoryPort.buscarPorId(usuarioId)
                 .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
 
         Cuenta cuenta = usuario.getCuenta();
@@ -29,7 +27,7 @@ public class UpdateEstadoCuentaService implements UpdateEstadoCuentaUseCase {
             cuenta.activarCuenta();
         }
 
-        usuarioRepositoryPort.save(usuario);
+        usuarioRepositoryPort.crear(usuario);
         return cuenta; // Devolvemos el objeto actualizado
     }
 

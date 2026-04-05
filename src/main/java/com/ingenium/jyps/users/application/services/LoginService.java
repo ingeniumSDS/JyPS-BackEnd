@@ -5,21 +5,17 @@ import com.ingenium.jyps.users.application.ports.in.usecases.command.LoginComman
 import com.ingenium.jyps.users.application.ports.out.PasswordEncoderPort;
 import com.ingenium.jyps.users.application.ports.out.UsuarioRepositoryPort;
 import com.ingenium.jyps.users.domain.model.Usuario;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 
 @Service
-public class LoginImpl implements com.ingenium.jyps.users.application.ports.in.usecases.LoginUseCase {
+@RequiredArgsConstructor
+public class LoginService implements com.ingenium.jyps.users.application.ports.in.usecases.LoginUseCase {
 
     private final UsuarioRepositoryPort usuarioRepositoryPort;
     private final PasswordEncoderPort passwordEncoderPort;
     private final DepartamentoRepositoryPort departamentoRepositoryPort;
-
-    public LoginImpl(UsuarioRepositoryPort usuarioRepositoryPort, PasswordEncoderPort passwordEncoderPort, DepartamentoRepositoryPort departamentoRepositoryPort) {
-        this.usuarioRepositoryPort = usuarioRepositoryPort;
-        this.passwordEncoderPort = passwordEncoderPort;
-        this.departamentoRepositoryPort = departamentoRepositoryPort;
-    }
 
     @Override
     public Usuario ejecutar(LoginCommand loginCommand) {
@@ -33,7 +29,7 @@ public class LoginImpl implements com.ingenium.jyps.users.application.ports.in.u
 
 
         // 1. Buscamos al usuario (Si no existe, lanzamos el error genérico)
-        Usuario usuario = usuarioRepositoryPort.findByCorreo(correo)
+        Usuario usuario = usuarioRepositoryPort.buscarPorCorreo(correo)
                 .orElseThrow(() -> new IllegalArgumentException("Credenciales incorrectas"));
 
 
@@ -45,7 +41,7 @@ public class LoginImpl implements com.ingenium.jyps.users.application.ports.in.u
 
         if (!esPasswordCorrecta) {
             usuario.getCuenta().registrarIntentoFallido();
-            usuarioRepositoryPort.save(usuario);
+            usuarioRepositoryPort.crear(usuario);
             throw new IllegalArgumentException("Credenciales incorrectas.");
         }
 
@@ -53,7 +49,7 @@ public class LoginImpl implements com.ingenium.jyps.users.application.ports.in.u
         // 3. Ejecutamos las reglas de negocio del Dominio (Revisa que esté activa, no bloqueada, etc.)
         usuario.getCuenta().login();
 
-        usuarioRepositoryPort.save(usuario);
+        usuarioRepositoryPort.crear(usuario);
 
         usuario.setNombreDepartamento(
                 departamentoRepositoryPort.findById(usuario.getDepartamentoId())
