@@ -21,8 +21,8 @@ public class DepartamentoEntity {
     private String nombre;
     private String descripcion;
     private boolean activo;
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_jefe", foreignKey = @ForeignKey(name = "FK_DEPARTAMENTO_JEFE"))
+    @OneToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "id_jefe", foreignKey = @ForeignKey(name = "FK_DEPARTAMENTO_JEFE" ), nullable = true)
     private UsuarioEntity jefe;
 
 }
