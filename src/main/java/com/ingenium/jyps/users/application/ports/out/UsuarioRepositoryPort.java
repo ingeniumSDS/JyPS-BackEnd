@@ -25,4 +25,6 @@ public interface UsuarioRepositoryPort {
 
     boolean existsByCorreo(String correo);
     boolean existsByTelefono(String telefono);
+
+    long contarPorDepartamento(Long id);
 }

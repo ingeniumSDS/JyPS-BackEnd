@@ -51,6 +51,11 @@ public class UsuarioRepositoryAdapter implements UsuarioRepositoryPort {
     }
 
     @Override
+    public long contarPorDepartamento(Long id) {
+        return jpaUsuarioRepository.countByDepartamento_Id(id);
+    }
+
+    @Override
     public Optional<Usuario> buscarPorId(Long id) {
         return jpaUsuarioRepository.findById(id).map(usuarioMapper::toDomain);
     }

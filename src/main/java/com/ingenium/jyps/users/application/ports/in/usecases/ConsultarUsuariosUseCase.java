@@ -8,5 +8,5 @@ public interface ConsultarUsuariosUseCase {
 
     Usuario obtenerPorId(Long id);
     List<Usuario> obtenerTodos();
-
+    Long contarPorDepartamento(Long departamentoId);
 }

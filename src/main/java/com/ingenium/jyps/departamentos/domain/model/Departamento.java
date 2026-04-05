@@ -24,7 +24,7 @@ public class Departamento {
         }
 
         if  (jefeId == null) {
-            this.activo = false; // Por defecto nace activo
+            this.activo = false; // Por defecto nace inactivo
         } else {
             this.activo = true;
             this.jefeId = jefeId;

@@ -8,4 +8,6 @@ public interface JpaUsuarioRepository extends JpaRepository<UsuarioEntity, Long>
     Optional<UsuarioEntity> findByCorreo(String correo);
     Optional<UsuarioEntity> findByTelefono(String telefono);
     Optional<UsuarioEntity> findByCuenta_TokenRecuperacion(String cuentaTokenRecuperacion);
+
+    Long countByDepartamento_Id(Long departamentoId);
 }
