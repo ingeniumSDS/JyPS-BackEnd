@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +21,12 @@ public class ConsultarUsuariosService implements ConsultarUsuariosUseCase {
 
 
     @Override
-    public Usuario obtenerPorId(Long id) {
+    public Optional<Usuario> obtenerPorId(Long id) {
+
+        if (id == null) {
+            return Optional.empty();
+        }
+
         Usuario usuario = usuarioRepositoryPort.buscarPorId(id)
                 .orElseThrow(() -> new IllegalArgumentException("El usuario con ese ID no existe"));
 
@@ -29,7 +35,7 @@ public class ConsultarUsuariosService implements ConsultarUsuariosUseCase {
 
         usuario.setNombreDepartamento(departamento.getNombre());
 
-        return usuario;
+        return Optional.of(usuario);
 
     }
 

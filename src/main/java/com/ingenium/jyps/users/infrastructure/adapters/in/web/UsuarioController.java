@@ -76,7 +76,12 @@ public class UsuarioController {
     @GetMapping("/{id}")
     @Operation(summary = "Obtener usuario por ID", description = "Recupera los datos de un usuario específico según su ID")
     public ResponseEntity<UsuarioResponse> findById(@PathVariable Long id) {
-        Usuario usuario = consultarUsuariosUseCase.obtenerPorId(id);
+        Usuario usuario = consultarUsuariosUseCase.obtenerPorId(id).map(u -> {
+            u.setNombreDepartamento(consultarUsuariosUseCase.obtenerPorId(u.getId())
+                    .map(Usuario::getNombreDepartamento)
+                    .orElse("Sin departamento asignado"));
+            return u;
+        }).orElseThrow(() -> new IllegalArgumentException("El usuario con ese ID no existe"));
         UsuarioResponse response = UsuarioResponse.desdeDominio(usuario);
         return ResponseEntity.ok(response);
     }
@@ -130,7 +135,13 @@ public class UsuarioController {
 
         updateEstadoCuentaUseCase.ejecutar(id);
 
-        Usuario usuario = consultarUsuariosUseCase.obtenerPorId(id);
+        Usuario usuario = consultarUsuariosUseCase.obtenerPorId(id).map(u -> {
+            u.setNombreDepartamento(consultarUsuariosUseCase.obtenerPorId(u.getId())
+                    .map(Usuario::getNombreDepartamento)
+                    .orElse("Sin departamento asignado"));
+            return u;
+        }).orElseThrow(() -> new IllegalArgumentException("El usuario con ese ID no existe")
+        );
 
         EstadoCuentaResponse response = EstadoCuentaResponse.desdeDominio(usuario);
 
@@ -140,7 +151,12 @@ public class UsuarioController {
     @GetMapping("/{id}/cuenta")
     @Operation(summary = "Obtener datos de la cuenta del usuario", description = "Recupera los datos de la cuenta de un usuario específico según su ID")
     public ResponseEntity<CuentaResponse> getCuenta(@PathVariable Long id) {
-        Usuario usuario = consultarUsuariosUseCase.obtenerPorId(id);
+        Usuario usuario = consultarUsuariosUseCase.obtenerPorId(id).map(u -> {
+            u.setNombreDepartamento(consultarUsuariosUseCase.obtenerPorId(u.getId())
+                    .map(Usuario::getNombreDepartamento)
+                    .orElse("Sin departamento asignado"));
+            return u;
+        }).orElseThrow(() -> new IllegalArgumentException("El usuario con ese ID no existe"));
         CuentaResponse response = CuentaResponse.desdeDominio(usuario);
         return ResponseEntity.ok(response);
     }

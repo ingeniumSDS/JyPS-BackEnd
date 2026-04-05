@@ -36,17 +36,20 @@ public class DepartamentoController {
     @PostMapping("")
     public ResponseEntity<DepartamentoResponse> crear(@RequestBody CrearDepartamentoRequest request) {
 
+
         CrearDepartamentoCommand command = new CrearDepartamentoCommand(
                 request.nombre(),
                 request.descripcion(),
-                request.jefeId()
+                request.jefeId().orElse(null)
         );
 
         Departamento nuevoDepartamento = crearDepartamentoUseCase.ejecutar(command);
-        Usuario jefe = consultarUsuariosUseCase.obtenerPorId(command.jefeId());
+        String nombreJefe = consultarUsuariosUseCase.obtenerPorId(nuevoDepartamento.getJefeId())
+                .map(Usuario::nombreCompleto)
+                .orElse("Sin jefe asignado");
 
 
-        DepartamentoResponse response = DepartamentoResponse.desdeDominio(nuevoDepartamento, jefe, 0L);
+        DepartamentoResponse response = DepartamentoResponse.desdeDominio(nuevoDepartamento, nombreJefe, 0L);
 
         URI location = URI.create("/api/v1/usuarios/" + response.id());
 
@@ -61,9 +64,11 @@ public class DepartamentoController {
 
         List<DepartamentoResponse> response = departamentos.stream()
                 .map(departamento -> {
-                    Usuario jefe = consultarUsuariosUseCase.obtenerPorId(departamento.getJefeId());
+                    String nombreJefe = consultarUsuariosUseCase.obtenerPorId(departamento.getJefeId())
+                            .map(Usuario::nombreCompleto)
+                            .orElse("Sin jefe asignado");
                     Long totalEmpleados = contarEmpleadosUseCase.contarPorDepartamento(departamento.getId());
-                    return DepartamentoResponse.desdeDominio(departamento, jefe, totalEmpleados);
+                    return DepartamentoResponse.desdeDominio(departamento, nombreJefe, totalEmpleados);
                 })
                 .toList();
 
@@ -75,7 +80,9 @@ public class DepartamentoController {
     public ResponseEntity<DepartamentoResponse> asignarJefe(@PathVariable Long id, @RequestParam Long jefeId) {
         AsignarJefeCommand command = new AsignarJefeCommand(id, jefeId);
         Departamento departamentoAsignado =  asignarJefeUseCase.ejecutar(command);
-        Usuario jefe = consultarUsuariosUseCase.obtenerPorId(jefeId);
+        String jefe = consultarUsuariosUseCase.obtenerPorId(jefeId)
+                .map(Usuario::nombreCompleto)
+                .orElse("Sin jefe asignado");
         Long totalEmpleados = contarEmpleadosUseCase.contarPorDepartamento(id);
         DepartamentoResponse.desdeDominio(departamentoAsignado, jefe, totalEmpleados);
         return ResponseEntity.ok(DepartamentoResponse.desdeDominio(departamentoAsignado, jefe, totalEmpleados));
