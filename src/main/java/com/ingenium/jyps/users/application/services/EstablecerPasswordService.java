@@ -3,7 +3,7 @@ package com.ingenium.jyps.users.application.services;
 import com.ingenium.jyps.users.application.ports.in.usecases.command.EstablecerPasswordCommand;
 import com.ingenium.jyps.users.application.ports.out.PasswordEncoderPort;
 import com.ingenium.jyps.users.domain.model.Usuario;
-import com.ingenium.jyps.users.application.ports.out.UsuarioRepositoryPort;
+import com.ingenium.jyps.users.domain.repository.UsuarioRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

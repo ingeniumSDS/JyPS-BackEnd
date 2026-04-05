@@ -1,4 +1,4 @@
-package com.ingenium.jyps.incidencias.application.ports;
+package com.ingenium.jyps.incidencias.domain.repository;
 
 import com.ingenium.jyps.incidencias.domain.model.Justificante;
 

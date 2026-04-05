@@ -1,5 +1,6 @@
 package com.ingenium.jyps.users.domain.model;
 
+import com.ingenium.jyps.config.mappstruct.Default;
 import com.ingenium.jyps.users.domain.model.enums.Roles;
 import lombok.Getter;
 import lombok.Setter;
@@ -67,7 +68,7 @@ public class Usuario {
         this.departamentoId = departamentoId;
     }
 
-    // Constructor para Rehidratar (recibe el ID y TODO el estado, incluyendo la Cuenta)
+    @Default
     public Usuario(Long id, String nombre, String apellidoPaterno, String apellidoMaterno,
                    String correo, String telefono, LocalTime horaEntrada, LocalTime horaSalida,
                    List<Roles> roles, Long departamentoId, Cuenta cuenta) {

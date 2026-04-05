@@ -3,7 +3,7 @@ package com.ingenium.jyps.users.application.services; // Asegúrate del paquete 
 import com.ingenium.jyps.departamentos.domain.ports.out.DepartamentoRepositoryPort;
 import com.ingenium.jyps.users.application.ports.in.usecases.command.LoginCommand;
 import com.ingenium.jyps.users.application.ports.out.PasswordEncoderPort;
-import com.ingenium.jyps.users.application.ports.out.UsuarioRepositoryPort;
+import com.ingenium.jyps.users.domain.repository.UsuarioRepositoryPort;
 import com.ingenium.jyps.users.domain.model.Usuario;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

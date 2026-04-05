@@ -1,10 +1,10 @@
-package com.ingenium.jyps.incidencias.application.ports.in.usecases.command;
+package com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request;
 
 
 import java.time.LocalDate;
 import java.util.List;
 
-public record SolicitarJustificanteCommand(
+public record JustificanteRequest(
         Long empleadoId,
         Long jefeId,
         LocalDate fechaSolicitada,
@@ -12,5 +12,4 @@ public record SolicitarJustificanteCommand(
         String descripcion,
         List<String> archivos
 ) {
-
 }
