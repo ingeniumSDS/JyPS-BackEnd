@@ -45,4 +45,9 @@ public class ConsultarUsuariosService implements ConsultarUsuariosUseCase {
         return usuarios;
     }
 
+    @Override
+    public Long contarPorDepartamento(Long departamentoId) {
+        return usuarioRepositoryPort.contarPorDepartamento(departamentoId);
+    }
+
 }

@@ -15,28 +15,29 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class DepartamentoRepositoryAdapter implements DepartamentoRepositoryPort {
 
-    private final JpaDepartamentoRepository departamentoRepository;
+    private final JpaDepartamentoRepository jpaDepartamentoRepository;
 
     @Override
     public Departamento guardar(Departamento departamento) {
         DepartamentoEntity d = mapToEntity(departamento);
-        DepartamentoEntity entidadGuardada = departamentoRepository.save(d);
+        DepartamentoEntity entidadGuardada = jpaDepartamentoRepository.save(d);
         return mapToDomain(entidadGuardada);
     }
 
     public List<Departamento> buscarTodos() {
-        List<DepartamentoEntity> entities = departamentoRepository.findAll();
+        List<DepartamentoEntity> entities = jpaDepartamentoRepository.findAll();
         return entities.stream().map(this::mapToDomain).toList();
     }
 
     public Optional<Departamento> buscarPorId(Long id) {
-        return departamentoRepository.findById(id).map(this::mapToDomain);
+        return jpaDepartamentoRepository.findById(id).map(this::mapToDomain);
     }
 
     @Override
     public Optional<Departamento> buscarPorNombre(String nombre) {
-        return departamentoRepository.findByNombre(nombre).map(this::mapToDomain);
+        return jpaDepartamentoRepository.findByNombre(nombre).map(this::mapToDomain);
     }
+
 
 
     private DepartamentoEntity mapToEntity(Departamento departamento) {
