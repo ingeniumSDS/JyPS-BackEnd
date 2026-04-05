@@ -12,10 +12,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ListarDepartamentoService implements ListarDepartamentosUseCase {
 
-    private final DepartamentoRepositoryPort repositoryPort;
+    DepartamentoRepositoryPort repositoryPort;
 
     @Override
     public List<Departamento> ejecutar() {
-       return repositoryPort.findAll();
+       return repositoryPort.buscarTodos();
     }
 }

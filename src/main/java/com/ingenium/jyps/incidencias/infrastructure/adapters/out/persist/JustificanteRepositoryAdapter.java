@@ -12,25 +12,19 @@ import com.ingenium.jyps.users.domain.model.Cuenta;
 import com.ingenium.jyps.users.domain.model.Usuario;
 import com.ingenium.jyps.users.infrastructure.adapters.out.persist.entity.CuentaEmbeddable;
 import com.ingenium.jyps.users.infrastructure.adapters.out.persist.entity.UsuarioEntity;
+import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Component;
 
 
 @Component
+@RequiredArgsConstructor
 public class JustificanteRepositoryAdapter implements JustificanteRepositoryPort {
 
-    private JpaJustificanteRepositoy jpaJustificanteRepositoy;
+    private final JpaJustificanteRepositoy jpaJustificanteRepositoy;
     private final UsuarioRepositoryPort usuarioRepositoryPort;
     private final DepartamentoRepositoryPort departamentoRepositoryPort;
-
-    public JustificanteRepositoryAdapter(
-            UsuarioRepositoryPort usuarioRepositoryPort,
-            DepartamentoRepositoryPort departamentoRepositoryPort
-    ) {
-        this.usuarioRepositoryPort = usuarioRepositoryPort;
-        this.departamentoRepositoryPort = departamentoRepositoryPort;
-    }
 
     @Override
     public Justificante solicitar(Justificante justificante) {
@@ -42,7 +36,7 @@ public class JustificanteRepositoryAdapter implements JustificanteRepositoryPort
     private JustificanteEntity mapToEntity(Justificante justificante) {
 
         Usuario u = usuarioRepositoryPort.buscarPorId(justificante.getEmpleadoId()).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        Departamento d =departamentoRepositoryPort.findById(u.getDepartamentoId()).orElseThrow(() -> new RuntimeException("Departamento no encontrado"));
+        Departamento d =departamentoRepositoryPort.buscarPorId(u.getDepartamentoId()).orElseThrow(() -> new RuntimeException("Departamento no encontrado"));
         Long idJefe = d.getJefeId();
         Usuario jefe = usuarioRepositoryPort.buscarPorId(idJefe).orElseThrow(() -> new RuntimeException("Jefe no encontrado"));
 

@@ -7,13 +7,13 @@ import java.util.Optional;
 
 public interface DepartamentoRepositoryPort {
 
-    List<Departamento> findAll();
+    List<Departamento> buscarTodos();
 
-    Departamento save(Departamento departamento);
+    Departamento guardar(Departamento departamento);
 
-    Optional<Departamento> findById(Long id);
+    Optional<Departamento> buscarPorId(Long id);
 
-    Optional<Departamento> findByNombre(String name);
+    Optional<Departamento> buscarPorNombre(String name);
 
 
 

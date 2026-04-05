@@ -24,7 +24,7 @@ public class ConsultarUsuariosService implements ConsultarUsuariosUseCase {
         Usuario usuario = usuarioRepositoryPort.buscarPorId(id)
                 .orElseThrow(() -> new IllegalArgumentException("El usuario con ese ID no existe"));
 
-        Departamento departamento = departamentoRepositoryPort.findById(usuario.getDepartamentoId())
+        Departamento departamento = departamentoRepositoryPort.buscarPorId(usuario.getDepartamentoId())
                 .orElseThrow(() -> new IllegalArgumentException("El departamento con ese ID no existe"));
 
         usuario.setNombreDepartamento(departamento.getNombre());
@@ -38,7 +38,7 @@ public class ConsultarUsuariosService implements ConsultarUsuariosUseCase {
         List<Usuario> usuarios = usuarioRepositoryPort.buscarTodos();
 
         usuarios.forEach(u -> {
-            Departamento departamento = departamentoRepositoryPort.findById(u.getDepartamentoId())
+            Departamento departamento = departamentoRepositoryPort.buscarPorId(u.getDepartamentoId())
                     .orElseThrow(() -> new IllegalArgumentException("El departamento con ese ID no existe"));
             u.setNombreDepartamento(departamento.getNombre());
         });

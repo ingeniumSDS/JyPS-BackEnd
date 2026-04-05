@@ -24,7 +24,7 @@ public class GuardarUsuarioService implements com.ingenium.jyps.users.applicatio
     @Override
     public Usuario ejecutar(RegistrarUsuarioCommand command) {
 
-        Departamento departamento = departamentoRepositoryPort.findById(command.departamentoId())
+        Departamento departamento = departamentoRepositoryPort.buscarPorId(command.departamentoId())
                 .orElseThrow(() -> new IllegalArgumentException("El departamento seleccionado no existe"));
 
         if (usuarioRepositoryPort.existsByCorreo(command.correo())) {

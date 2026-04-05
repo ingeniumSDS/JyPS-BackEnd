@@ -52,7 +52,7 @@ public class LoginService implements com.ingenium.jyps.users.application.ports.i
         usuarioRepositoryPort.crear(usuario);
 
         usuario.setNombreDepartamento(
-                departamentoRepositoryPort.findById(usuario.getDepartamentoId())
+                departamentoRepositoryPort.buscarPorId(usuario.getDepartamentoId())
                         .orElseThrow(() -> new IllegalArgumentException("El departamento con ese ID no existe"))
                         .getNombre()
         );

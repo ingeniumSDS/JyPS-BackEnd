@@ -18,7 +18,7 @@ public class CrearDepartamentoService implements CrearDepartamentoUseCase {
     @Override
     public Departamento ejecutar(CrearDepartamentoCommand command) {
         // 1. Validar regla de negocio cruzada (Ej. que el nombre no se repita)
-        if (repositoryPort.findByNombre(command.nombre().trim().toUpperCase()).isPresent()) {
+        if (repositoryPort.buscarPorNombre(command.nombre().trim().toUpperCase()).isPresent()) {
             throw new IllegalArgumentException("Ya existe un departamento con ese nombre.");
         }
 
@@ -30,6 +30,6 @@ public class CrearDepartamentoService implements CrearDepartamentoUseCase {
         );
 
         // AQUÍ: Capturamos y retornamos el objeto que ya trae el ID de la base de datos
-        return repositoryPort.save(nuevoDepartamento);
+        return repositoryPort.guardar(nuevoDepartamento);
     }
 }
