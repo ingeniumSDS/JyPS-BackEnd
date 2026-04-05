@@ -4,17 +4,16 @@ import com.ingenium.jyps.departamentos.application.ports.in.command.CrearDeparta
 import com.ingenium.jyps.departamentos.application.usecase.CrearDepartamentoUseCase;
 import com.ingenium.jyps.departamentos.domain.model.Departamento;
 import com.ingenium.jyps.departamentos.domain.ports.out.DepartamentoRepositoryPort;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class CrearDepartamentoService implements CrearDepartamentoUseCase {
 
     private final DepartamentoRepositoryPort repositoryPort;
 
     // Inyección de dependencias por constructor
-    public CrearDepartamentoService(DepartamentoRepositoryPort repositoryPort) {
-        this.repositoryPort = repositoryPort;
-    }
 
     @Override
     public Departamento ejecutar(CrearDepartamentoCommand command) {

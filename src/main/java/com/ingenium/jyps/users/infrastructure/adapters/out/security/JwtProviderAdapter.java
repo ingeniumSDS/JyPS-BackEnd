@@ -2,7 +2,6 @@ package com.ingenium.jyps.users.infrastructure.adapters.out.security;
 
 import com.ingenium.jyps.users.application.ports.out.JwtProviderPort;
 import com.ingenium.jyps.users.domain.model.Usuario;
-import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,14 +12,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static java.lang.Long.parseLong;
 
 
 @Component
 public class JwtProviderAdapter implements JwtProviderPort {
 
     private final SecretKey key; // La declaramos, pero NO la inicializamos aquí
-
 
     public JwtProviderAdapter(@Value("${jwt.secret.key}") String secretKey) {
         this.key = Keys.hmacShaKeyFor(secretKey.getBytes());

@@ -17,12 +17,9 @@ public class JavaMailSenderAdapter implements EmailSenderPort {
     @Value("${spring.mail.username}")
     private String remitente;
 
-
-
     @Override
     public void enviarCorreoBienvenida(String destinatario, String nombre, String deepLink) {
         try {
-
             // Usamos MimeMessage para poder enviar HTML, no solo texto plano
             MimeMessage mensaje = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mensaje, true, "UTF-8");

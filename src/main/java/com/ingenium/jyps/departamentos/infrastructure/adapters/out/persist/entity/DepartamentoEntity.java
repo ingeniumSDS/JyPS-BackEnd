@@ -1,4 +1,4 @@
-package com.ingenium.jyps.departamentos.infrastructure.adapters.out.persist;
+package com.ingenium.jyps.departamentos.infrastructure.adapters.out.persist.entity;
 
 import com.ingenium.jyps.users.infrastructure.adapters.out.persist.entity.UsuarioEntity;
 import jakarta.persistence.*;

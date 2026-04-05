@@ -2,12 +2,14 @@ package com.ingenium.jyps.users.infrastructure.adapters.out.email;
 
 import com.ingenium.jyps.users.application.ports.out.EmailSenderPort;
 import com.ingenium.jyps.users.domain.event.TokenSolicitadoEvent;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class RecuperarPasswordListener {
 
     private final EmailSenderPort emailSenderPort;
@@ -15,9 +17,6 @@ public class RecuperarPasswordListener {
     @Value("${front.end.url}")
     private String frontURL;
 
-    public RecuperarPasswordListener(EmailSenderPort emailSenderPort) {
-        this.emailSenderPort = emailSenderPort;
-    }
 
     @Async //  Siendo asíncrono para no trabar la API
     @EventListener

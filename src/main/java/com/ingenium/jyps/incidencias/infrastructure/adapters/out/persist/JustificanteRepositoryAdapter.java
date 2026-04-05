@@ -2,7 +2,7 @@ package com.ingenium.jyps.incidencias.infrastructure.adapters.out.persist;
 
 import com.ingenium.jyps.departamentos.domain.model.Departamento;
 import com.ingenium.jyps.departamentos.domain.ports.out.DepartamentoRepositoryPort;
-import com.ingenium.jyps.departamentos.infrastructure.adapters.out.persist.DepartamentoEntity;
+import com.ingenium.jyps.departamentos.infrastructure.adapters.out.persist.entity.DepartamentoEntity;
 import com.ingenium.jyps.incidencias.domain.model.Justificante;
 import com.ingenium.jyps.incidencias.application.ports.JustificanteRepositoryPort;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.out.persist.entity.JustificanteEntity;
@@ -41,10 +41,10 @@ public class JustificanteRepositoryAdapter implements JustificanteRepositoryPort
 
     private JustificanteEntity mapToEntity(Justificante justificante) {
 
-        Usuario u = usuarioRepositoryPort.findById(justificante.getEmpleadoId()).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        Usuario u = usuarioRepositoryPort.buscarPorId(justificante.getEmpleadoId()).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         Departamento d =departamentoRepositoryPort.findById(u.getDepartamentoId()).orElseThrow(() -> new RuntimeException("Departamento no encontrado"));
         Long idJefe = d.getJefeId();
-        Usuario jefe = usuarioRepositoryPort.findById(idJefe).orElseThrow(() -> new RuntimeException("Jefe no encontrado"));
+        Usuario jefe = usuarioRepositoryPort.buscarPorId(idJefe).orElseThrow(() -> new RuntimeException("Jefe no encontrado"));
 
         JustificanteEntity justificanteEntity = new JustificanteEntity();
         justificanteEntity.setId(justificante.getId());
@@ -60,7 +60,7 @@ public class JustificanteRepositoryAdapter implements JustificanteRepositoryPort
     }
 
     private UsuarioEntity mapUserToEntity(Usuario usuario) {
-        Usuario u = usuarioRepositoryPort.findById(usuario.getId()).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        Usuario u = usuarioRepositoryPort.buscarPorId(usuario.getId()).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
         DepartamentoEntity departamentoEntity = new DepartamentoEntity();
         departamentoEntity.setId(u.getDepartamentoId());

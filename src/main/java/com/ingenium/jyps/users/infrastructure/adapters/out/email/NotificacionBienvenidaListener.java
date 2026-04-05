@@ -2,12 +2,14 @@ package com.ingenium.jyps.users.infrastructure.adapters.out.email;
 
 import com.ingenium.jyps.users.application.ports.out.EmailSenderPort;
 import com.ingenium.jyps.users.domain.event.UsuarioCreadoEvent;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class NotificacionBienvenidaListener {
 
     private final EmailSenderPort emailSenderPort; // Inyectamos la interfaz
@@ -15,9 +17,7 @@ public class NotificacionBienvenidaListener {
     @Value("${front.end.url}")
     private String frontURL;
 
-    public NotificacionBienvenidaListener(EmailSenderPort emailSenderPort) {
-        this.emailSenderPort = emailSenderPort;
-    }
+
 
     @Async // Sigue siendo asíncrono para no trabar la API
     @EventListener

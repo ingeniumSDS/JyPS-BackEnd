@@ -8,14 +8,14 @@ import com.ingenium.jyps.departamentos.infrastructure.adapters.in.web.dto.reques
 import com.ingenium.jyps.departamentos.infrastructure.adapters.in.web.dto.response.DepartamentoResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.tags.Tags;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
 @CrossOrigin("*")
 @RequestMapping("api/v1/departamentos")
@@ -25,10 +25,6 @@ public class DepartamentoController {
     private final CrearDepartamentoUseCase crearDepartamentoUseCase;
     private final ListarDepartamentosUseCase listarDepartamentosUseCase;
 
-    public DepartamentoController(CrearDepartamentoUseCase crearDepartamentoUseCase, ListarDepartamentosUseCase listarDepartamentosUseCase) {
-        this.crearDepartamentoUseCase = crearDepartamentoUseCase;
-        this.listarDepartamentosUseCase = listarDepartamentosUseCase;
-    }
     @Operation(summary = "Crear un nuevo departamento", description = "Crea un nuevo departamento con la información proporcionada (Ej. Nombre, descripción y jefe) y devuelve los datos del departamento registrado junto con la ubicación del recurso creado")
     @PostMapping("")
     public ResponseEntity<DepartamentoResponse> crear(@RequestBody CrearDepartamentoRequest request) {

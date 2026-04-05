@@ -7,25 +7,19 @@ import com.ingenium.jyps.users.domain.event.UsuarioCreadoEvent;
 import com.ingenium.jyps.users.domain.model.Cuenta;
 import com.ingenium.jyps.users.domain.model.Usuario;
 import com.ingenium.jyps.users.application.ports.out.UsuarioRepositoryPort;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
 @Service
-public class GuardarUsuarioImpl implements com.ingenium.jyps.users.application.ports.in.usecases.GuardarUsuarioUseCase {
+@RequiredArgsConstructor
+public class GuardarUsuarioService implements com.ingenium.jyps.users.application.ports.in.usecases.GuardarUsuarioUseCase {
 
     private final UsuarioRepositoryPort usuarioRepositoryPort;
     private final DepartamentoRepositoryPort departamentoRepositoryPort;
     private final ApplicationEventPublisher publisher;
-
-    public GuardarUsuarioImpl(UsuarioRepositoryPort usuarioRepositoryPort,
-                              DepartamentoRepositoryPort departamentoRepositoryPort,
-                              ApplicationEventPublisher publisher) {
-        this.usuarioRepositoryPort = usuarioRepositoryPort;
-        this.departamentoRepositoryPort = departamentoRepositoryPort;
-        this.publisher = publisher;
-    }
 
     @Override
     public Usuario ejecutar(RegistrarUsuarioCommand command) {
@@ -64,9 +58,9 @@ public class GuardarUsuarioImpl implements com.ingenium.jyps.users.application.p
 
         nuevoUsuario.asignarCuenta(cuenta);
 
-        usuarioRepositoryPort.save(nuevoUsuario);
+        usuarioRepositoryPort.crear(nuevoUsuario);
 
-        nuevoUsuario.setId(usuarioRepositoryPort.findByCorreo(command.correo()).orElseThrow().getId());
+        nuevoUsuario.setId(usuarioRepositoryPort.buscarPorCorreo(command.correo()).orElseThrow().getId());
 
         publisher.publishEvent(new UsuarioCreadoEvent(
                 nuevoUsuario.getCorreo(),
