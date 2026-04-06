@@ -38,13 +38,11 @@ public class DepartamentoRepositoryAdapter implements DepartamentoRepositoryPort
         return jpaDepartamentoRepository.findByNombre(nombre).map(this::mapToDomain);
     }
 
-
-
     private DepartamentoEntity mapToEntity(Departamento departamento) {
         UsuarioEntity jefeEntity = null;
 
         // JPA solo necesita una entidad con el ID para guardar la llave foránea
-        if (departamento.getJefeId() != null) {
+        if (departamento.getJefeId() != null && departamento.getJefeId() > 0) {
             jefeEntity = new UsuarioEntity();
             jefeEntity.setId(departamento.getJefeId());
         }
