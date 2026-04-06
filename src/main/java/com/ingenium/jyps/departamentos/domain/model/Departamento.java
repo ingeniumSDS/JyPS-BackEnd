@@ -23,7 +23,7 @@ public class Departamento {
             this.descripcion = descripcion.trim();
         }
 
-        if  (jefeId == null) {
+        if  (jefeId == null || jefeId <= 0) {
             this.activo = false; // Por defecto nace inactivo
         } else {
             this.activo = true;
