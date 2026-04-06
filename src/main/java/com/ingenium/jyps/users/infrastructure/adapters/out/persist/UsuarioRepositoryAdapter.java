@@ -1,7 +1,7 @@
 package com.ingenium.jyps.users.infrastructure.adapters.out.persist;
 
 import com.ingenium.jyps.users.domain.model.Usuario;
-import com.ingenium.jyps.users.application.ports.out.UsuarioRepositoryPort;
+import com.ingenium.jyps.users.domain.repository.UsuarioRepositoryPort;
 import com.ingenium.jyps.users.infrastructure.adapters.out.persist.entity.UsuarioEntity;
 import com.ingenium.jyps.users.infrastructure.adapters.out.persist.repository.JpaUsuarioRepository;
 import com.ingenium.jyps.users.infrastructure.adapters.out.mapper.UsuarioMapper;

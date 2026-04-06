@@ -1,5 +1,6 @@
 package com.ingenium.jyps.users.domain.model;
 
+import com.ingenium.jyps.config.mappstruct.Default;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -24,7 +25,7 @@ public class Cuenta {
         this.tokenAcceso = tokenAcceso;
     }
 
-    // Constructor 2: EXCLUSIVO PARA REHIDRATAR DESDE BD (Recibe datos)
+    @Default
     public Cuenta(String password, int intentosFallidos, String tokenAcceso, LocalDateTime tokenExpiresAt,
                   boolean tokenUsado, boolean bloqueada, boolean activa, LocalDateTime blockedAt) {
         this.password = password;
@@ -38,10 +39,7 @@ public class Cuenta {
     }
 
     public boolean primerInicio() {
-        if (password == null) {
-            return true;
-        }
-        return false;
+        return password == null;
     }
 
     public void generarTokenAcceso() {

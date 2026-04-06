@@ -1,6 +1,6 @@
 package com.ingenium.jyps.users.application.services;
 
-import com.ingenium.jyps.users.application.ports.out.UsuarioRepositoryPort;
+import com.ingenium.jyps.users.domain.repository.UsuarioRepositoryPort;
 import com.ingenium.jyps.users.domain.event.TokenSolicitadoEvent;
 import com.ingenium.jyps.users.domain.model.Usuario;
 import lombok.RequiredArgsConstructor;

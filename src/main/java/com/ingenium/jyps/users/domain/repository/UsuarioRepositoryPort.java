@@ -1,4 +1,4 @@
-package com.ingenium.jyps.users.application.ports.out;
+package com.ingenium.jyps.users.domain.repository;
 
 import com.ingenium.jyps.users.domain.model.Usuario;
 

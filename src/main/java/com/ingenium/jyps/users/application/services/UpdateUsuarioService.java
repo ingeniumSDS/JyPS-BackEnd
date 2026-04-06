@@ -4,7 +4,7 @@ import com.ingenium.jyps.departamentos.domain.ports.out.DepartamentoRepositoryPo
 import com.ingenium.jyps.users.application.ports.in.usecases.command.UpdateUsuarioCommand;
 import com.ingenium.jyps.users.application.ports.in.usecases.UpdateUsuarioUseCase;
 import com.ingenium.jyps.users.domain.model.Usuario;
-import com.ingenium.jyps.users.application.ports.out.UsuarioRepositoryPort;
+import com.ingenium.jyps.users.domain.repository.UsuarioRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -6,7 +6,7 @@ import com.ingenium.jyps.users.application.ports.in.usecases.command.RegistrarUs
 import com.ingenium.jyps.users.domain.event.UsuarioCreadoEvent;
 import com.ingenium.jyps.users.domain.model.Cuenta;
 import com.ingenium.jyps.users.domain.model.Usuario;
-import com.ingenium.jyps.users.application.ports.out.UsuarioRepositoryPort;
+import com.ingenium.jyps.users.domain.repository.UsuarioRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;

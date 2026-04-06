@@ -1,8 +1,8 @@
 package com.ingenium.jyps.incidencias.domain.model;
 
+import com.ingenium.jyps.config.mappstruct.Default;
 import com.ingenium.jyps.incidencias.domain.model.enums.EstadosIncidencia;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -11,7 +11,6 @@ import java.util.List;
 @Getter
 public class Justificante {
 
-    @Setter
     private Long id;
     private Long empleadoId;
     private Long jefeId;
@@ -47,6 +46,7 @@ public class Justificante {
     }
 
     // Constructor para rehidratar el justificante desde la base de datos, con el ID incluido.
+    @Default
     public Justificante(
             Long id,
             Long empleadoId,
