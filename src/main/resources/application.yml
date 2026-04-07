@@ -2,6 +2,12 @@ spring:
   application:
     name: JyPS
 
+
+  servlet:
+     multipart:
+       max-request-size: 10MB
+       max-file-size: 3MB
+
   # Database Configuration
   datasource:
     url: ${DB_URL}
@@ -30,11 +36,6 @@ spring:
       mail.smtp.auth: ${MAIL_SMTP_AUTH}
       mail.smtp.starttls.enable: ${MAIL_SMTP_STARTTLS_ENABLE}
       mail.smtp.starttls.required: ${MAIL_SMTP_STARTTLS_REQUIRED}
-
-  servlet:
-    multipart:
-      max-request-size: 10MB
-      max-file-size: 3MB
 
 server:
   port: ${SERVER_PORT:8080}
