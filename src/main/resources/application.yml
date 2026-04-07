@@ -47,5 +47,9 @@ jwt:
 frontend:
   url: ${FRONT_END_URL}
 
+app:
+  storage:
+    location: ${STORAGE_LOCATION}
+
 # Discord Webhook Configuration
 #discord.webhook.url=${DISCORD_WEBHOOK_URL}

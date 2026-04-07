@@ -4,6 +4,8 @@ services:
     container_name: jyps_backend
     ports:
       - "8081:8081"
+    volumes:
+      - ./mis-archivos-reales:/data/justificantes # <--- LA MAGIA
     env_file:
       - .env
     environment:
@@ -12,6 +14,7 @@ services:
       - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_DRIVER_CLASS_NAME=${DB_DRIVER_CLASS_NAME}
+      - APP_STORAGE_LOCATION=/data/justificantes
 
       - JPA_SHOW_SQL=${JPA_SHOW_SQL}
       - JPA_HIBERNATE_DDL_AUTO=${SPRING_JPA_HIBERNATE_DDL_AUTO}

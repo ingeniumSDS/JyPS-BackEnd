@@ -2,6 +2,7 @@ package com.ingenium.jyps.incidencias.infrastructure.adapters.out.storage;
 
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.ArchivoAdjunto;
 import com.ingenium.jyps.incidencias.application.ports.out.StoragePort;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -14,8 +15,8 @@ import java.util.UUID;
 @Component
 public class StorageHandlerAdapter implements StoragePort {
 
-    // Imagina que esto viene de tu application.properties
-    private final String rootPath = "storage/empleados/";
+    @Value("${app.storage.location}")
+    private String rootPath;
 
     @Override
     public List<String> guardarArchivos(Long idEmpleado, List<ArchivoAdjunto> archivos) {
@@ -32,9 +33,10 @@ public class StorageHandlerAdapter implements StoragePort {
                 // Resultado: 550e8400-e29b_receta.pdf
                 String nombreUnico = UUID.randomUUID() + "_" + archivo.nombreOriginal();
                 Path rutaArchivoFinal = directorioEmpleado.resolve(nombreUnico);
-                nombresFinales.add(rutaArchivoFinal.toString());
                 // Escribimos los bytes en el disco
                 Files.write(rutaArchivoFinal, archivo.contenido());
+                nombresFinales.add(nombreUnico);
+
 
             }
             return nombresFinales;
