@@ -1,18 +1,20 @@
 package com.ingenium.jyps.incidencias.infrastructure.adapters.in.web;
 
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.SolicitarJustificanteUseCase;
+import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.SolicitarJustificanteCommand;
+import com.ingenium.jyps.incidencias.application.ports.out.StoragePort;
 import com.ingenium.jyps.incidencias.domain.model.Justificante;
-import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.JustificanteRequest;
+import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.SolicitarJustificanteRequest;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.response.JustificanteResponse;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.out.persist.mapper.JustificanteMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,13 +24,20 @@ public class JustificanteController {
     private final SolicitarJustificanteUseCase solicitarJustificanteUseCase;
     private final JustificanteMapper justificanteMapper;
 
-    @PostMapping("")
-    public ResponseEntity<JustificanteResponse> solicitarJustificante(@RequestBody JustificanteRequest request) {
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<JustificanteResponse> solicitarJustificante(
+
+            @RequestPart("data") SolicitarJustificanteRequest request,
+            @RequestPart("archivos") List<MultipartFile> archivos) {
+
+        SolicitarJustificanteCommand command = justificanteMapper.toCommand(request, archivos);
+
 
         Justificante nuevoJustificante = solicitarJustificanteUseCase
                 .ejecutar(
-                        justificanteMapper.toCommand(request)
+                        command
                 );
+
 
         URI location = URI.create("/api/v1/justificantes/" + nuevoJustificante.getId());
 

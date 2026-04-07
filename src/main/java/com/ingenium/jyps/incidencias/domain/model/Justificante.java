@@ -91,6 +91,10 @@ public class Justificante {
         if (fechaSolicitada.isBefore(LocalDate.now().minusDays(diasAtras))) {
             throw new IllegalArgumentException("El justificante no puede ser anterior a 3 días hábiles.");
         }
+
+        if (fechaSolicitada.isAfter(LocalDate.now())) {
+            throw new IllegalArgumentException("El justificante no puede ser posterior a la fecha actual.");
+        }
     }
 
     private void tieneJefe(Long jefeId) {
