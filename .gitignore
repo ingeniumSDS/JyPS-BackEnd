@@ -2,6 +2,7 @@ README.md
 .gradle
 wallet/
 build/
+./mis-archivos-reales/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
@@ -42,3 +43,6 @@ out/
 ### VS Code ###
 .vscode/
 .env
+mis-archivos-reales/1/29fe1520-2807-47a2-b1e5-9ced0b3c5eff_torrano HC.pdf
+
+mis-archivos-reales/1/dee80f84-aa57-4bd3-8024-133ec82caf99_receta.pdf
