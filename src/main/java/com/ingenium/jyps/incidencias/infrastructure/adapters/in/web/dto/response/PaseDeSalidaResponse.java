@@ -1,0 +1,16 @@
+package com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.response;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+
+public record PaseDeSalidaResponse(
+        Long empleadoId,
+        Long jefeId,
+        LocalDateTime horaSolicitada,
+        LocalDate fechaSolicitud,
+        String descripcion,
+        List<String> archivos,
+        String estado
+) {
+}

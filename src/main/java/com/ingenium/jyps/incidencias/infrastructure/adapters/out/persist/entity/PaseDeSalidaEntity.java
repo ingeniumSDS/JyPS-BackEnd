@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -36,17 +38,17 @@ public class PaseDeSalidaEntity {
     private UsuarioEntity jefe;
 
     @Column(name = "hora_solicitada", nullable = false)
-    private LocalTime horaSolicitada;
+    private LocalDateTime horaSolicitada;
 
     @Column(name = "fecha_solicitud", nullable = false)
     private LocalDate fechaSolicitud;
 
     @Column(name = "hora_salida_real")
-    private LocalTime horaSalidaReal;
+    private LocalDateTime horaSalidaReal;
 
 
     @Column(name = "hora_esperada", nullable = false)
-    private LocalTime horaEsperada;
+    private LocalDateTime horaEsperada;
 
     @Column(name = "detalles", length = 500)
     private String detalles;
@@ -54,5 +56,13 @@ public class PaseDeSalidaEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "estado", nullable = false)
     private EstadosIncidencia estado;
+
+    @Column(name = "codigo_qr")
+    private String QR;
+
+    @Column(name = "archivos")
+    @ElementCollection
+    @CollectionTable(name = "pase_de_salida_evidencias", joinColumns = @JoinColumn(name = "justificante_id"), foreignKey = @ForeignKey(name = "FK_JUSTIFICANTE_ARCHIVOS"))
+    private List<String> archivos;
 
 }

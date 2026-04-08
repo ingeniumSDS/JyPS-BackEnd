@@ -23,8 +23,7 @@ public class Justificante extends Incidencia {
             List<String> archivos
     ) {
 
-        // Validación de los campos (El Modelo se defiende solo)
-
+    // Validamos la información esencial y asignamos los valores si estos son válidos.
         validarDescripcion(descripcion);
         tieneEmpleado(empleadoId);
         tieneJefe(jefeId);
@@ -59,6 +58,8 @@ public class Justificante extends Incidencia {
         this.estado = estado;
     }
 
+    // Valida que no se hayan excedido los 3 días HÁBILES permitidos para
+    // solicitar un justificante Y NO permite fechas futuras.
 
     private void validarFechaSolicitada(LocalDate fechaSolicitada) {
 
@@ -81,7 +82,4 @@ public class Justificante extends Incidencia {
         this.fechaSolicitada = fechaSolicitada;
 
     }
-
-
-
 }

@@ -18,6 +18,11 @@ public class Incidencia {
     protected EstadosIncidencia estado;
     protected String motivoRechazo;
 
+
+    //==============//
+    // VALIDACIONES //
+    //==============//
+
     public void validarDescripcion(String descripcion) {
         if (descripcion == null || descripcion.trim().isEmpty()) {
             throw new IllegalArgumentException("La descripción no puede estar vacía");
@@ -29,19 +34,21 @@ public class Incidencia {
         this.descripcion = descripcion.trim();
     }
 
-    public void rechazar() {
-        validarMotivoRechazo(motivoRechazo);
-        this.estado = EstadosIncidencia.RECHAZADO;
-    }
-
-    public void aprobar() {
-        this.estado = EstadosIncidencia.APROBADO;
-    }
-
-    public void caducar() {
-        if (this.estado == EstadosIncidencia.PENDIENTE || this.estado == EstadosIncidencia.APROBADO) {
-            this.estado = EstadosIncidencia.CADUCADO;
+    public void tieneJefe(Long jefeId) {
+        if (jefeId == null) {
+            throw new IllegalArgumentException("El ID del jefe no puede ser nulo");
         }
+        this.jefeId = jefeId;
+
+    }
+
+    public void tieneEmpleado(Long empleadoId) {
+        if (empleadoId == null) {
+            throw new IllegalArgumentException("El ID del empleado no puede ser nulo");
+        }
+
+        this.empleadoId = empleadoId;
+
     }
 
     public void validarMotivoRechazo(String motivoRechazo) {
@@ -62,22 +69,23 @@ public class Incidencia {
 
     }
 
-    public void tieneJefe(Long jefeId) {
-        if (jefeId == null) {
-            throw new IllegalArgumentException("El ID del jefe no puede ser nulo");
-        }
-        this.jefeId = jefeId;
+    //=========//
+    // ESTADOS //
+    //=========//
 
+    public void rechazar() {
+        validarMotivoRechazo(motivoRechazo);
+        this.estado = EstadosIncidencia.RECHAZADO;
     }
 
-    public void tieneEmpleado(Long empleadoId) {
-        if (empleadoId == null) {
-            throw new IllegalArgumentException("El ID del empleado no puede ser nulo");
-        }
-
-        this.empleadoId = empleadoId;
-
+    public void aprobar() {
+        this.estado = EstadosIncidencia.APROBADO;
     }
 
+    public void caducar() {
+        if (this.estado == EstadosIncidencia.PENDIENTE || this.estado == EstadosIncidencia.APROBADO) {
+            this.estado = EstadosIncidencia.CADUCADO;
+        }
+    }
 
 }

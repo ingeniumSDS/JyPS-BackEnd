@@ -7,11 +7,13 @@ import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.Solic
 import com.ingenium.jyps.incidencias.domain.model.Justificante;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class SolicitarJustificanteService implements SolicitarJustificanteUseCase {
 
     private final JustificanteRepositoryPort justificanteRepositoryPort;
@@ -21,8 +23,6 @@ public class SolicitarJustificanteService implements SolicitarJustificanteUseCas
     public Justificante ejecutar(SolicitarJustificanteCommand command) {
 
         List<String> archivosGuardados = storagePort.guardarArchivos(command.empleadoId(), command.archivos());
-
-
 
         Justificante nuevoJustificante = new Justificante(
                 command.empleadoId(),

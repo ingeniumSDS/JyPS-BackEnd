@@ -8,9 +8,11 @@ import lombok.Getter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 public class PaseDeSalida extends Incidencia {
+
 
 
     // Extras para el dominio del pase de salida
@@ -18,16 +20,15 @@ public class PaseDeSalida extends Incidencia {
     private LocalDateTime horaSolicitada;
     private LocalDateTime horaEsperada;
     private LocalDateTime horaSalidaReal;
+    private String QR;
 
 
     // Constructor para mandar a crear un nuevo pasa de salida, sin el ID que se genera automáticamente.
     public PaseDeSalida(
             Long empleadoId,
             Long jefeId,
-            LocalDate fechaSolicitud,
             String descripcion,
             List<String> archivos,
-            EstadosIncidencia estado,
             Usuario empleado,
             LocalDateTime horaSolicitada) {
 
@@ -36,9 +37,12 @@ public class PaseDeSalida extends Incidencia {
         tieneJefe(jefeId);
         validarDescripcion(descripcion);
 
-        this.fechaSolicitud = fechaSolicitud;
+        // Se toma la fecha del día en curso por defecto.
+        this.fechaSolicitud = LocalDate.now();
+
         this.archivos = archivos;
-        this.estado = estado;
+        // Por defecto se crea como pendiente
+        this.estado = EstadosIncidencia.PENDIENTE;
         this.empleado = empleado;
 
     }
@@ -75,6 +79,11 @@ public class PaseDeSalida extends Incidencia {
         this.archivos = archivos;
         this.estado = estado;
     }
+
+
+    //==============//
+    // VALIDACIONES //
+    //==============//
 
     // Validaciones y métodos para la creación del PASE DE SALIDA
     private void validarHoraSolicitada(LocalDateTime horaSolicitada) {
@@ -121,6 +130,10 @@ public class PaseDeSalida extends Incidencia {
         } else {
             this.estado = EstadosIncidencia.A_TIEMPO;
         }
+    }
+
+    public void generarQR(){
+        this.QR = UUID.randomUUID().toString();
     }
 
 }
