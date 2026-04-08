@@ -9,16 +9,10 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Getter
-public class Justificante {
+public class Justificante extends Incidencia {
 
-    private Long id;
-    private Long empleadoId;
-    private Long jefeId;
+
     private LocalDate fechaSolicitada;
-    private LocalDate fechaSolicitud;
-    private String descripcion;
-    private List<String> archivos;
-    private EstadosIncidencia estado;
 
     // Constructor para mandar a crear un nuevo justificante, sin el ID que se genera automáticamente.
     public Justificante(
@@ -36,11 +30,7 @@ public class Justificante {
         tieneJefe(jefeId);
         validarFechaSolicitada(fechaSolicitada);
 
-        this.empleadoId = empleadoId;
-        this.jefeId = jefeId;
-        this.fechaSolicitada = fechaSolicitada;
         this.fechaSolicitud = LocalDate.now();
-        this.descripcion = descripcion.trim();
         this.archivos = archivos;
         this.estado = EstadosIncidencia.PENDIENTE;
     }
@@ -68,16 +58,6 @@ public class Justificante {
     }
 
 
-    private void validarDescripcion(String descripcion) {
-        if (descripcion == null || descripcion.trim().isEmpty()) {
-            throw new IllegalArgumentException("La descripción no puede estar vacía");
-        } else if (descripcion.trim().length() < 25) {
-            throw new IllegalArgumentException("La descripción debe tener al menos 25 caracteres");
-        } else if (descripcion.trim().length() > 255) {
-            throw new IllegalArgumentException("La descripción no puede exceder los 255 caracteres");
-        }
-    }
-
     private void validarFechaSolicitada(LocalDate fechaSolicitada) {
 
         int diasAtras = 3;
@@ -95,33 +75,11 @@ public class Justificante {
         if (fechaSolicitada.isAfter(LocalDate.now())) {
             throw new IllegalArgumentException("El justificante no puede ser posterior a la fecha actual.");
         }
+
+        this.fechaSolicitada = fechaSolicitada;
+
     }
 
-    private void tieneJefe(Long jefeId) {
-        if (jefeId == null) {
-            throw new IllegalArgumentException("El ID del jefe no puede ser nulo");
-        }
-    }
-
-    private void tieneEmpleado(Long empleadoId) {
-        if (empleadoId == null) {
-            throw new IllegalArgumentException("El ID del empleado no puede ser nulo");
-        }
-    }
-
-    // Métodos para gestionar el flujo de estados.
-
-    public void rechazar() {
-        this.estado = EstadosIncidencia.RECHAZADO;
-    }
-
-    public void aprobar() {
-        this.estado = EstadosIncidencia.APROBADO;
-    }
-
-    public void caducar() {
-        this.estado = EstadosIncidencia.CADUCADO;
-    }
 
 
 }
