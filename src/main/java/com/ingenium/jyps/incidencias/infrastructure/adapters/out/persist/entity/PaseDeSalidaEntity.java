@@ -19,6 +19,10 @@ import java.time.LocalTime;
 @Table(name = "pases_de_salida")
 public class PaseDeSalidaEntity {
 
+    //========================//
+    // DATOS DE IDENTIFICACIÓN//
+    //========================//
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -36,6 +40,13 @@ public class PaseDeSalidaEntity {
 
     @Column(name = "fecha_solicitud", nullable = false)
     private LocalDate fechaSolicitud;
+
+    @Column(name = "hora_salida_real")
+    private LocalTime horaSalidaReal;
+
+
+    @Column(name = "hora_esperada", nullable = false)
+    private LocalTime horaEsperada;
 
     @Column(name = "detalles", length = 500)
     private String detalles;
