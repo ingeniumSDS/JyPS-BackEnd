@@ -27,13 +27,11 @@ public class Incidencia {
             throw new IllegalArgumentException("La descripción no puede exceder los 255 caracteres");
         }
         this.descripcion = descripcion.trim();
-
     }
 
     public void rechazar() {
         validarMotivoRechazo(motivoRechazo);
         this.estado = EstadosIncidencia.RECHAZADO;
-
     }
 
     public void aprobar() {
@@ -41,21 +39,23 @@ public class Incidencia {
     }
 
     public void caducar() {
-        this.estado = EstadosIncidencia.CADUCADO;
+        if (this.estado == EstadosIncidencia.PENDIENTE || this.estado == EstadosIncidencia.APROBADO) {
+            this.estado = EstadosIncidencia.CADUCADO;
+        }
     }
 
     public void validarMotivoRechazo(String motivoRechazo) {
 
         if (motivoRechazo.isEmpty()) {
-            throw new IllegalArgumentException("El motivo de rechazo no puede estar vacío");
+            throw new IllegalArgumentException("Debe incluír los motivos del rechazo.");
         }
 
         if (motivoRechazo.length() < 25) {
-            throw new IllegalArgumentException("El motivo de rechazo debe tener al menos 25 caracteres");
+            throw new IllegalArgumentException("El motivo de rechazo debe tener al menos 25 caracteres.");
         }
 
         if (motivoRechazo.length() > 255) {
-            throw new IllegalArgumentException("El motivo de rechazo no puede exceder los 255 caracteres");
+            throw new IllegalArgumentException("El motivo de rechazo no puede exceder los 255 caracteres.");
         }
 
         this.motivoRechazo = motivoRechazo;

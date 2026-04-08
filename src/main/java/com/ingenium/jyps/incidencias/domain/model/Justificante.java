@@ -38,6 +38,7 @@ public class Justificante extends Incidencia {
     // Constructor para rehidratar el justificante desde la base de datos, con el ID incluido.
     @Default
     public Justificante(
+
             Long id,
             Long empleadoId,
             Long jefeId,
@@ -46,6 +47,7 @@ public class Justificante extends Incidencia {
             String descripcion,
             List<String> archivos,
             EstadosIncidencia estado
+
     ) {
         this.id = id;
         this.empleadoId = empleadoId;

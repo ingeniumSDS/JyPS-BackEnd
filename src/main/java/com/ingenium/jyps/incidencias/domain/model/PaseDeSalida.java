@@ -21,35 +21,47 @@ public class PaseDeSalida extends Incidencia {
 
 
     // Constructor para mandar a crear un nuevo pasa de salida, sin el ID que se genera automáticamente.
-    public PaseDeSalida(Long empleadoId,
-                        Long jefeId,
-                        LocalDate fechaSolicitud,
-                        String descripcion,
-                        List<String> archivos,
-                        EstadosIncidencia estado,
-                        Usuario empleado,
-                        LocalDateTime horaSolicitada) {
-
-        this.empleadoId = empleadoId;
-        this.jefeId = jefeId;
-        this.fechaSolicitud = fechaSolicitud;
-        this.descripcion = descripcion;
-        this.archivos = archivos;
-        this.estado = estado;
-        this.empleado = empleado;
-        this.horaSolicitada = horaSolicitada;
-    }
-
-
-    @Default
     public PaseDeSalida(
-            Long id,
             Long empleadoId,
             Long jefeId,
-            LocalDateTime horaSolicitada,
             LocalDate fechaSolicitud,
             String descripcion,
             List<String> archivos,
+            EstadosIncidencia estado,
+            Usuario empleado,
+            LocalDateTime horaSolicitada) {
+
+        validarHoraSolicitada(horaSolicitada);
+        tieneEmpleado(empleadoId);
+        tieneJefe(jefeId);
+        validarDescripcion(descripcion);
+
+        this.fechaSolicitud = fechaSolicitud;
+        this.archivos = archivos;
+        this.estado = estado;
+        this.empleado = empleado;
+
+    }
+
+    // Constuctor para rehidratar desde la base de datos.
+    @Default
+    public PaseDeSalida(
+            // Datos de identificación/
+            Long id,
+            Long empleadoId,
+            Long jefeId,
+            LocalDate fechaSolicitud,
+
+            // Datos inherentes al pase de salida.
+            LocalDateTime horaSolicitada,
+            String descripcion,
+            List<String> archivos,
+
+            // Momento en que el empleado parsa por la caseta de vigilancia.
+            LocalDateTime horaSalidaReal,
+
+            // Se calcula en funición de la hora de salida real
+            LocalDateTime horaEsperada,
             EstadosIncidencia estado
     ) {
         this.id = id;
@@ -57,6 +69,8 @@ public class PaseDeSalida extends Incidencia {
         this.jefeId = jefeId;
         this.horaSolicitada = horaSolicitada;
         this.fechaSolicitud = fechaSolicitud;
+        this.horaEsperada = horaEsperada;
+        this.horaSalidaReal = horaSalidaReal;
         this.descripcion = descripcion;
         this.archivos = archivos;
         this.estado = estado;
@@ -75,11 +89,17 @@ public class PaseDeSalida extends Incidencia {
                 || horaSolicitada.toLocalDate().isBefore(LocalDate.now())) {
             throw new IllegalArgumentException("La hora solicitada no puede ser para un día distinto al actual.");
         }
+
+        this.horaSolicitada = horaSolicitada;
+
     }
 
+    //========================================//
+    // FLUJO DE ESTADOS PARA EL PASE DE SALIDA//
+    //========================================//
 
-    // FLUJO DE ESTADOS PARA EL PASE DE SALIDA
     // Verifica si el empleado debe volver o si el periodo de gracia coincide con el fin de su jornada.
+    // Se ejecuta al momento que el empleado hace checkout.
     public void debeVolver() {
         if (empleado.getHoraSalida().equals(horaEsperada.toLocalTime())
                 || empleado.getHoraSalida().isBefore(horaEsperada.toLocalTime())) {
@@ -91,10 +111,16 @@ public class PaseDeSalida extends Incidencia {
     public void checkOut() {
         this.horaSalidaReal = LocalDateTime.now();
         this.horaEsperada = horaSalidaReal.plusHours(3);
+        debeVolver();
     }
 
     public void checkIn() {
-        this.estado = EstadosIncidencia.RETARDO;
+        this.horaSalidaReal = LocalDateTime.now();
+        if (horaEsperada.toLocalDate().isAfter(LocalDate.now())) {
+            this.estado = EstadosIncidencia.RETARDO;
+        } else {
+            this.estado = EstadosIncidencia.A_TIEMPO;
+        }
     }
 
 }
