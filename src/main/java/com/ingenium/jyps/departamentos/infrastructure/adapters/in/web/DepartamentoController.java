@@ -75,7 +75,7 @@ public class DepartamentoController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/{id}/asignar-jefe")
+    @PatchMapping("/{id}/asignar-jefe")
     @Operation(summary = "Asignar jefe a departamento", description = "Asigna un jefe a un departamento existente, lo que activa el departamento si no estaba activo previamente")
     public ResponseEntity<DepartamentoResponse> asignarJefe(@PathVariable Long id, @RequestParam Long jefeId) {
         AsignarJefeCommand command = new AsignarJefeCommand(id, jefeId);

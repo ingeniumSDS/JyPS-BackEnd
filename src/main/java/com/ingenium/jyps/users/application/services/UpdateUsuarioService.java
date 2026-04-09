@@ -70,10 +70,8 @@ public class UpdateUsuarioService implements UpdateUsuarioUseCase {
                         .getNombre()
         );
 
-        usuarioRepositoryPort.crear(u);
 
-        u.setId(command.id());
         // 6. Guardar los cambios
-        return u;
+        return usuarioRepositoryPort.crear(u);
     }
 }
