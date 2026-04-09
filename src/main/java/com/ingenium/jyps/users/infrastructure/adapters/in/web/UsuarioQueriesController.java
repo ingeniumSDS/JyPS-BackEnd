@@ -1,6 +1,5 @@
 package com.ingenium.jyps.users.infrastructure.adapters.in.web;
 
-import com.ingenium.jyps.departamentos.domain.ports.out.DepartamentoRepositoryPort;
 import com.ingenium.jyps.users.application.ports.in.usecases.ConsultarUsuariosUseCase;
 import com.ingenium.jyps.users.domain.model.Usuario;
 import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.response.UsuarioResponse;
@@ -34,5 +33,17 @@ public class UsuarioQueriesController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/usuarios/jefes")
+    @Operation(summary = "Filtro Jefes de Departamento", description = "Recopila a todos los usuarios que sean jefes de departamento.")
+    public ResponseEntity<List<UsuarioResponse>> filtrarJefes() {
 
+        List<Usuario> usuarios = consultarUsuariosUseCase.filtrarJefes();
+
+        List<UsuarioResponse> response = usuarios.stream().map(
+                        UsuarioResponse::desdeDominio)
+                .toList();
+
+        return ResponseEntity.ok(response);
+
+    }
 }

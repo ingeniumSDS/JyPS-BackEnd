@@ -1,5 +1,6 @@
 package com.ingenium.jyps.users.application.services;
 
+import com.ingenium.jyps.users.application.ports.in.usecases.GenerarTokenUseCase;
 import com.ingenium.jyps.users.domain.repository.UsuarioRepositoryPort;
 import com.ingenium.jyps.users.domain.event.TokenSolicitadoEvent;
 import com.ingenium.jyps.users.domain.model.Usuario;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class GenerarTokenService implements com.ingenium.jyps.users.application.ports.in.usecases.GenerarTokenUseCase {
+public class GenerarTokenService implements GenerarTokenUseCase {
 
     private final UsuarioRepositoryPort usuarioRepository;
     private final ApplicationEventPublisher publisher;

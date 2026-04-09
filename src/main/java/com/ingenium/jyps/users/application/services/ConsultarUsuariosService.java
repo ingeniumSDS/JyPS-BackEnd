@@ -56,19 +56,22 @@ public class ConsultarUsuariosService implements ConsultarUsuariosUseCase {
 
     @Override
     public List<Usuario> filtrarPorDepartamento(Long departamentoId) {
-
-        if (departamentoRepositoryPort.buscarPorId(departamentoId).isEmpty()) {
-            throw new IllegalArgumentException("El departamento con ese ID no existe");
-        }
-        Departamento departamento = departamentoRepositoryPort.buscarPorId(departamentoId).orElseThrow(() -> new IllegalArgumentException("El departamento con ese ID no existe"));
+        // Buscamos el departamento una sola vez
+        Departamento departamento = departamentoRepositoryPort.buscarPorId(departamentoId)
+                .orElseThrow(() -> new IllegalArgumentException("El departamento con ese ID no existe"));
 
         List<Usuario> usuarios = usuarioRepositoryPort.filtrarPorDepartamento(departamentoId);
-
-        usuarios.forEach(u -> {
-            u.setNombreDepartamento(departamento.getNombre());
-        });
+        usuarios.forEach(u -> u.setNombreDepartamento(departamento.getNombre()));
 
         return usuarios;
+    }
+
+    @Override
+    public List<Usuario> filtrarJefes() {
+
+        List<Usuario> jefes = usuarioRepositoryPort.buscarJefes();
+
+        return jefes;
     }
 
 

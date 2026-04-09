@@ -11,4 +11,6 @@ public interface ConsultarUsuariosUseCase {
     List<Usuario> obtenerTodos();
     Long contarPorDepartamento(Long departamentoId);
     List<Usuario> filtrarPorDepartamento(Long departamentoId);
+
+    List<Usuario> filtrarJefes();
 }
