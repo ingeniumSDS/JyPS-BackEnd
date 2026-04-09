@@ -2,6 +2,7 @@ package com.ingenium.jyps.users.application.services;
 
 import com.ingenium.jyps.departamentos.domain.model.Departamento;
 import com.ingenium.jyps.departamentos.domain.ports.out.DepartamentoRepositoryPort;
+import com.ingenium.jyps.users.application.ports.in.usecases.GuardarUsuarioUseCase;
 import com.ingenium.jyps.users.application.ports.in.usecases.command.RegistrarUsuarioCommand;
 import com.ingenium.jyps.users.domain.event.UsuarioCreadoEvent;
 import com.ingenium.jyps.users.domain.model.Cuenta;
@@ -15,7 +16,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class GuardarUsuarioService implements com.ingenium.jyps.users.application.ports.in.usecases.GuardarUsuarioUseCase {
+public class GuardarUsuarioService implements GuardarUsuarioUseCase {
 
     private final UsuarioRepositoryPort usuarioRepositoryPort;
     private final DepartamentoRepositoryPort departamentoRepositoryPort;
@@ -35,6 +36,8 @@ public class GuardarUsuarioService implements com.ingenium.jyps.users.applicatio
             throw new IllegalArgumentException("El teléfono: " + command.telefono() + " ya se encuentra registrado.");
         }
 
+
+
         Usuario nuevoUsuario = new Usuario(
                 command.nombre(),
                 command.apellidoPaterno(),
@@ -48,20 +51,16 @@ public class GuardarUsuarioService implements com.ingenium.jyps.users.applicatio
         );
 
         String tokenAcceso = UUID.randomUUID().toString();
-
         Cuenta cuenta = new Cuenta(
                 tokenAcceso,
                 120
         );
 
         nuevoUsuario.setNombreDepartamento(departamento.getNombre());
-
         nuevoUsuario.asignarCuenta(cuenta);
 
         usuarioRepositoryPort.crear(nuevoUsuario);
-
         nuevoUsuario.setId(usuarioRepositoryPort.buscarPorCorreo(command.correo()).orElseThrow().getId());
-
         publisher.publishEvent(new UsuarioCreadoEvent(
                 nuevoUsuario.getCorreo(),
                 nuevoUsuario.getNombre() + " " + nuevoUsuario.getApellidoPaterno() +  " " + nuevoUsuario.getApellidoMaterno(),

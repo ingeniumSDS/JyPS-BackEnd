@@ -1,5 +1,6 @@
 package com.ingenium.jyps.users.application.services;
 
+import com.ingenium.jyps.users.application.ports.in.usecases.EstablecerPasswordUseCase;
 import com.ingenium.jyps.users.application.ports.in.usecases.command.EstablecerPasswordCommand;
 import com.ingenium.jyps.users.application.ports.out.PasswordEncoderPort;
 import com.ingenium.jyps.users.domain.model.Usuario;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class EstablecerPasswordService implements com.ingenium.jyps.users.application.ports.in.usecases.EstablecerPasswordUseCase {
+public class EstablecerPasswordService implements EstablecerPasswordUseCase {
 
     private final UsuarioRepositoryPort usuarioRepositoryPort;
     private final PasswordEncoderPort passwordEncoderPort;

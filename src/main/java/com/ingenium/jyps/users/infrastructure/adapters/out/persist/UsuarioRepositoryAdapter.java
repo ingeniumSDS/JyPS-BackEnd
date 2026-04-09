@@ -1,6 +1,7 @@
 package com.ingenium.jyps.users.infrastructure.adapters.out.persist;
 
 import com.ingenium.jyps.users.domain.model.Usuario;
+import com.ingenium.jyps.users.domain.model.enums.Roles;
 import com.ingenium.jyps.users.domain.repository.UsuarioRepositoryPort;
 import com.ingenium.jyps.users.infrastructure.adapters.out.persist.entity.UsuarioEntity;
 import com.ingenium.jyps.users.infrastructure.adapters.out.persist.repository.JpaUsuarioRepository;
@@ -69,5 +70,11 @@ public class UsuarioRepositoryAdapter implements UsuarioRepositoryPort {
     @Override
     public List<Usuario> buscarTodos() {
         return jpaUsuarioRepository.findAll().stream().map(usuarioMapper::toDomain).toList();
+    }
+
+    @Override
+    public List<Usuario> buscarJefes() {
+        List<UsuarioEntity> jefes = jpaUsuarioRepository.findByRoles(List.of(Roles.JEFE_DE_DEPARTAMENTO));
+        return jefes.stream().map(usuarioMapper::toDomain).toList();
     }
 }

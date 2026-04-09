@@ -28,4 +28,6 @@ public interface UsuarioRepositoryPort {
 
     long contarPorDepartamento(Long id);
     List<Usuario> filtrarPorDepartamento(Long idDepartamento);
+
+    List<Usuario> buscarJefes();
 }
