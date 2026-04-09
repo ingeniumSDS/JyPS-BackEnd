@@ -10,7 +10,6 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 
 @Entity
@@ -62,7 +61,7 @@ public class PaseDeSalidaEntity {
 
     @Column(name = "archivos")
     @ElementCollection
-    @CollectionTable(name = "pase_de_salida_evidencias", joinColumns = @JoinColumn(name = "justificante_id"), foreignKey = @ForeignKey(name = "FK_JUSTIFICANTE_ARCHIVOS"))
+    @CollectionTable(name = "pase_de_salida_evidencias", joinColumns = @JoinColumn(name = "pase_salida_id"), foreignKey = @ForeignKey(name = "FK_PASE_ARCHIVOS"))
     private List<String> archivos;
 
 }

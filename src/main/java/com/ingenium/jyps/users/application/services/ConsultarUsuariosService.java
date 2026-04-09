@@ -18,8 +18,6 @@ public class ConsultarUsuariosService implements ConsultarUsuariosUseCase {
     private final UsuarioRepositoryPort usuarioRepositoryPort;
     private final DepartamentoRepositoryPort departamentoRepositoryPort;
 
-
-
     @Override
     public Optional<Usuario> obtenerPorId(Long id) {
 
@@ -58,10 +56,19 @@ public class ConsultarUsuariosService implements ConsultarUsuariosUseCase {
 
     @Override
     public List<Usuario> filtrarPorDepartamento(Long departamentoId) {
+
         if (departamentoRepositoryPort.buscarPorId(departamentoId).isEmpty()) {
             throw new IllegalArgumentException("El departamento con ese ID no existe");
         }
-        return usuarioRepositoryPort.filtrarPorDepartamento(departamentoId);
+        Departamento departamento = departamentoRepositoryPort.buscarPorId(departamentoId).orElseThrow(() -> new IllegalArgumentException("El departamento con ese ID no existe"));
+
+        List<Usuario> usuarios = usuarioRepositoryPort.filtrarPorDepartamento(departamentoId);
+
+        usuarios.forEach(u -> {
+            u.setNombreDepartamento(departamento.getNombre());
+        });
+
+        return usuarios;
     }
 
 
