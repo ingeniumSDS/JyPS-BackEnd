@@ -18,6 +18,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/justificantes")
+@CrossOrigin("*")
 public class JustificanteController {
 
     private final SolicitarJustificanteUseCase solicitarJustificanteUseCase;

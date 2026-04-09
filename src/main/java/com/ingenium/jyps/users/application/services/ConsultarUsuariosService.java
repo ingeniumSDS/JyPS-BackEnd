@@ -56,4 +56,13 @@ public class ConsultarUsuariosService implements ConsultarUsuariosUseCase {
         return usuarioRepositoryPort.contarPorDepartamento(departamentoId);
     }
 
+    @Override
+    public List<Usuario> filtrarPorDepartamento(Long departamentoId) {
+        if (departamentoRepositoryPort.buscarPorId(departamentoId).isEmpty()) {
+            throw new IllegalArgumentException("El departamento con ese ID no existe");
+        }
+        return usuarioRepositoryPort.filtrarPorDepartamento(departamentoId);
+    }
+
+
 }

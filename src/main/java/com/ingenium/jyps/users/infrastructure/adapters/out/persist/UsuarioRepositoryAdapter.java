@@ -56,6 +56,12 @@ public class UsuarioRepositoryAdapter implements UsuarioRepositoryPort {
     }
 
     @Override
+    public List<Usuario> filtrarPorDepartamento(Long idDepartamento) {
+        List<UsuarioEntity> usuariosEntity = jpaUsuarioRepository.findByDepartamento_Id(idDepartamento);
+        return usuariosEntity.stream().map(usuarioMapper::toDomain).toList();
+    }
+
+    @Override
     public Optional<Usuario> buscarPorId(Long id) {
         return jpaUsuarioRepository.findById(id).map(usuarioMapper::toDomain);
     }

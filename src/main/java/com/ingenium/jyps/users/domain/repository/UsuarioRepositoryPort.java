@@ -27,4 +27,5 @@ public interface UsuarioRepositoryPort {
     boolean existsByTelefono(String telefono);
 
     long contarPorDepartamento(Long id);
+    List<Usuario> filtrarPorDepartamento(Long idDepartamento);
 }
