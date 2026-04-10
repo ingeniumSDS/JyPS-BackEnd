@@ -41,6 +41,7 @@ public class JwtProviderAdapter implements JwtProviderPort {
                 .claim("apellidoPaterno", usuario.getApellidoPaterno())
                 .claim("apellidoMaterno", usuario.getApellidoMaterno())
                 .claim("telefono", usuario.getTelefono())
+                .claim("departamentoId", usuario.getDepartamentoId())
                 .claim("nombreDepartamento", usuario.getNombreDepartamento())
                 .claim("roles", rolesStr) // ¡Súperimportante para los permisos después!
                 .claim("easter", "Luis Travesti")
