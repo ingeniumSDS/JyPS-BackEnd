@@ -153,7 +153,7 @@ public class PaseDeSalida extends Incidencia {
     }
 
     public void generarQR() {
-        this.QR = UUID.randomUUID().toString();
+        this.QR = UUID.randomUUID().toString().substring(0,6).toUpperCase();
     }
 
 
@@ -168,9 +168,5 @@ public class PaseDeSalida extends Incidencia {
             throw new IllegalArgumentException("El estado debe ser APROBADO o RECHAZADO.");
         }
     }
-
-
-
-
 }
 
