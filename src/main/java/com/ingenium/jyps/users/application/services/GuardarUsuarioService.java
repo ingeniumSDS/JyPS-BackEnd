@@ -25,8 +25,7 @@ public class GuardarUsuarioService implements GuardarUsuarioUseCase {
     @Override
     public Usuario ejecutar(RegistrarUsuarioCommand command) {
 
-        Departamento departamento = departamentoRepositoryPort.buscarPorId(command.departamentoId())
-                .orElseThrow(() -> new IllegalArgumentException("El departamento seleccionado no existe"));
+        Departamento departamento = departamentoRepositoryPort.buscarPorId(command.departamentoId());
 
         if (usuarioRepositoryPort.existsByCorreo(command.correo())) {
             throw new IllegalArgumentException("El correo: " + command.correo() + " ya se encuentra registrado.");
@@ -66,5 +65,6 @@ public class GuardarUsuarioService implements GuardarUsuarioUseCase {
         ));
 
         return nuevoUsuario;
+
     }
 }

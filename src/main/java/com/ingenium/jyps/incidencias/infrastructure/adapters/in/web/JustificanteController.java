@@ -1,10 +1,7 @@
 package com.ingenium.jyps.incidencias.infrastructure.adapters.in.web;
 
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.justificante.RevisarJustificanteCommand;
-import com.ingenium.jyps.incidencias.application.ports.in.usecases.justificante.JustificantesPorEmpleadoUseCase;
-import com.ingenium.jyps.incidencias.application.ports.in.usecases.justificante.JustificantesPorJefeUseCase;
-import com.ingenium.jyps.incidencias.application.ports.in.usecases.justificante.RevisarJustificanteUseCase;
-import com.ingenium.jyps.incidencias.application.ports.in.usecases.justificante.SolicitarJustificanteUseCase;
+import com.ingenium.jyps.incidencias.application.ports.in.usecases.justificante.*;
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.justificante.SolicitarJustificanteCommand;
 import com.ingenium.jyps.incidencias.domain.model.Justificante;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.RevisarJustificanteRequest;
@@ -33,6 +30,7 @@ public class JustificanteController {
     private final RevisarJustificanteUseCase revisarJustificanteUseCase;
     private final JustificantesPorEmpleadoUseCase obtenerJustificantesPorEmpleado;
     private final JustificantesPorJefeUseCase obtenerJustificantesPorJefe;
+    private final DetallesJustificanteUseCase detallesJustificanteUseCase;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<JustificanteResponse> solicitarJustificante(
@@ -79,6 +77,13 @@ public class JustificanteController {
                 .map(justificanteMapper::toResponse)
                 .toList();
         return ResponseEntity.ok(responses);
+    }
+
+    @GetMapping("/{id}/detalles")
+    public ResponseEntity<JustificanteResponse> obtenerDetallesJustificante(@PathVariable Long id) {
+        Justificante justificante = detallesJustificanteUseCase.ejecutar(id);
+        JustificanteResponse response = justificanteMapper.toResponse(justificante);
+        return ResponseEntity.ok(response);
     }
 
 }

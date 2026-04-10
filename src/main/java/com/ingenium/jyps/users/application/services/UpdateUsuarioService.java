@@ -26,8 +26,7 @@ public class UpdateUsuarioService implements UpdateUsuarioUseCase {
         // 2. Validar Departamento (¡Usando el ID correcto!)
         // Solo validamos si el Frontend nos envió un departamentoId para actualizar
         if (command.departamentoId() != null) {
-            departamentoRepositoryPort.buscarPorId(command.departamentoId())
-                    .orElseThrow(() -> new IllegalArgumentException("Departamento no encontrado"));
+            departamentoRepositoryPort.buscarPorId(command.departamentoId());
         }
 
         // 3. Validar Correo Único (Evitando la trampa del PUT)
@@ -66,7 +65,6 @@ public class UpdateUsuarioService implements UpdateUsuarioUseCase {
 
         u.setNombreDepartamento(
                 departamentoRepositoryPort.buscarPorId(command.departamentoId())
-                        .orElseThrow(() -> new IllegalArgumentException("Departamento no encontrado"))
                         .getNombre()
         );
 

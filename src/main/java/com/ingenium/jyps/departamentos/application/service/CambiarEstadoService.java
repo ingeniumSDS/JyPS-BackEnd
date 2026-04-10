@@ -18,8 +18,7 @@ public class CambiarEstadoService implements CambiarEstadoUseCase {
 
     @Override
     public Departamento ejecutar(CambiarEstadoCommand command) {
-        Departamento departamento = departamentoRepository.buscarPorId(command.departamentoId())
-                .orElseThrow(() -> new RuntimeException("Departamento no encontrado"));
+        Departamento departamento = departamentoRepository.buscarPorId(command.departamentoId());
 
         long totalEmpleados = usuarioRepositoryPort.contarPorDepartamento(departamento.getId());
 
