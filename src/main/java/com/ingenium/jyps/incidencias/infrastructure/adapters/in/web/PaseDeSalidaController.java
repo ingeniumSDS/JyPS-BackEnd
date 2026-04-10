@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -28,11 +29,13 @@ public class PaseDeSalidaController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<PaseDeSalidaResponse> solicitar(
             @RequestPart("data") SolicitarPaseDeSalidaRequest request,
-            @RequestPart("archivos") List<MultipartFile> archivos) {
+            @RequestPart(value = "archivos", required = false) List<MultipartFile> archivos) {
+
+        List<MultipartFile> archivosSeguros = (archivos != null) ? archivos : Collections.emptyList();
 
         PaseDeSalida nuevoPaseDeSalida =
                 paseDeSalidaUseCase.ejecutar(
-                        mapper.toCommand(request, archivos)
+                        mapper.toCommand(request, archivosSeguros)
                 );
 
 
