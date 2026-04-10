@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record PaseDeSalidaResponse(
+        Long id,
         Long empleadoId,
         String nombreCompleto,
         Long jefeId,

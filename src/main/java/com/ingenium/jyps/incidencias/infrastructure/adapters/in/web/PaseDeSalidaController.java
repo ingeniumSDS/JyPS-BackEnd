@@ -7,6 +7,7 @@ import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.SolicitarPaseDeSalidaRequest;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.response.PaseDeSalidaResponse;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.out.persist.mapper.PaseDeSalidaMapper;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -34,6 +35,7 @@ public class PaseDeSalidaController {
     private final PaseDeSalidaMapper mapper;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "Nuevo Pase de Salida", description = "Permite a un empleado solicitar un nuevo Pase de Salida, adjuntando archivos relacionados.")
     public ResponseEntity<PaseDeSalidaResponse> solicitar(
             @RequestPart("data") SolicitarPaseDeSalidaRequest request,
             @RequestPart(value = "archivos", required = false) List<MultipartFile> archivos) {
@@ -46,7 +48,6 @@ public class PaseDeSalidaController {
                 );
 
 
-
         URI location = URI.create("/api/v1/justificantes/" + nuevoPaseDeSalida.getId());
 
         PaseDeSalidaResponse paseDeSalidaResponse = mapper.toResponse(nuevoPaseDeSalida);
@@ -55,6 +56,8 @@ public class PaseDeSalidaController {
     }
 
     @PutMapping("/revisar")
+    @Operation(summary = "Revisar Pase de Salida", description = "Permite a un jefe revisar un pase de salida pendiente, " +
+            "aprobándolo (estado = APROBADO) o rechazándolo (estado = RECHAZADO) con una observación (mensaje).")
     public ResponseEntity<PaseDeSalidaResponse> revisarPaseDeSalida(
             @RequestBody RevisarPaseDeSalidaRequest request) {
         RevisarPaseDeSalidaCommand command = mapper.toRevisarPaseDeSalidaCommand(request);
@@ -62,6 +65,7 @@ public class PaseDeSalidaController {
     }
 
     @GetMapping("/empleado")
+    @Operation(summary = "Pases de Salida por Empleado", description = "Obtiene la lista de pases de salida asociados a un empleado específico.")
     public ResponseEntity<List<PaseDeSalidaResponse>> obtenerPasesPorEmpleado(@RequestParam Long empleadoId) {
         List<PaseDeSalida> pases = obtenerPasesPorEmpleado.ejecutar(empleadoId);
         List<PaseDeSalidaResponse> responses = pases.stream()
@@ -71,6 +75,7 @@ public class PaseDeSalidaController {
     }
 
     @GetMapping("/jefe")
+    @Operation(summary = "¨Pases por Jefe", description = "Obtiene la lista de pases de salida asociados a un jefe específico.")
     public ResponseEntity<List<PaseDeSalidaResponse>> obtenerPasesPorJefe(@RequestParam Long jefeId) {
         List<PaseDeSalida> pases = obtenerPasesPorJefe.ejecutar(jefeId);
         List<PaseDeSalidaResponse> responses = pases.stream()
@@ -80,6 +85,7 @@ public class PaseDeSalidaController {
     }
 
     @GetMapping("/{id}/detalles")
+    @Operation(summary = "Detalles del Pase de Salida", description = "Muestra los detalles del pase del pase de salida.")
     public ResponseEntity<PaseDeSalidaResponse> obtenerDetallesJustificante(@PathVariable Long id) {
         PaseDeSalida paseDeSalida = detallesPaseUseCase.ejecutar(id);
         PaseDeSalidaResponse response = mapper.toResponse(paseDeSalida);
@@ -87,6 +93,7 @@ public class PaseDeSalidaController {
     }
 
     @PatchMapping("/{qr}")
+    @Operation(summary = "Check IN/OUT del Pase de Salida", description = "Permite validar un pase de salida escaneando su código QR, actualizando su estado a 'FUERA' o 'A_TIEMPO'")
     public ResponseEntity<PaseDeSalidaResponse> check(
             @PathVariable String qr
     ) {

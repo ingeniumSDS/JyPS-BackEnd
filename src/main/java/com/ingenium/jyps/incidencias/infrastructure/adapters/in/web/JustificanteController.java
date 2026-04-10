@@ -8,6 +8,7 @@ import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.SolicitarJustificanteRequest;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.response.JustificanteResponse;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.out.persist.mapper.JustificanteMapper;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -33,6 +34,7 @@ public class JustificanteController {
     private final DetallesJustificanteUseCase detallesJustificanteUseCase;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "Nuevo Justificante", description = "Permite a un empleado solicitar un nuevo justificante, adjuntando archivos relacionados.")
     public ResponseEntity<JustificanteResponse> solicitarJustificante(
 
             @RequestPart("data") SolicitarJustificanteRequest request,
@@ -55,6 +57,7 @@ public class JustificanteController {
     }
 
     @PutMapping("/revisar")
+    @Operation(summary = "Revisar Justificante", description = "Permite a un jefe revisar un justificante pendiente, aprobándolo o rechazándolo con una observación.")
     public ResponseEntity<JustificanteResponse> revisarJustificante(
             @RequestBody RevisarJustificanteRequest request) {
         RevisarJustificanteCommand command = justificanteMapper.toRevisarJustificanteCommand(request);
@@ -62,6 +65,7 @@ public class JustificanteController {
     }
 
     @GetMapping("/empleado")
+    @Operation(summary = "Justificantes por Empleado", description = "Obtiene la lista de justificantes asociados a un empleado específico.")
     public ResponseEntity<List<JustificanteResponse>> obtenerJustificantesPorEmpleado(@RequestParam Long empleadoId) {
         List<Justificante> justificantes = obtenerJustificantesPorEmpleado.ejecutar(empleadoId);
         List<JustificanteResponse> responses = justificantes.stream()
@@ -71,6 +75,7 @@ public class JustificanteController {
     }
 
     @GetMapping("/jefe")
+    @Operation(summary = "Justificantes por Jefe", description = "Obtiene la lista de justificantes asociados a un jefe específico.")
     public ResponseEntity<List<JustificanteResponse>> obtenerJustificantesPorJefe(@RequestParam Long jefeId) {
         List<Justificante> justificantes = obtenerJustificantesPorJefe.ejecutar(jefeId);
         List<JustificanteResponse> responses = justificantes.stream()
@@ -80,6 +85,7 @@ public class JustificanteController {
     }
 
     @GetMapping("/{id}/detalles")
+    @Operation(summary = "Detalles del Justificante", description = "Muestra los detalles del pase del justificante.")
     public ResponseEntity<JustificanteResponse> obtenerDetallesJustificante(@PathVariable Long id) {
         Justificante justificante = detallesJustificanteUseCase.ejecutar(id);
         JustificanteResponse response = justificanteMapper.toResponse(justificante);
