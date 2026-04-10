@@ -1,13 +1,12 @@
 package com.ingenium.jyps.departamentos.infrastructure.adapters.in.web;
 
 import com.ingenium.jyps.departamentos.application.ports.in.command.AsignarJefeCommand;
+import com.ingenium.jyps.departamentos.application.ports.in.command.CambiarEstadoCommand;
 import com.ingenium.jyps.departamentos.application.ports.in.command.CrearDepartamentoCommand;
-import com.ingenium.jyps.departamentos.application.usecase.ActualizarDepartamentoUseCase;
-import com.ingenium.jyps.departamentos.application.usecase.AsignarJefeUseCase;
-import com.ingenium.jyps.departamentos.application.usecase.ListarDepartamentosUseCase;
+import com.ingenium.jyps.departamentos.application.usecase.*;
 import com.ingenium.jyps.departamentos.application.ports.in.command.UpdateDepartamentoCommand;
-import com.ingenium.jyps.departamentos.application.usecase.CrearDepartamentoUseCase;
 import com.ingenium.jyps.departamentos.domain.model.Departamento;
+import com.ingenium.jyps.departamentos.infrastructure.adapters.in.web.dto.request.CambiarEstadoRequest;
 import com.ingenium.jyps.departamentos.infrastructure.adapters.in.web.dto.request.CrearDepartamentoRequest;
 import com.ingenium.jyps.departamentos.infrastructure.adapters.in.web.dto.request.UpdateDepartamentoRequest;
 import com.ingenium.jyps.departamentos.infrastructure.adapters.in.web.dto.response.DepartamentoResponse;
@@ -27,7 +26,7 @@ import java.util.List;
 @RestController
 @CrossOrigin("*")
 @RequestMapping("api/v1/departamentos")
-@Tag(name = "Departamentos", description = "Operaciones relacionadas con la gestión de departamentos")
+@Tag(name = "1 - Departamentos", description = "Operaciones relacionadas con la gestión de departamentos")
 public class DepartamentoController {
 
     private final CrearDepartamentoUseCase crearDepartamentoUseCase;
@@ -37,6 +36,7 @@ public class DepartamentoController {
     private final ConsultarUsuariosUseCase contarEmpleadosUseCase;
     private final DepartamentoMapper departamentoMapper;
     private final ActualizarDepartamentoUseCase actualizarDepartamentoUseCase;
+    private final CambiarEstadoUseCase cambiarEstadoUseCase;
 
     @Operation(summary = "Crear un nuevo departamento", description = "Crea un nuevo departamento con la información proporcionada (Ej. Nombre, descripción y jefe) y devuelve los datos del departamento registrado junto con la ubicación del recurso creado")
     @PostMapping("")
@@ -97,19 +97,24 @@ public class DepartamentoController {
         return ResponseEntity.ok(response);
     }
 
-
-
-
     @PatchMapping("/{id}/asignar-jefe")
     @Operation(summary = "Asignar jefe a departamento", description = "Asigna un jefe a un departamento existente, lo que activa el departamento si no estaba activo previamente")
     public ResponseEntity<DepartamentoResponse> asignarJefe(@PathVariable Long id, @RequestParam Long jefeId) {
         AsignarJefeCommand command = new AsignarJefeCommand(id, jefeId);
-        Departamento departamentoAsignado =  asignarJefeUseCase.ejecutar(command);
+        Departamento departamentoAsignado = asignarJefeUseCase.ejecutar(command);
         String jefe = consultarUsuariosUseCase.obtenerPorId(jefeId)
                 .map(Usuario::nombreCompleto)
                 .orElse("Sin jefe asignado");
         Long totalEmpleados = contarEmpleadosUseCase.contarPorDepartamento(id);
         DepartamentoResponse.desdeDominio(departamentoAsignado, jefe, totalEmpleados);
         return ResponseEntity.ok(DepartamentoResponse.desdeDominio(departamentoAsignado, jefe, totalEmpleados));
+    }
+
+    @PatchMapping("/estado")
+    @Operation(summary = "Activar/Inactivar", description = "Permite activar o desactivar un departamento. Un departamento activo es aquel que tiene un jefe asignado, mientras que un departamento inactivo no tiene jefe asignado.")
+    public ResponseEntity<DepartamentoResponse> cambiarEstado(@RequestBody CambiarEstadoRequest request) {
+        CambiarEstadoCommand command = departamentoMapper.toCambiarEstadoCommand(request);
+        Departamento departamentoActualizado = cambiarEstadoUseCase.ejecutar(command);
+        return ResponseEntity.ok(DepartamentoResponse.desdeDominio(departamentoActualizado, "", 0L));
     }
 }

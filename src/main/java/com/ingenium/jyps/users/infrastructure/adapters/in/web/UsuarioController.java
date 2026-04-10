@@ -25,7 +25,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/usuarios")
 @CrossOrigin("*")
-@Tag(name = "Usuarios", description = "Operaciones relacionadas con la gestión de usuarios y cuentas")
+@Tag(name = "2 - Usuarios", description = "Operaciones relacionadas con la gestión de usuarios y cuentas")
 public class UsuarioController {
 
     private final GuardarUsuarioUseCase guardarUsuarioUseCase;
