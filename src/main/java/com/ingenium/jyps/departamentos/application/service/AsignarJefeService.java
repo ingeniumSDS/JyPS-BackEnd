@@ -28,6 +28,7 @@ public class AsignarJefeService implements AsignarJefeUseCase {
         if (!usuario.getRoles().contains(rolJefe)) {
             throw new RuntimeException("El usuario no tiene el rol de Jefe de Departamento");
         }
+
         Departamento departamento = repositoryPort.buscarPorId(command.id())
                 .orElseThrow(() -> new RuntimeException("Departamento no encontrado"));
         departamento.asignarJefe(command.idJefe());

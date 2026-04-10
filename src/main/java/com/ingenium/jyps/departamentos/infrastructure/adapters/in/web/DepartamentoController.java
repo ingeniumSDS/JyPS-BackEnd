@@ -1,13 +1,17 @@
 package com.ingenium.jyps.departamentos.infrastructure.adapters.in.web;
 
 import com.ingenium.jyps.departamentos.application.ports.in.command.AsignarJefeCommand;
+import com.ingenium.jyps.departamentos.application.ports.in.command.CrearDepartamentoCommand;
+import com.ingenium.jyps.departamentos.application.usecase.ActualizarDepartamentoUseCase;
 import com.ingenium.jyps.departamentos.application.usecase.AsignarJefeUseCase;
 import com.ingenium.jyps.departamentos.application.usecase.ListarDepartamentosUseCase;
-import com.ingenium.jyps.departamentos.application.ports.in.command.CrearDepartamentoCommand;
+import com.ingenium.jyps.departamentos.application.ports.in.command.UpdateDepartamentoCommand;
 import com.ingenium.jyps.departamentos.application.usecase.CrearDepartamentoUseCase;
 import com.ingenium.jyps.departamentos.domain.model.Departamento;
 import com.ingenium.jyps.departamentos.infrastructure.adapters.in.web.dto.request.CrearDepartamentoRequest;
+import com.ingenium.jyps.departamentos.infrastructure.adapters.in.web.dto.request.UpdateDepartamentoRequest;
 import com.ingenium.jyps.departamentos.infrastructure.adapters.in.web.dto.response.DepartamentoResponse;
+import com.ingenium.jyps.departamentos.infrastructure.adapters.out.persist.mapper.DepartamentoMapper;
 import com.ingenium.jyps.users.application.ports.in.usecases.ConsultarUsuariosUseCase;
 import com.ingenium.jyps.users.domain.model.Usuario;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,17 +35,15 @@ public class DepartamentoController {
     private final ConsultarUsuariosUseCase consultarUsuariosUseCase;
     private final AsignarJefeUseCase asignarJefeUseCase;
     private final ConsultarUsuariosUseCase contarEmpleadosUseCase;
+    private final DepartamentoMapper departamentoMapper;
+    private final ActualizarDepartamentoUseCase actualizarDepartamentoUseCase;
 
     @Operation(summary = "Crear un nuevo departamento", description = "Crea un nuevo departamento con la información proporcionada (Ej. Nombre, descripción y jefe) y devuelve los datos del departamento registrado junto con la ubicación del recurso creado")
     @PostMapping("")
     public ResponseEntity<DepartamentoResponse> crear(@RequestBody CrearDepartamentoRequest request) {
 
 
-        CrearDepartamentoCommand command = new CrearDepartamentoCommand(
-                request.nombre(),
-                request.descripcion(),
-                request.jefeId().orElse(null)
-        );
+        CrearDepartamentoCommand command = departamentoMapper.toCreateCommand(request);
 
         Departamento nuevoDepartamento = crearDepartamentoUseCase.ejecutar(command);
         String nombreJefe = consultarUsuariosUseCase.obtenerPorId(nuevoDepartamento.getJefeId())
@@ -55,6 +57,26 @@ public class DepartamentoController {
 
         return ResponseEntity.created(location).body(response);
     }
+
+    @Operation(summary = "Actualizar departamento", description = "Actualiza el departamento con la información proporcionada (Ej. Nombre, descripción y jefe) y devuelve los datos del departamento registrado junto con la ubicación del recurso creado")
+    @PutMapping("")
+    public ResponseEntity<DepartamentoResponse> actualizar(@RequestBody UpdateDepartamentoRequest request) {
+
+
+        UpdateDepartamentoCommand command = departamentoMapper.toUpdateCommand(request);
+
+        Departamento departamentoActualizado = actualizarDepartamentoUseCase.ejecutar(command);
+
+        String nombreJefe = consultarUsuariosUseCase.obtenerPorId(departamentoActualizado.getJefeId())
+                .map(Usuario::nombreCompleto)
+                .orElse("Sin jefe asignado");
+
+        DepartamentoResponse response = DepartamentoResponse.desdeDominio(departamentoActualizado, nombreJefe, 0L);
+
+
+        return ResponseEntity.ok(response);
+    }
+
 
     @GetMapping("")
     @Operation(summary = "Listar departamentos", description = "Obtiene una lista de todos los departamentos registrados en el sistema, incluyendo su nombre, descripción y jefe")
@@ -74,6 +96,9 @@ public class DepartamentoController {
 
         return ResponseEntity.ok(response);
     }
+
+
+
 
     @PatchMapping("/{id}/asignar-jefe")
     @Operation(summary = "Asignar jefe a departamento", description = "Asigna un jefe a un departamento existente, lo que activa el departamento si no estaba activo previamente")
