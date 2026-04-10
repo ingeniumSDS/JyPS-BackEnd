@@ -1,6 +1,8 @@
 package com.ingenium.jyps.incidencias.infrastructure.adapters.in.web;
 
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.paseDeSalida.RevisarPaseDeSalidaCommand;
+import com.ingenium.jyps.incidencias.application.ports.in.usecases.paseDeSalida.PasesPorEmpleadoUseCase;
+import com.ingenium.jyps.incidencias.application.ports.in.usecases.paseDeSalida.PasesPorJefeUseCase;
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.paseDeSalida.RevisarPaseDeSalidaUseCase;
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.paseDeSalida.SolicitarPaseDeSalidaUseCase;
 import com.ingenium.jyps.incidencias.domain.model.PaseDeSalida;
@@ -28,6 +30,8 @@ public class PaseDeSalidaController {
 
     private final SolicitarPaseDeSalidaUseCase paseDeSalidaUseCase;
     private final RevisarPaseDeSalidaUseCase revisarPaseDeSalida;
+    private final PasesPorEmpleadoUseCase obtenerPasesPorEmpleado;
+    private final PasesPorJefeUseCase obtenerPasesPorJefe;
     private final PaseDeSalidaMapper mapper;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -56,6 +60,24 @@ public class PaseDeSalidaController {
             @RequestBody RevisarPaseDeSalidaRequest request) {
         RevisarPaseDeSalidaCommand command = mapper.toRevisarPaseDeSalidaCommand(request);
         return ResponseEntity.ok(mapper.toResponse(revisarPaseDeSalida.ejecutar(command)));
+    }
+
+    @GetMapping("/empleado")
+    public ResponseEntity<List<PaseDeSalidaResponse>> obtenerPasesPorEmpleado(@RequestParam Long empleadoId) {
+        List<PaseDeSalida> pases = obtenerPasesPorEmpleado.ejecutar(empleadoId);
+        List<PaseDeSalidaResponse> responses = pases.stream()
+                .map(mapper::toResponse)
+                .toList();
+        return ResponseEntity.ok(responses);
+    }
+
+    @GetMapping("/jefe")
+    public ResponseEntity<List<PaseDeSalidaResponse>> obtenerPasesPorJefe(@RequestParam Long jefeId) {
+        List<PaseDeSalida> pases = obtenerPasesPorJefe.ejecutar(jefeId);
+        List<PaseDeSalidaResponse> responses = pases.stream()
+                .map(mapper::toResponse)
+                .toList();
+        return ResponseEntity.ok(responses);
     }
 
 }

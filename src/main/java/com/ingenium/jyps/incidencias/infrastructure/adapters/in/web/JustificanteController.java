@@ -1,6 +1,8 @@
 package com.ingenium.jyps.incidencias.infrastructure.adapters.in.web;
 
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.justificante.RevisarJustificanteCommand;
+import com.ingenium.jyps.incidencias.application.ports.in.usecases.justificante.JustificantesPorEmpleadoUseCase;
+import com.ingenium.jyps.incidencias.application.ports.in.usecases.justificante.JustificantesPorJefeUseCase;
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.justificante.RevisarJustificanteUseCase;
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.justificante.SolicitarJustificanteUseCase;
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.justificante.SolicitarJustificanteCommand;
@@ -29,6 +31,8 @@ public class JustificanteController {
     private final SolicitarJustificanteUseCase solicitarJustificanteUseCase;
     private final JustificanteMapper justificanteMapper;
     private final RevisarJustificanteUseCase revisarJustificanteUseCase;
+    private final JustificantesPorEmpleadoUseCase obtenerJustificantesPorEmpleado;
+    private final JustificantesPorJefeUseCase obtenerJustificantesPorJefe;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<JustificanteResponse> solicitarJustificante(
@@ -57,6 +61,24 @@ public class JustificanteController {
             @RequestBody RevisarJustificanteRequest request) {
         RevisarJustificanteCommand command = justificanteMapper.toRevisarJustificanteCommand(request);
         return ResponseEntity.ok(justificanteMapper.toResponse(revisarJustificanteUseCase.ejecutar(command)));
+    }
+
+    @GetMapping("/empleado")
+    public ResponseEntity<List<JustificanteResponse>> obtenerJustificantesPorEmpleado(@RequestParam Long empleadoId) {
+        List<Justificante> justificantes = obtenerJustificantesPorEmpleado.ejecutar(empleadoId);
+        List<JustificanteResponse> responses = justificantes.stream()
+                .map(justificanteMapper::toResponse)
+                .toList();
+        return ResponseEntity.ok(responses);
+    }
+
+    @GetMapping("/jefe")
+    public ResponseEntity<List<JustificanteResponse>> obtenerJustificantesPorJefe(@RequestParam Long jefeId) {
+        List<Justificante> justificantes = obtenerJustificantesPorJefe.ejecutar(jefeId);
+        List<JustificanteResponse> responses = justificantes.stream()
+                .map(justificanteMapper::toResponse)
+                .toList();
+        return ResponseEntity.ok(responses);
     }
 
 }
