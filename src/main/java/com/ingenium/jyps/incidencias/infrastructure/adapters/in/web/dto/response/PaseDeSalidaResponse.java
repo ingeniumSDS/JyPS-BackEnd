@@ -14,6 +14,8 @@ public record PaseDeSalidaResponse(
         List<String> archivos,
         String comentario,
         String QR,
-        String estado
-) {
+        String estado,
+        LocalDateTime horaSalidaReal,
+        LocalDateTime horaEsperada
+        ) {
 }
