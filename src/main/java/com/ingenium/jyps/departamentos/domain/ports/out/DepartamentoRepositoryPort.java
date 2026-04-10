@@ -7,6 +7,8 @@ import java.util.Optional;
 
 public interface DepartamentoRepositoryPort {
 
+    long count();
+
     List<Departamento> buscarTodos();
 
     Departamento guardar(Departamento departamento);
@@ -15,6 +17,7 @@ public interface DepartamentoRepositoryPort {
 
     Optional<Departamento> buscarPorNombre(String name);
 
+    Optional<Departamento> buscarPorJefeId(Long jefeId);
 
 
 }

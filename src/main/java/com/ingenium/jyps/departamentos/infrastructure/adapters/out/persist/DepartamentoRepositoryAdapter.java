@@ -24,6 +24,11 @@ public class DepartamentoRepositoryAdapter implements DepartamentoRepositoryPort
         return mapToDomain(entidadGuardada);
     }
 
+    @Override
+    public long count() {
+        return jpaDepartamentoRepository.count();
+    }
+
     public List<Departamento> buscarTodos() {
         List<DepartamentoEntity> entities = jpaDepartamentoRepository.findAll();
         return entities.stream().map(this::mapToDomain).toList();
@@ -36,6 +41,11 @@ public class DepartamentoRepositoryAdapter implements DepartamentoRepositoryPort
     @Override
     public Optional<Departamento> buscarPorNombre(String nombre) {
         return jpaDepartamentoRepository.findByNombre(nombre).map(this::mapToDomain);
+    }
+
+    @Override
+    public Optional<Departamento> buscarPorJefeId(Long jefeId) {
+        return jpaDepartamentoRepository.findByJefeId(jefeId).map(this::mapToDomain);
     }
 
     private DepartamentoEntity mapToEntity(Departamento departamento) {

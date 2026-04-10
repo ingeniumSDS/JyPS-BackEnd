@@ -4,6 +4,9 @@ import com.ingenium.jyps.departamentos.application.ports.in.command.CrearDeparta
 import com.ingenium.jyps.departamentos.application.usecase.CrearDepartamentoUseCase;
 import com.ingenium.jyps.departamentos.domain.model.Departamento;
 import com.ingenium.jyps.departamentos.domain.ports.out.DepartamentoRepositoryPort;
+import com.ingenium.jyps.users.domain.model.Usuario;
+import com.ingenium.jyps.users.domain.model.enums.Roles;
+import com.ingenium.jyps.users.domain.repository.UsuarioRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,24 +15,40 @@ import org.springframework.stereotype.Service;
 public class CrearDepartamentoService implements CrearDepartamentoUseCase {
 
     private final DepartamentoRepositoryPort repositoryPort;
+    private final UsuarioRepositoryPort usuarioRepositoryPort;
 
-    // Inyección de dependencias por constructor
 
     @Override
     public Departamento ejecutar(CrearDepartamentoCommand command) {
-        // 1. Validar regla de negocio cruzada (Ej. que el nombre no se repita)
-        if (repositoryPort.buscarPorNombre(command.nombre().trim().toUpperCase()).isPresent()) {
+
+        if (repositoryPort.buscarPorNombre(command.nombre().trim().toUpperCase()).isPresent())
+        {
             throw new IllegalArgumentException("Ya existe un departamento con ese nombre.");
         }
 
-        // 2. Crear la entidad de Dominio (usando tu constructor 1)
-        Departamento nuevoDepartamento = new Departamento(
-                command.nombre(),
+        if (repositoryPort.buscarPorJefeId(command.jefeId()).isPresent())
+        {
+            throw new IllegalArgumentException("El jefe ya está asignado a otro departamento.");
+        }
+
+        Usuario usuario = usuarioRepositoryPort.buscarPorId(command.jefeId()).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        Roles rolJefe = Roles.JEFE_DE_DEPARTAMENTO;
+
+        if (!usuario.getRoles().contains(rolJefe)) {
+            throw new RuntimeException("El usuario no tiene el rol de Jefe de Departamento");
+        }
+
+
+        Departamento departamento = new Departamento(
+                command.nombre().trim().toUpperCase(),
                 command.descripcion(),
                 command.jefeId()
         );
 
         // AQUÍ: Capturamos y retornamos el objeto que ya trae el ID de la base de datos
-        return repositoryPort.guardar(nuevoDepartamento);
+        return repositoryPort.guardar(departamento);
     }
+
+
 }

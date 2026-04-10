@@ -23,7 +23,7 @@ public class Departamento {
             this.descripcion = descripcion.trim();
         }
 
-        if  (jefeId == null || jefeId <= 0) {
+        if (jefeId == null || jefeId <= 0) {
             this.activo = false; // Por defecto nace inactivo
         } else {
             this.activo = true;
@@ -32,7 +32,7 @@ public class Departamento {
     }
 
     // CONSTRUCTOR 2: Para rehidratar desde la base de datos (Adaptador)
-    public Departamento(Long id, String nombre, String descripcion, boolean activo,  Long jefeId) {
+    public Departamento(Long id, String nombre, String descripcion, boolean activo, Long jefeId) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -61,4 +61,17 @@ public class Departamento {
     public void activar() {
         this.activo = true;
     }
+
+    public void actualizarDatos(
+            String nombre,
+            String descripcion,
+            boolean activo,
+            long jefeId
+    ) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.activo = activo;
+        this.jefeId = jefeId;
+    }
+
 }

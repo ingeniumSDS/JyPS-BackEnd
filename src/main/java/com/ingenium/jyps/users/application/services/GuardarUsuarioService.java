@@ -36,8 +36,6 @@ public class GuardarUsuarioService implements GuardarUsuarioUseCase {
             throw new IllegalArgumentException("El teléfono: " + command.telefono() + " ya se encuentra registrado.");
         }
 
-
-
         Usuario nuevoUsuario = new Usuario(
                 command.nombre(),
                 command.apellidoPaterno(),

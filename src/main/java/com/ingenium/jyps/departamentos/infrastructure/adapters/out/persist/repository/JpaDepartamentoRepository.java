@@ -9,4 +9,5 @@ public interface JpaDepartamentoRepository extends JpaRepository<DepartamentoEnt
 
     Optional<DepartamentoEntity> findByNombre(String nombre);
 
+    Optional<DepartamentoEntity> findByJefeId(Long jefeId);
 }
