@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public record JustificanteResponse(
+        Long id,
         Long empleadoId,
         String nombreCompleto,
         Long jefeId,
