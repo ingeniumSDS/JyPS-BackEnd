@@ -21,24 +21,26 @@ public class CrearDepartamentoService implements CrearDepartamentoUseCase {
     @Override
     public Departamento ejecutar(CrearDepartamentoCommand command) {
 
-        if (repositoryPort.buscarPorNombre(command.nombre().trim().toUpperCase()).isPresent())
-        {
+        if (repositoryPort.buscarPorNombre(command.nombre().trim().toUpperCase()).isPresent()) {
             throw new IllegalArgumentException("Ya existe un departamento con ese nombre.");
         }
 
-        if (repositoryPort.buscarPorJefeId(command.jefeId()).isPresent())
-        {
+        if (repositoryPort.buscarPorJefeId(command.jefeId()).isPresent()) {
             throw new IllegalArgumentException("El jefe ya está asignado a otro departamento.");
         }
 
-        Usuario usuario = usuarioRepositoryPort.buscarPorId(command.jefeId()).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        Roles rolJefe = Roles.JEFE_DE_DEPARTAMENTO;
+        if (command.jefeId() > 0) {
 
-        if (!usuario.getRoles().contains(rolJefe)) {
-            throw new RuntimeException("El usuario no tiene el rol de Jefe de Departamento");
+            Usuario usuario = usuarioRepositoryPort.buscarPorId(command.id()).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+            Roles rolJefe = Roles.JEFE_DE_DEPARTAMENTO;
+
+            if (!usuario.getRoles().contains(rolJefe)) {
+                throw new RuntimeException("El usuario no tiene el rol de Jefe de Departamento");
+            }
+
         }
-
 
         Departamento departamento = new Departamento(
                 command.nombre().trim().toUpperCase(),
