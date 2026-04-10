@@ -13,7 +13,7 @@ public interface DepartamentoRepositoryPort {
 
     Departamento guardar(Departamento departamento);
 
-    Optional<Departamento> buscarPorId(Long id);
+    Departamento buscarPorId(Long id);
 
     Optional<Departamento> buscarPorNombre(String name);
 

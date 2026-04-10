@@ -53,7 +53,6 @@ public class LoginService implements com.ingenium.jyps.users.application.ports.i
 
         usuario.setNombreDepartamento(
                 departamentoRepositoryPort.buscarPorId(usuario.getDepartamentoId())
-                        .orElseThrow(() -> new IllegalArgumentException("El departamento con ese ID no existe"))
                         .getNombre()
         );
         // 4. Todo un éxito, retornamos la cuenta

@@ -1,10 +1,7 @@
 package com.ingenium.jyps.incidencias.infrastructure.adapters.in.web;
 
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.paseDeSalida.RevisarPaseDeSalidaCommand;
-import com.ingenium.jyps.incidencias.application.ports.in.usecases.paseDeSalida.PasesPorEmpleadoUseCase;
-import com.ingenium.jyps.incidencias.application.ports.in.usecases.paseDeSalida.PasesPorJefeUseCase;
-import com.ingenium.jyps.incidencias.application.ports.in.usecases.paseDeSalida.RevisarPaseDeSalidaUseCase;
-import com.ingenium.jyps.incidencias.application.ports.in.usecases.paseDeSalida.SolicitarPaseDeSalidaUseCase;
+import com.ingenium.jyps.incidencias.application.ports.in.usecases.paseDeSalida.*;
 import com.ingenium.jyps.incidencias.domain.model.PaseDeSalida;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.RevisarPaseDeSalidaRequest;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.SolicitarPaseDeSalidaRequest;
@@ -32,6 +29,7 @@ public class PaseDeSalidaController {
     private final RevisarPaseDeSalidaUseCase revisarPaseDeSalida;
     private final PasesPorEmpleadoUseCase obtenerPasesPorEmpleado;
     private final PasesPorJefeUseCase obtenerPasesPorJefe;
+    private final DetallesPaseUseCase detallesPaseUseCase;
     private final PaseDeSalidaMapper mapper;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -79,5 +77,13 @@ public class PaseDeSalidaController {
                 .toList();
         return ResponseEntity.ok(responses);
     }
+
+    @GetMapping("/{id}/detalles")
+    public ResponseEntity<PaseDeSalidaResponse> obtenerDetallesJustificante(@PathVariable Long id) {
+        PaseDeSalida paseDeSalida = detallesPaseUseCase.ejecutar(id);
+        PaseDeSalidaResponse response = mapper.toResponse(paseDeSalida);
+        return ResponseEntity.ok(response);
+    }
+
 
 }

@@ -16,8 +16,7 @@ public class ActualizarDepartamentoService implements ActualizarDepartamentoUseC
     @Override
     public Departamento ejecutar(UpdateDepartamentoCommand command) {
 
-        Departamento departamento = repositoryPort.buscarPorId(command.id()).orElseThrow(() ->
-                new IllegalArgumentException("No se encontró el departamento con el ID proporcionado."));
+        Departamento departamento = repositoryPort.buscarPorId(command.id());
 
         if (repositoryPort.buscarPorNombre(command.nombre()).isPresent() &&
                 !repositoryPort.buscarPorNombre(command.nombre()).get().getId().equals(command.id())) {

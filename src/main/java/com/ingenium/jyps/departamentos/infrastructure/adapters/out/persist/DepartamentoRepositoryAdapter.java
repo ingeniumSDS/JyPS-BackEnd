@@ -25,6 +25,13 @@ public class DepartamentoRepositoryAdapter implements DepartamentoRepositoryPort
     }
 
     @Override
+    public Departamento buscarPorId(Long id) {
+        DepartamentoEntity departamento = jpaDepartamentoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("No se encontró el departamento con ID: " + id));
+        return mapToDomain(departamento);
+    }
+
+    @Override
     public long count() {
         return jpaDepartamentoRepository.count();
     }
@@ -32,10 +39,6 @@ public class DepartamentoRepositoryAdapter implements DepartamentoRepositoryPort
     public List<Departamento> buscarTodos() {
         List<DepartamentoEntity> entities = jpaDepartamentoRepository.findAll();
         return entities.stream().map(this::mapToDomain).toList();
-    }
-
-    public Optional<Departamento> buscarPorId(Long id) {
-        return jpaDepartamentoRepository.findById(id).map(this::mapToDomain);
     }
 
     @Override
