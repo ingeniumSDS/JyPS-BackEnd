@@ -32,8 +32,7 @@ public class SolicitarJustificanteService implements SolicitarJustificanteUseCas
                 archivosGuardados
         );
 
-
-        return  justificanteRepositoryPort.solicitar(nuevoJustificante);
+        return  justificanteRepositoryPort.guardar(nuevoJustificante);
 
     }
 }

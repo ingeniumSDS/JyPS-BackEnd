@@ -9,6 +9,8 @@ public record JustificanteResponse(
         LocalDate fechaSolicitada,
         LocalDate fechaSolicitud,
         String descripcion,
+        String estado,
+        String comentario,
         List<String> archivos
 ) {
 }

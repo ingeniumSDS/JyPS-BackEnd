@@ -49,4 +49,7 @@ public class JustificanteEntity {
     @Column(name = "estado", nullable = false)
     private EstadosIncidencia estado;
 
+    @Column(name = "comentario")
+    private String comentario;
+
 }

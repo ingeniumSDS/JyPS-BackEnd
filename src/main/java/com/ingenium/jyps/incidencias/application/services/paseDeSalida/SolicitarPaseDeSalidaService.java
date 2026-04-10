@@ -34,8 +34,7 @@ public class SolicitarPaseDeSalidaService implements SolicitarPaseDeSalidaUseCas
 
         List<String> archivosGuardados = storagePort.guardarArchivos(command.empleadoId(), command.archivos());
 
-
-        return new PaseDeSalida(
+        PaseDeSalida nuevoPase = new PaseDeSalida(
                 command.empleadoId(),
                 command.jefeId(),
                 command.descripcion(),
@@ -43,5 +42,7 @@ public class SolicitarPaseDeSalidaService implements SolicitarPaseDeSalidaUseCas
                 empleado,
                 command.horaSolicitada()
         );
+
+        return paseDeSalidaRepository.solicitar(nuevoPase);
     }
 }

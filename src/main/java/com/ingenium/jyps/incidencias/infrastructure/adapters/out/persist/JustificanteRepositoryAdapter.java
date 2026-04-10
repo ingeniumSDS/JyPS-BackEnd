@@ -19,7 +19,7 @@ public class JustificanteRepositoryAdapter implements JustificanteRepositoryPort
     private final JustificanteMapper justificanteMapper;
 
     @Override
-    public Justificante solicitar(Justificante justificante) {
+    public Justificante guardar(Justificante justificante) {
         JustificanteEntity justificanteEntity = justificanteMapper.toEntity(justificante);
         JustificanteEntity justificanteGuardado = jpaJustificanteRepositoy.save(justificanteEntity);
         return justificanteMapper.toDomain(justificanteGuardado);
