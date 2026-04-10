@@ -2,7 +2,6 @@ spring:
   application:
     name: JyPS
 
-
   servlet:
      multipart:
        max-request-size: 10MB
@@ -51,5 +50,10 @@ app:
   storage:
     location: ${STORAGE_LOCATION}
 
+
 # Discord Webhook Configuration
 #discord.webhook.url=${DISCORD_WEBHOOK_URL}
+springdoc:
+  swagger-ui:
+    tags-sorter: alpha
+    operations-sorter: method
