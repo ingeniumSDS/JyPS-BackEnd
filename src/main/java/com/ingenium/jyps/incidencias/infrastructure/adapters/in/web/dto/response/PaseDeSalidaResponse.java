@@ -11,6 +11,8 @@ public record PaseDeSalidaResponse(
         LocalDate fechaSolicitud,
         String descripcion,
         List<String> archivos,
+        String comentario,
+        String QR,
         String estado
 ) {
 }

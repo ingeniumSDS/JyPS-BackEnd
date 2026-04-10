@@ -27,4 +27,14 @@ public class PaseDeSalidaRepositoryAdapter implements PaseDeSalidaRepositoryPort
     public boolean solicitudEnCurso() {
         return false;
     }
+
+    @Override
+    public PaseDeSalida buscarPorId(long paseDeSalidaId) {
+
+            PaseDeSalidaEntity paseDeSalidaEntity = jpaPaseDeSalidaRepository.findById(paseDeSalidaId).orElseThrow(() ->
+                    new IllegalArgumentException("Pase de salida inexistente.")
+            );
+
+        return paseDeSalidaMapper.toDomain(paseDeSalidaEntity);
+    }
 }

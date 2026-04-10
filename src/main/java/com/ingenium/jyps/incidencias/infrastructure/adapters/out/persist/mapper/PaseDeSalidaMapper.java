@@ -1,8 +1,10 @@
 package com.ingenium.jyps.incidencias.infrastructure.adapters.out.persist.mapper;
 
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.ArchivoAdjunto;
-import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.SolicitarPaseDeSalidaCommand;
+import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.paseDeSalida.RevisarPaseDeSalidaCommand;
+import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.paseDeSalida.SolicitarPaseDeSalidaCommand;
 import com.ingenium.jyps.incidencias.domain.model.PaseDeSalida;
+import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.RevisarPaseDeSalidaRequest;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.SolicitarPaseDeSalidaRequest;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.response.PaseDeSalidaResponse;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.out.persist.entity.PaseDeSalidaEntity;
@@ -49,4 +51,5 @@ public interface PaseDeSalidaMapper {
     PaseDeSalidaResponse toResponse(PaseDeSalida paseDeSalida);
 
 
+    RevisarPaseDeSalidaCommand toRevisarPaseDeSalidaCommand(RevisarPaseDeSalidaRequest request);
 }
