@@ -8,7 +8,7 @@ import com.ingenium.jyps.incidencias.infrastructure.adapters.out.persist.reposit
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
+import java.util.List;
 
 
 @Component
@@ -32,6 +32,22 @@ public class JustificanteRepositoryAdapter implements JustificanteRepositoryPort
         );
 
         return justificanteMapper.toDomain(justificanteEntity);
+    }
+
+    @Override
+    public List<Justificante> buscarPorEmpleado(Long usuarioId) {
+        List<JustificanteEntity> justificantesEntity = jpaJustificanteRepositoy.findByEmpleado_Id(usuarioId);
+        return justificantesEntity.stream()
+                .map(justificanteMapper::toDomain)
+                .toList();
+    }
+
+    @Override
+    public List<Justificante> buscarPorJefe(Long usuarioId) {
+        List<JustificanteEntity> justificanteEntities = jpaJustificanteRepositoy.findByJefe_Id(usuarioId);
+        return justificanteEntities.stream()
+                .map(justificanteMapper::toDomain)
+                .toList();
     }
 
 }

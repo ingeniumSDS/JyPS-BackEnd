@@ -8,6 +8,8 @@ import com.ingenium.jyps.incidencias.infrastructure.adapters.out.persist.reposit
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 public class PaseDeSalidaRepositoryAdapter implements PaseDeSalidaRepositoryPort {
@@ -31,10 +33,27 @@ public class PaseDeSalidaRepositoryAdapter implements PaseDeSalidaRepositoryPort
     @Override
     public PaseDeSalida buscarPorId(long paseDeSalidaId) {
 
-            PaseDeSalidaEntity paseDeSalidaEntity = jpaPaseDeSalidaRepository.findById(paseDeSalidaId).orElseThrow(() ->
-                    new IllegalArgumentException("Pase de salida inexistente.")
-            );
+        PaseDeSalidaEntity paseDeSalidaEntity = jpaPaseDeSalidaRepository.findById(paseDeSalidaId).orElseThrow(() ->
+                new IllegalArgumentException("Pase de salida inexistente.")
+        );
 
         return paseDeSalidaMapper.toDomain(paseDeSalidaEntity);
+    }
+
+    @Override
+    public List<PaseDeSalida> buscarPorIdEmpleado(Long empleadoId) {
+        List<PaseDeSalidaEntity> paseDeSalidaEntities = jpaPaseDeSalidaRepository.findByEmpleado_Id(empleadoId);
+        return paseDeSalidaEntities.stream()
+                .map(paseDeSalidaMapper::toDomain)
+                .toList();
+    }
+
+    @Override
+    public List<PaseDeSalida> buscarPorIdJefe(Long jefeId) {
+        List<PaseDeSalidaEntity> paseDeSalidaEntities = jpaPaseDeSalidaRepository.findByJefe_Id(jefeId);
+        return paseDeSalidaEntities.stream()
+                .map(paseDeSalidaMapper::toDomain)
+                .toList();
+
     }
 }
