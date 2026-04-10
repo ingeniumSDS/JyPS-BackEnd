@@ -1,25 +1,23 @@
 package com.ingenium.jyps.incidencias.infrastructure.adapters.out.persist.mapper;
 
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.ArchivoAdjunto;
-import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.SolicitarJustificanteCommand;
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.SolicitarPaseDeSalidaCommand;
-import com.ingenium.jyps.incidencias.domain.model.Justificante;
 import com.ingenium.jyps.incidencias.domain.model.PaseDeSalida;
-import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.SolicitarJustificanteRequest;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.SolicitarPaseDeSalidaRequest;
-import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.response.JustificanteResponse;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.response.PaseDeSalidaResponse;
-import com.ingenium.jyps.incidencias.infrastructure.adapters.out.persist.entity.JustificanteEntity;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.out.persist.entity.PaseDeSalidaEntity;
-import org.mapstruct.InheritInverseConfiguration;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(
+        componentModel = "spring",
+        collectionMappingStrategy = CollectionMappingStrategy.TARGET_IMMUTABLE,
+        nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS,
+        nullValueIterableMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT
+)
 public interface PaseDeSalidaMapper {
 
     @Mapping(target = "descripcion", source = "paseDeSalidaEntity.detalles")

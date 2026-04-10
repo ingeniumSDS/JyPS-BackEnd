@@ -8,6 +8,8 @@ import com.ingenium.jyps.incidencias.infrastructure.adapters.out.persist.reposit
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 
 @Component
 @RequiredArgsConstructor
@@ -21,6 +23,15 @@ public class JustificanteRepositoryAdapter implements JustificanteRepositoryPort
         JustificanteEntity justificanteEntity = justificanteMapper.toEntity(justificante);
         JustificanteEntity justificanteGuardado = jpaJustificanteRepositoy.save(justificanteEntity);
         return justificanteMapper.toDomain(justificanteGuardado);
+    }
+
+    @Override
+    public Justificante buscarPorId(long justificanteId) {
+        JustificanteEntity justificanteEntity = jpaJustificanteRepositoy.findById(justificanteId).orElseThrow(() ->
+                new IllegalArgumentException("Justificante inexistente.")
+        );
+
+        return justificanteMapper.toDomain(justificanteEntity);
     }
 
 }

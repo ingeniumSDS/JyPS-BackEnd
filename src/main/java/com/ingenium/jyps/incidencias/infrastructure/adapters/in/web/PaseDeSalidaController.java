@@ -1,6 +1,6 @@
 package com.ingenium.jyps.incidencias.infrastructure.adapters.in.web;
 
-import com.ingenium.jyps.incidencias.application.ports.in.usecases.SolicitarPaseDeSalidaUseCase;
+import com.ingenium.jyps.incidencias.application.ports.in.usecases.paseDeSalida.SolicitarPaseDeSalidaUseCase;
 import com.ingenium.jyps.incidencias.domain.model.PaseDeSalida;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.SolicitarPaseDeSalidaRequest;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.response.PaseDeSalidaResponse;
