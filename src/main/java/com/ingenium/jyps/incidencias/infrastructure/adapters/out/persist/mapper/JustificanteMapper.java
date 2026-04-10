@@ -8,6 +8,7 @@ import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.SolicitarJustificanteRequest;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.response.JustificanteResponse;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.out.persist.entity.JustificanteEntity;
+import com.ingenium.jyps.users.infrastructure.adapters.out.persist.entity.UsuarioEntity;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -22,6 +23,7 @@ public interface JustificanteMapper {
     @Mapping(target = "descripcion", source = "justificanteEntity.detalles")
     @Mapping(target = "empleadoId", source = "empleado.id")
     @Mapping(target = "jefeId", source = "jefe.id")
+    @Mapping(target = "nombreCompleto", expression = "java(mapNombreCompleto(justificanteEntity.getEmpleado()))")
     Justificante toDomain(JustificanteEntity justificanteEntity);
 
     @InheritInverseConfiguration
@@ -45,7 +47,33 @@ public interface JustificanteMapper {
         }
     }
 
+    @Mapping(target = "nombreCompleto", source = "nombreCompleto")
     JustificanteResponse toResponse(Justificante justificante);
+
+    default String mapNombreCompleto(UsuarioEntity empleado) {
+        if (empleado == null) {
+            return null;
+        }
+        StringBuilder nombre = new StringBuilder();
+
+        if (tieneTexto(empleado.getNombre())) {
+            nombre.append(empleado.getNombre().trim());
+        }
+        if (tieneTexto(empleado.getApellidoPaterno())) {
+            if (!nombre.isEmpty()) nombre.append(" ");
+            nombre.append(empleado.getApellidoPaterno().trim());
+        }
+        if (tieneTexto(empleado.getApellidoMaterno())) {
+            if (!nombre.isEmpty()) nombre.append(" ");
+            nombre.append(empleado.getApellidoMaterno().trim());
+        }
+
+        return nombre.isEmpty() ? null : nombre.toString();
+    }
+
+    default boolean tieneTexto(String valor) {
+        return valor != null && !valor.trim().isEmpty();
+    }
 
     RevisarJustificanteCommand toRevisarJustificanteCommand(RevisarJustificanteRequest request);
 }

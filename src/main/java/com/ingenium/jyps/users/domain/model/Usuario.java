@@ -198,4 +198,8 @@ public class Usuario {
         this.roles = roles;
         this.departamentoId = departamentoId;
     }
+
+    public String getNombreCompleto(){
+        return this.nombre + " " + this.apellidoPaterno + " " + this.apellidoMaterno;
+    }
 }

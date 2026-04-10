@@ -22,7 +22,14 @@ public class JustificanteRepositoryAdapter implements JustificanteRepositoryPort
     public Justificante guardar(Justificante justificante) {
         JustificanteEntity justificanteEntity = justificanteMapper.toEntity(justificante);
         JustificanteEntity justificanteGuardado = jpaJustificanteRepositoy.save(justificanteEntity);
-        return justificanteMapper.toDomain(justificanteGuardado);
+        Justificante justificanteRehidratado = justificanteMapper.toDomain(justificanteGuardado);
+
+        // En altas, la relación empleado puede volver solo con id; preservamos el nombre ya resuelto en dominio.
+        if (justificanteRehidratado.getNombreCompleto() == null && justificante.getEmpleado() != null) {
+            justificanteRehidratado.cargarEmpleado(justificante.getEmpleado());
+        }
+
+        return justificanteRehidratado;
     }
 
     @Override

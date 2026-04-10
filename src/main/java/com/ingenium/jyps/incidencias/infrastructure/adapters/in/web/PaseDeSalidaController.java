@@ -30,6 +30,7 @@ public class PaseDeSalidaController {
     private final PasesPorEmpleadoUseCase obtenerPasesPorEmpleado;
     private final PasesPorJefeUseCase obtenerPasesPorJefe;
     private final DetallesPaseUseCase detallesPaseUseCase;
+    private final CheckUseCase checkUseCase;
     private final PaseDeSalidaMapper mapper;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -81,6 +82,15 @@ public class PaseDeSalidaController {
     @GetMapping("/{id}/detalles")
     public ResponseEntity<PaseDeSalidaResponse> obtenerDetallesJustificante(@PathVariable Long id) {
         PaseDeSalida paseDeSalida = detallesPaseUseCase.ejecutar(id);
+        PaseDeSalidaResponse response = mapper.toResponse(paseDeSalida);
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/{qr}")
+    public ResponseEntity<PaseDeSalidaResponse> check(
+            @PathVariable String qr
+    ) {
+        PaseDeSalida paseDeSalida = checkUseCase.ejecutar(qr);
         PaseDeSalidaResponse response = mapper.toResponse(paseDeSalida);
         return ResponseEntity.ok(response);
     }

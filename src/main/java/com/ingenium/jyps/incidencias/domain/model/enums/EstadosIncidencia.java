@@ -6,5 +6,7 @@ public enum EstadosIncidencia {
     RECHAZADO,
     CADUCADO,
     A_TIEMPO,
-    RETARDO
+    RETARDO,
+    FUERA,
+    USADO
 }

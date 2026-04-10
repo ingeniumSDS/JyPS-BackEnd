@@ -16,4 +16,6 @@ public interface PaseDeSalidaRepositoryPort {
     List<PaseDeSalida> buscarPorIdEmpleado(Long empleadoId);
 
     List<PaseDeSalida> buscarPorIdJefe(Long jefeId);
+
+    PaseDeSalida buscarPorQR(String qr);
 }
