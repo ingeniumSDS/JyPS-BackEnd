@@ -15,7 +15,8 @@ public class RevisarJustificanteService implements RevisarJustificanteUseCase {
 
     @Override
     public Justificante ejecutar(RevisarJustificanteCommand command) {
-        return justificanteRepositoryPort.buscarPorId(command.justificanteId());
-
+        Justificante justificante = justificanteRepositoryPort.buscarPorId(command.justificanteId());
+        justificante.revisar(command.estado(), command.comentario());
+        return justificanteRepositoryPort.guardar(justificante);
     }
 }

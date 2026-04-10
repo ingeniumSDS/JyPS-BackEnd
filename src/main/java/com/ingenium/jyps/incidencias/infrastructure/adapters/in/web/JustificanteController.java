@@ -1,8 +1,11 @@
 package com.ingenium.jyps.incidencias.infrastructure.adapters.in.web;
 
+import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.justificante.RevisarJustificanteCommand;
+import com.ingenium.jyps.incidencias.application.ports.in.usecases.justificante.RevisarJustificanteUseCase;
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.justificante.SolicitarJustificanteUseCase;
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.justificante.SolicitarJustificanteCommand;
 import com.ingenium.jyps.incidencias.domain.model.Justificante;
+import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.RevisarJustificanteRequest;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.SolicitarJustificanteRequest;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.response.JustificanteResponse;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.out.persist.mapper.JustificanteMapper;
@@ -25,6 +28,7 @@ public class JustificanteController {
 
     private final SolicitarJustificanteUseCase solicitarJustificanteUseCase;
     private final JustificanteMapper justificanteMapper;
+    private final RevisarJustificanteUseCase revisarJustificanteUseCase;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<JustificanteResponse> solicitarJustificante(
@@ -46,6 +50,13 @@ public class JustificanteController {
         JustificanteResponse justificanteResponse = justificanteMapper.toResponse(nuevoJustificante);
 
         return ResponseEntity.created(location).body(justificanteResponse);
+    }
+
+    @PutMapping("/revisar")
+    public ResponseEntity<JustificanteResponse> revisarJustificante(
+            @RequestBody RevisarJustificanteRequest request) {
+        RevisarJustificanteCommand command = justificanteMapper.toRevisarJustificanteCommand(request);
+        return ResponseEntity.ok(justificanteMapper.toResponse(revisarJustificanteUseCase.ejecutar(command)));
     }
 
 }

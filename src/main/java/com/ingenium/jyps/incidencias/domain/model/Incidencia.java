@@ -5,6 +5,7 @@ import lombok.Getter;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 public class Incidencia {
@@ -16,7 +17,7 @@ public class Incidencia {
     protected String descripcion;
     protected List<String> archivos;
     protected EstadosIncidencia estado;
-    protected String motivoRechazo;
+    protected String comentario;
 
 
     //==============//
@@ -65,7 +66,7 @@ public class Incidencia {
             throw new IllegalArgumentException("El motivo de rechazo no puede exceder los 255 caracteres.");
         }
 
-        this.motivoRechazo = motivoRechazo;
+        this.comentario = motivoRechazo;
 
     }
 
@@ -73,9 +74,19 @@ public class Incidencia {
     // ESTADOS //
     //=========//
 
-    public void rechazar() {
-        validarMotivoRechazo(motivoRechazo);
+    public void rechazar(String comentario) {
+        validarMotivoRechazo(comentario);
         this.estado = EstadosIncidencia.RECHAZADO;
+    }
+
+    public void revisar(EstadosIncidencia estado, String comentario){
+        if (estado.equals(EstadosIncidencia.APROBADO)) {
+            aprobar();
+        } else if (estado.equals(EstadosIncidencia.RECHAZADO)) {
+            rechazar(comentario );
+        } else {
+            throw new IllegalArgumentException("El estado debe ser APROBADO o RECHAZADO.");
+        }
     }
 
     public void aprobar() {

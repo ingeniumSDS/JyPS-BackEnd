@@ -23,7 +23,7 @@ public class Justificante extends Incidencia {
             List<String> archivos
     ) {
 
-    // Validamos la información esencial y asignamos los valores si estos son válidos.
+        // Validamos la información esencial y asignamos los valores si estos son válidos.
         validarDescripcion(descripcion);
         tieneEmpleado(empleadoId);
         tieneJefe(jefeId);
@@ -45,6 +45,7 @@ public class Justificante extends Incidencia {
             LocalDate fechaSolicitud,
             String descripcion,
             List<String> archivos,
+            String comentario,
             EstadosIncidencia estado
 
     ) {
@@ -56,10 +57,11 @@ public class Justificante extends Incidencia {
         this.descripcion = descripcion;
         this.archivos = archivos;
         this.estado = estado;
+        this.comentario = comentario;
     }
 
     // Valida que no se hayan excedido los 3 días HÁBILES permitidos para
-    // solicitar un justificante Y NO permite fechas futuras.
+    // guardar un justificante Y NO permite fechas futuras.
 
     private void validarFechaSolicitada(LocalDate fechaSolicitada) {
 
@@ -82,4 +84,5 @@ public class Justificante extends Incidencia {
         this.fechaSolicitada = fechaSolicitada;
 
     }
+
 }
