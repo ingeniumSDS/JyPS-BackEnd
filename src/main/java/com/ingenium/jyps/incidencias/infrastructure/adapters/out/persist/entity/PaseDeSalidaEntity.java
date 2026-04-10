@@ -64,4 +64,7 @@ public class PaseDeSalidaEntity {
     @CollectionTable(name = "pase_de_salida_evidencias", joinColumns = @JoinColumn(name = "pase_salida_id"), foreignKey = @ForeignKey(name = "FK_PASE_ARCHIVOS"))
     private List<String> archivos;
 
+    @Column(name = "comentario")
+    private String comentario;
+
 }

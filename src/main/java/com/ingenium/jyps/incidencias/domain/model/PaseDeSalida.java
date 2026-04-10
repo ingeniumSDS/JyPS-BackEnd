@@ -44,6 +44,7 @@ public class PaseDeSalida extends Incidencia {
         // Por defecto se crea como pendiente
         this.estado = EstadosIncidencia.PENDIENTE;
         this.empleado = empleado;
+        this.horaEsperada = horaSolicitada.plusHours(3);
 
     }
 
@@ -66,7 +67,9 @@ public class PaseDeSalida extends Incidencia {
 
             // Se calcula en funición de la hora de salida real
             LocalDateTime horaEsperada,
-            EstadosIncidencia estado
+            EstadosIncidencia estado,
+            String QR,
+            String comentario
     ) {
         this.id = id;
         this.empleadoId = empleadoId;
@@ -78,6 +81,8 @@ public class PaseDeSalida extends Incidencia {
         this.descripcion = descripcion;
         this.archivos = archivos;
         this.estado = estado;
+        this.QR = QR;
+        this.comentario = comentario;
     }
 
 
@@ -134,6 +139,19 @@ public class PaseDeSalida extends Incidencia {
 
     public void generarQR(){
         this.QR = UUID.randomUUID().toString();
+    }
+
+
+    public void revisar(EstadosIncidencia estado, String comentario){
+        if (estado.equals(EstadosIncidencia.APROBADO)) {
+            aprobar();
+            generarQR();
+            this.comentario = comentario;
+        } else if (estado.equals(EstadosIncidencia.RECHAZADO)) {
+            rechazar(comentario);
+        } else {
+            throw new IllegalArgumentException("El estado debe ser APROBADO o RECHAZADO.");
+        }
     }
 
 }

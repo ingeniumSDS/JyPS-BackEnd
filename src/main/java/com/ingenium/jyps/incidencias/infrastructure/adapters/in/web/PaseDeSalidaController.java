@@ -1,7 +1,10 @@
 package com.ingenium.jyps.incidencias.infrastructure.adapters.in.web;
 
+import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.paseDeSalida.RevisarPaseDeSalidaCommand;
+import com.ingenium.jyps.incidencias.application.ports.in.usecases.paseDeSalida.RevisarPaseDeSalidaUseCase;
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.paseDeSalida.SolicitarPaseDeSalidaUseCase;
 import com.ingenium.jyps.incidencias.domain.model.PaseDeSalida;
+import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.RevisarPaseDeSalidaRequest;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.SolicitarPaseDeSalidaRequest;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.response.PaseDeSalidaResponse;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.out.persist.mapper.PaseDeSalidaMapper;
@@ -24,6 +27,7 @@ import java.util.List;
 public class PaseDeSalidaController {
 
     private final SolicitarPaseDeSalidaUseCase paseDeSalidaUseCase;
+    private final RevisarPaseDeSalidaUseCase revisarPaseDeSalida;
     private final PaseDeSalidaMapper mapper;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -46,4 +50,12 @@ public class PaseDeSalidaController {
 
         return ResponseEntity.created(location).body(paseDeSalidaResponse);
     }
+
+    @PutMapping("/revisar")
+    public ResponseEntity<PaseDeSalidaResponse> revisarPaseDeSalida(
+            @RequestBody RevisarPaseDeSalidaRequest request) {
+        RevisarPaseDeSalidaCommand command = mapper.toRevisarPaseDeSalidaCommand(request);
+        return ResponseEntity.ok(mapper.toResponse(revisarPaseDeSalida.ejecutar(command)));
+    }
+
 }
