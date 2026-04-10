@@ -53,13 +53,9 @@ public class Departamento {
         }
     }
 
-    // Métodos de negocio para cambiar el estado (sin usar setters)
-    public void desactivar() {
-        this.activo = false;
-    }
 
-    public void activar() {
-        this.activo = true;
+    public void cambiarEstado() {
+        this.activo = !this.activo;
     }
 
     public void actualizarDatos(

@@ -4,6 +4,7 @@ import com.ingenium.jyps.users.application.ports.in.usecases.ConsultarUsuariosUs
 import com.ingenium.jyps.users.domain.model.Usuario;
 import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.response.UsuarioResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,11 +15,13 @@ import java.util.List;
 @RequiredArgsConstructor
 @CrossOrigin("*")
 @RequestMapping("/api/v1")
+@Tag(name = "3 - Usuarios Queries Personalizadas", description = "Queries para filtros relacionadas a usuarios.")
+
 public class UsuarioQueriesController {
 
     private final ConsultarUsuariosUseCase consultarUsuariosUseCase;
 
-    // Obtiene los usuario por Departamento
+    // Obtiene los usuarios por Departamento
     @GetMapping("/{departamentoId}/usuarios")
     @Operation(summary = "Filtra usuarios por depatamento", description = "Recopila a todos los usuarios de un departamento.")
     public ResponseEntity<List<UsuarioResponse>> filtrarPorDepartamento(@PathVariable Long departamentoId) {
