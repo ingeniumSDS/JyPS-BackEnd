@@ -43,6 +43,8 @@ public class SolicitarPaseDeSalidaService implements SolicitarPaseDeSalidaUseCas
                 command.horaSolicitada()
         );
 
+        nuevoPase.cargarEmpleado(empleado);
+
         return paseDeSalidaRepository.solicitar(nuevoPase);
     }
 }

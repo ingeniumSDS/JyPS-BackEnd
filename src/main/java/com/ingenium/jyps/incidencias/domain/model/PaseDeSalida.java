@@ -14,13 +14,12 @@ import java.util.UUID;
 public class PaseDeSalida extends Incidencia {
 
 
-
     // Extras para el dominio del pase de salida
-    private Usuario empleado;
     private LocalDateTime horaSolicitada;
     private LocalDateTime horaEsperada;
     private LocalDateTime horaSalidaReal;
     private String QR;
+
 
 
     // Constructor para mandar a crear un nuevo pasa de salida, sin el ID que se genera automáticamente.
@@ -69,7 +68,8 @@ public class PaseDeSalida extends Incidencia {
             LocalDateTime horaEsperada,
             EstadosIncidencia estado,
             String QR,
-            String comentario
+            String comentario,
+            String nombreCompletoEmpleado
     ) {
         this.id = id;
         this.empleadoId = empleadoId;
@@ -83,6 +83,7 @@ public class PaseDeSalida extends Incidencia {
         this.estado = estado;
         this.QR = QR;
         this.comentario = comentario;
+        this.nombreCompleto = nombreCompletoEmpleado;
     }
 
 
@@ -121,12 +122,26 @@ public class PaseDeSalida extends Incidencia {
         }
     }
 
+    public void check() {
+        if (this.estado == EstadosIncidencia.CADUCADO || this.estado == EstadosIncidencia.USADO) {
+            throw new IllegalStateException("El pase de salida ya ha sido usado o ha caducado, no se puede usar nuevamente.");
+        }
+
+        if (this.estado == EstadosIncidencia.APROBADO) {
+            checkOut();
+        } else if (this.estado == EstadosIncidencia.FUERA) {
+            checkIn();
+        }
+
+    }
+
     // Registra la hora de salida REAL del empleado al pasar por caseta de vigilancia.
     public void checkOut() {
         this.horaSalidaReal = LocalDateTime.now();
         this.horaEsperada = horaSalidaReal.plusHours(3);
         debeVolver();
     }
+
 
     public void checkIn() {
         this.horaSalidaReal = LocalDateTime.now();
@@ -137,12 +152,12 @@ public class PaseDeSalida extends Incidencia {
         }
     }
 
-    public void generarQR(){
+    public void generarQR() {
         this.QR = UUID.randomUUID().toString();
     }
 
 
-    public void revisar(EstadosIncidencia estado, String comentario){
+    public void revisar(EstadosIncidencia estado, String comentario) {
         if (estado.equals(EstadosIncidencia.APROBADO)) {
             aprobar();
             generarQR();
@@ -153,6 +168,9 @@ public class PaseDeSalida extends Incidencia {
             throw new IllegalArgumentException("El estado debe ser APROBADO o RECHAZADO.");
         }
     }
+
+
+
 
 }
 

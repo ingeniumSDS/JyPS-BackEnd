@@ -22,7 +22,14 @@ public class PaseDeSalidaRepositoryAdapter implements PaseDeSalidaRepositoryPort
     public PaseDeSalida solicitar(PaseDeSalida paseDeSalida) {
         PaseDeSalidaEntity nuevoPase = paseDeSalidaMapper.toEntity(paseDeSalida);
         PaseDeSalidaEntity paseGuardado = jpaPaseDeSalidaRepository.save(nuevoPase);
-        return paseDeSalidaMapper.toDomain(paseGuardado);
+        PaseDeSalida paseRehidratado = paseDeSalidaMapper.toDomain(paseGuardado);
+
+        // En altas, la relación empleado puede volver solo con id; preservamos el nombre ya resuelto en dominio.
+        if (paseRehidratado.getNombreCompleto() == null && paseDeSalida.getEmpleado() != null) {
+            paseRehidratado.cargarEmpleado(paseDeSalida.getEmpleado());
+        }
+
+        return paseRehidratado;
     }
 
     @Override
@@ -55,5 +62,15 @@ public class PaseDeSalidaRepositoryAdapter implements PaseDeSalidaRepositoryPort
                 .map(paseDeSalidaMapper::toDomain)
                 .toList();
 
+    }
+
+    @Override
+    public PaseDeSalida buscarPorQR(String qr) {
+
+        PaseDeSalidaEntity paseDeSalidaEntity = jpaPaseDeSalidaRepository.findByQR(qr).orElseThrow(() ->
+                new IllegalArgumentException("Pase de salida inexistente.")
+        );
+
+        return paseDeSalidaMapper.toDomain(paseDeSalidaEntity);
     }
 }

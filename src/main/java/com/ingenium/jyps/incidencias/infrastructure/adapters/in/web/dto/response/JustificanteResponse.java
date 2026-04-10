@@ -5,6 +5,7 @@ import java.util.List;
 
 public record JustificanteResponse(
         Long empleadoId,
+        String nombreCompleto,
         Long jefeId,
         LocalDate fechaSolicitada,
         LocalDate fechaSolicitud,

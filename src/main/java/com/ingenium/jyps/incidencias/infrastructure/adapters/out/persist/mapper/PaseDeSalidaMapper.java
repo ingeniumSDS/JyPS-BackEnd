@@ -8,6 +8,7 @@ import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.SolicitarPaseDeSalidaRequest;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.response.PaseDeSalidaResponse;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.out.persist.entity.PaseDeSalidaEntity;
+import com.ingenium.jyps.users.infrastructure.adapters.out.persist.entity.UsuarioEntity;
 import org.mapstruct.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,6 +26,7 @@ public interface PaseDeSalidaMapper {
     @Mapping(target = "descripcion", source = "paseDeSalidaEntity.detalles")
     @Mapping(target = "empleadoId", source = "empleado.id")
     @Mapping(target = "jefeId", source = "jefe.id")
+    @Mapping(target = "nombreCompletoEmpleado", expression = "java(mapNombreCompleto(paseDeSalidaEntity.getEmpleado()))")
     PaseDeSalida toDomain(PaseDeSalidaEntity paseDeSalidaEntity);
 
     @InheritInverseConfiguration
@@ -48,7 +50,34 @@ public interface PaseDeSalidaMapper {
         }
     }
 
+    @Mapping(target = "nombreCompleto", source = "nombreCompleto")
     PaseDeSalidaResponse toResponse(PaseDeSalida paseDeSalida);
+
+    default String mapNombreCompleto(UsuarioEntity empleado) {
+        if (empleado == null) {
+            return null;
+        }
+        StringBuilder nombre = new StringBuilder();
+
+        if (tieneTexto(empleado.getNombre())) {
+            nombre.append(empleado.getNombre().trim());
+        }
+        if (tieneTexto(empleado.getApellidoPaterno())) {
+            if (!nombre.isEmpty()) nombre.append(" ");
+            nombre.append(empleado.getApellidoPaterno().trim());
+        }
+        if (tieneTexto(empleado.getApellidoMaterno())) {
+            if (!nombre.isEmpty()) nombre.append(" ");
+            nombre.append(empleado.getApellidoMaterno().trim());
+        }
+
+        return nombre.isEmpty() ? null : nombre.toString();
+    }
+
+    default boolean tieneTexto(String valor) {
+        return valor != null && !valor.trim().isEmpty();
+    }
+
 
 
     RevisarPaseDeSalidaCommand toRevisarPaseDeSalidaCommand(RevisarPaseDeSalidaRequest request);

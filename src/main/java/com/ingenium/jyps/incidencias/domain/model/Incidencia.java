@@ -1,15 +1,16 @@
 package com.ingenium.jyps.incidencias.domain.model;
 
 import com.ingenium.jyps.incidencias.domain.model.enums.EstadosIncidencia;
+import com.ingenium.jyps.users.domain.model.Usuario;
 import lombok.Getter;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 public class Incidencia {
 
+    protected Usuario empleado;
     protected Long id;
     protected Long empleadoId;
     protected Long jefeId;
@@ -18,6 +19,7 @@ public class Incidencia {
     protected List<String> archivos;
     protected EstadosIncidencia estado;
     protected String comentario;
+    protected String nombreCompleto;
 
 
     //==============//
@@ -97,6 +99,16 @@ public class Incidencia {
         if (this.estado == EstadosIncidencia.PENDIENTE || this.estado == EstadosIncidencia.APROBADO) {
             this.estado = EstadosIncidencia.CADUCADO;
         }
+    }
+
+    public void cargarEmpleado(Usuario empleado) {
+        this.empleado = empleado;
+        this.nombreCompleto = getNombreCompletoEmpleado();
+    }
+
+
+    public String  getNombreCompletoEmpleado() {
+        return empleado.getNombre() + " " + empleado.getApellidoPaterno() + " " + empleado.getApellidoMaterno();
     }
 
 }

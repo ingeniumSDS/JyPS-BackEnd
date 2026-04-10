@@ -6,6 +6,7 @@ import java.util.List;
 
 public record PaseDeSalidaResponse(
         Long empleadoId,
+        String nombreCompleto,
         Long jefeId,
         LocalDateTime horaSolicitada,
         LocalDate fechaSolicitud,
