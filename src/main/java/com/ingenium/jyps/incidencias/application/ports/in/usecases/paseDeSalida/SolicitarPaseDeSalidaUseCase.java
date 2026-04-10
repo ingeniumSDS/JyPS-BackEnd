@@ -1,4 +1,4 @@
-package com.ingenium.jyps.incidencias.application.ports.in.usecases;
+package com.ingenium.jyps.incidencias.application.ports.in.usecases.paseDeSalida;
 
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.SolicitarPaseDeSalidaCommand;
 import com.ingenium.jyps.incidencias.domain.model.PaseDeSalida;

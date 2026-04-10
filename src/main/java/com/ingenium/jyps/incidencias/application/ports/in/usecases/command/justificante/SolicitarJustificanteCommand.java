@@ -1,4 +1,6 @@
-package com.ingenium.jyps.incidencias.application.ports.in.usecases.command;
+package com.ingenium.jyps.incidencias.application.ports.in.usecases.command.justificante;
+import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.ArchivoAdjunto;
+
 import java.time.LocalDate;
 import java.util.List;
 
