@@ -1,9 +1,11 @@
 package com.ingenium.jyps.incidencias.infrastructure.adapters.out.persist.mapper;
 
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.ArchivoAdjunto;
+import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.RangoDeFechasCommand;
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.justificante.RevisarJustificanteCommand;
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.justificante.SolicitarJustificanteCommand;
 import com.ingenium.jyps.incidencias.domain.model.Justificante;
+import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.RangoDeFechasRequest;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.RevisarJustificanteRequest;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.SolicitarJustificanteRequest;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.response.JustificanteResponse;
@@ -76,4 +78,6 @@ public interface JustificanteMapper {
     }
 
     RevisarJustificanteCommand toRevisarJustificanteCommand(RevisarJustificanteRequest request);
+
+    RangoDeFechasCommand toRangoDeFechasCommand(RangoDeFechasRequest request);
 }

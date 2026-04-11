@@ -1,5 +1,6 @@
 package com.ingenium.jyps.incidencias.infrastructure.adapters.out.persist;
 
+import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.RangoDeFechasCommand;
 import com.ingenium.jyps.incidencias.domain.model.Justificante;
 import com.ingenium.jyps.incidencias.domain.repository.JustificanteRepositoryPort;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.out.persist.entity.JustificanteEntity;
@@ -53,6 +54,15 @@ public class JustificanteRepositoryAdapter implements JustificanteRepositoryPort
     public List<Justificante> buscarPorJefe(Long usuarioId) {
         List<JustificanteEntity> justificanteEntities = jpaJustificanteRepositoy.findByJefe_Id(usuarioId);
         return justificanteEntities.stream()
+                .map(justificanteMapper::toDomain)
+                .toList();
+    }
+
+    @Override
+    public List<Justificante> buscarPorRangoDeFechas(RangoDeFechasCommand command) {
+        List<JustificanteEntity> entidadesFiltradas = jpaJustificanteRepositoy.findByFechaSolicitudBetween(command.fechaInicio(), command.fechaFin());
+
+        return entidadesFiltradas.stream()
                 .map(justificanteMapper::toDomain)
                 .toList();
     }

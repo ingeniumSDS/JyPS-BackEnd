@@ -1,5 +1,6 @@
 package com.ingenium.jyps.incidencias.domain.repository;
 
+import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.RangoDeFechasCommand;
 import com.ingenium.jyps.incidencias.domain.model.Justificante;
 
 import java.util.List;
@@ -13,4 +14,6 @@ public interface JustificanteRepositoryPort {
     List<Justificante> buscarPorEmpleado(Long usuarioId);
 
     List<Justificante> buscarPorJefe(Long usuarioId);
+
+    List<Justificante> buscarPorRangoDeFechas(RangoDeFechasCommand command);
 }
