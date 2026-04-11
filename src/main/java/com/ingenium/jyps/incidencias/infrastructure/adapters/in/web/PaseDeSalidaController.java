@@ -1,14 +1,19 @@
 package com.ingenium.jyps.incidencias.infrastructure.adapters.in.web;
 
+import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.RangoDeFechasCommand;
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.paseDeSalida.RevisarPaseDeSalidaCommand;
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.paseDeSalida.*;
+import com.ingenium.jyps.incidencias.domain.model.Justificante;
 import com.ingenium.jyps.incidencias.domain.model.PaseDeSalida;
+import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.RangoDeFechasRequest;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.RevisarPaseDeSalidaRequest;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.SolicitarPaseDeSalidaRequest;
+import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.response.JustificanteResponse;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.response.PaseDeSalidaResponse;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.out.persist.mapper.PaseDeSalidaMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +36,7 @@ public class PaseDeSalidaController {
     private final PasesPorEmpleadoUseCase obtenerPasesPorEmpleado;
     private final PasesPorJefeUseCase obtenerPasesPorJefe;
     private final DetallesPaseUseCase detallesPaseUseCase;
+    private final BuscarPasePorRangoDeFechas buscarPasePorRangoDeFechas;
     private final CheckUseCase checkUseCase;
     private final PaseDeSalidaMapper mapper;
 
@@ -100,6 +106,18 @@ public class PaseDeSalidaController {
         PaseDeSalida paseDeSalida = checkUseCase.ejecutar(qr);
         PaseDeSalidaResponse response = mapper.toResponse(paseDeSalida);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/rango-fechas")
+    @Operation(summary = "Justificantes por Rango de Fechas", description = "Obtiene la lista de justificantes dentro de un rango de fechas específico.")
+    public ResponseEntity<List<PaseDeSalidaResponse>> obtenerJustificantesPorRangoDeFechas(
+            @RequestBody @Valid RangoDeFechasRequest request) {
+        RangoDeFechasCommand command = mapper.toRangoDeFechasCommand(request);
+        List<PaseDeSalida> pasesDeSalida = buscarPasePorRangoDeFechas.ejecutar(command);
+        List<PaseDeSalidaResponse> responses = pasesDeSalida.stream()
+                .map(mapper::toResponse)
+                .toList();
+        return ResponseEntity.ok(responses);
     }
 
 

@@ -1,15 +1,18 @@
 package com.ingenium.jyps.incidencias.infrastructure.adapters.in.web;
 
+import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.RangoDeFechasCommand;
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.justificante.RevisarJustificanteCommand;
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.justificante.*;
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.justificante.SolicitarJustificanteCommand;
 import com.ingenium.jyps.incidencias.domain.model.Justificante;
+import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.RangoDeFechasRequest;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.RevisarJustificanteRequest;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.SolicitarJustificanteRequest;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.response.JustificanteResponse;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.out.persist.mapper.JustificanteMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +35,7 @@ public class JustificanteController {
     private final JustificantesPorEmpleadoUseCase obtenerJustificantesPorEmpleado;
     private final JustificantesPorJefeUseCase obtenerJustificantesPorJefe;
     private final DetallesJustificanteUseCase detallesJustificanteUseCase;
+    private final BuscarJustificantePorRangoDeFechas buscarJustificantePorRangoDeFechas;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Nuevo Justificante", description = "Permite a un empleado solicitar un nuevo justificante, adjuntando archivos relacionados.")
@@ -90,6 +94,18 @@ public class JustificanteController {
         Justificante justificante = detallesJustificanteUseCase.ejecutar(id);
         JustificanteResponse response = justificanteMapper.toResponse(justificante);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/rango-fechas")
+    @Operation(summary = "Justificantes por Rango de Fechas", description = "Obtiene la lista de justificantes dentro de un rango de fechas específico.")
+    public ResponseEntity<List<JustificanteResponse>> obtenerJustificantesPorRangoDeFechas(
+            @RequestBody @Valid RangoDeFechasRequest request) {
+        RangoDeFechasCommand command = justificanteMapper.toRangoDeFechasCommand(request);
+        List<Justificante> justificantes = buscarJustificantePorRangoDeFechas.ejecutar(command);
+        List<JustificanteResponse> responses = justificantes.stream()
+                .map(justificanteMapper::toResponse)
+                .toList();
+        return ResponseEntity.ok(responses);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.ingenium.jyps.incidencias.infrastructure.adapters.out.persist;
 
+import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.RangoDeFechasCommand;
 import com.ingenium.jyps.incidencias.domain.model.PaseDeSalida;
 import com.ingenium.jyps.incidencias.domain.repository.PaseDeSalidaRepositoryPort;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.out.persist.entity.PaseDeSalidaEntity;
@@ -8,6 +9,7 @@ import com.ingenium.jyps.incidencias.infrastructure.adapters.out.persist.reposit
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Component
@@ -61,7 +63,6 @@ public class PaseDeSalidaRepositoryAdapter implements PaseDeSalidaRepositoryPort
         return paseDeSalidaEntities.stream()
                 .map(paseDeSalidaMapper::toDomain)
                 .toList();
-
     }
 
     @Override
@@ -70,7 +71,15 @@ public class PaseDeSalidaRepositoryAdapter implements PaseDeSalidaRepositoryPort
         PaseDeSalidaEntity paseDeSalidaEntity = jpaPaseDeSalidaRepository.findByQR(qr).orElseThrow(() ->
                 new IllegalArgumentException("Pase de salida inexistente.")
         );
-
         return paseDeSalidaMapper.toDomain(paseDeSalidaEntity);
+    }
+
+    @Override
+    public List<PaseDeSalida> buscarPorRangoDeFechas(RangoDeFechasCommand command) {
+        List<PaseDeSalidaEntity> entities = jpaPaseDeSalidaRepository.findByFechaSolicitudBetween(command.fechaInicio(),command.fechaFin());
+        return entities.stream()
+                .map(paseDeSalidaMapper::toDomain)
+                .toList();
+
     }
 }

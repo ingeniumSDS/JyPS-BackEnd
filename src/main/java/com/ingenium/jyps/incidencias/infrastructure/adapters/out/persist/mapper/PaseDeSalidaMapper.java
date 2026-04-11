@@ -1,14 +1,17 @@
 package com.ingenium.jyps.incidencias.infrastructure.adapters.out.persist.mapper;
 
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.ArchivoAdjunto;
+import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.RangoDeFechasCommand;
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.paseDeSalida.RevisarPaseDeSalidaCommand;
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.paseDeSalida.SolicitarPaseDeSalidaCommand;
 import com.ingenium.jyps.incidencias.domain.model.PaseDeSalida;
+import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.RangoDeFechasRequest;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.RevisarPaseDeSalidaRequest;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.SolicitarPaseDeSalidaRequest;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.response.PaseDeSalidaResponse;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.out.persist.entity.PaseDeSalidaEntity;
 import com.ingenium.jyps.users.infrastructure.adapters.out.persist.entity.UsuarioEntity;
+import jakarta.validation.Valid;
 import org.mapstruct.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -81,4 +84,6 @@ public interface PaseDeSalidaMapper {
 
 
     RevisarPaseDeSalidaCommand toRevisarPaseDeSalidaCommand(RevisarPaseDeSalidaRequest request);
+
+    RangoDeFechasCommand toRangoDeFechasCommand(RangoDeFechasRequest request);
 }
