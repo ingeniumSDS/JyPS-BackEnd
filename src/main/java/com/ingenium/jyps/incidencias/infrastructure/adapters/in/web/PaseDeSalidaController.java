@@ -3,12 +3,10 @@ package com.ingenium.jyps.incidencias.infrastructure.adapters.in.web;
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.RangoDeFechasCommand;
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.paseDeSalida.RevisarPaseDeSalidaCommand;
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.paseDeSalida.*;
-import com.ingenium.jyps.incidencias.domain.model.Justificante;
 import com.ingenium.jyps.incidencias.domain.model.PaseDeSalida;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.RangoDeFechasRequest;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.RevisarPaseDeSalidaRequest;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.SolicitarPaseDeSalidaRequest;
-import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.response.JustificanteResponse;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.response.PaseDeSalidaResponse;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.out.persist.mapper.PaseDeSalidaMapper;
 import io.swagger.v3.oas.annotations.Operation;
@@ -109,7 +107,7 @@ public class PaseDeSalidaController {
     }
 
     @GetMapping("/rango-fechas")
-    @Operation(summary = "Justificantes por Rango de Fechas", description = "Obtiene la lista de justificantes dentro de un rango de fechas específico.")
+    @Operation(summary = "Pases de Salida por Rango de Fechas", description = "Obtiene la lista de justificantes dentro de un rango de fechas específico y con estado A_TIEMPO o RETARDO")
     public ResponseEntity<List<PaseDeSalidaResponse>> obtenerJustificantesPorRangoDeFechas(
             @RequestBody @Valid RangoDeFechasRequest request) {
         RangoDeFechasCommand command = mapper.toRangoDeFechasCommand(request);
