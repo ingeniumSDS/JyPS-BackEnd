@@ -30,30 +30,33 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults()) // ¡Ojo! No olvides activar el CORS en el chain
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // PUBLICAS
+                        // 1. PUBLICAS (Siempre arriba)
                         .requestMatchers("/api/v1/usuarios/login", "/swagger-ui/**", "/v3/api-docs/**",
                                 "/api/v1/usuarios/token", "/api/v1/usuarios/setup/**").permitAll()
 
-                        // COMPARTIDAS (Específicas primero)
+                        // 2. RUTAS MULTI-ROL (Evitamos que un rol bloquee al otro)
                         .requestMatchers("/api/v1/justificantes/{id}/detalles", "/api/v1/pases/{id}/detalles")
-                        .hasAnyRole("EMPLEADO", "JEFE_DEPARTAMENTO")
-                        .requestMatchers("/api/v1/{departamentoId}/usuarios")
-                        .hasAnyRole("JEFE_DEPARTAMENTO", "ADMINISTRADOR")
+                        .hasAnyRole("EMPLEADO", "JEFE_DE_DEPARTAMENTO", "ADMINISTRADOR")
 
-                        // EMPLEADO
+                        .requestMatchers("/api/v1/{departamentoId}/usuarios")
+                        .hasAnyRole("JEFE_DE_DEPARTAMENTO", "ADMINISTRADOR")
+
+                        .requestMatchers("/api/v1/usuarios/{id}/**")
+                        .hasAnyRole("JEFE_DE_DEPARTAMENTO", "ADMINISTRADOR")
+
+                        // 3. RUTAS EXCLUSIVAS EMPLEADO
                         .requestMatchers(HttpMethod.POST, "/api/v1/justificantes", "/api/v1/pases").hasRole("EMPLEADO")
                         .requestMatchers("/api/v1/justificantes/empleado", "/api/v1/pases/empleado").hasRole("EMPLEADO")
 
-                        // JEFE DEPARTAMENTO
-                        .requestMatchers("/api/v1/justificantes/jefe", "/api/v1/justificantes/revisar").hasRole("JEFE_DEPARTAMENTO")
-                        .requestMatchers("/api/v1/pases/jefe", "/api/v1/pases/revisar").hasRole("JEFE_DEPARTAMENTO")
-                        .requestMatchers("/api/v1/usuarios/{id}/**").hasRole("JEFE_DEPARTAMENTO") // Incluye /estado
-                        .requestMatchers(HttpMethod.POST, "/api/v1/usuarios").hasRole("JEFE_DEPARTAMENTO")
+                        // 4. RUTAS EXCLUSIVAS JEFE
+                        .requestMatchers("/api/v1/justificantes/jefe", "/api/v1/justificantes/revisar").hasRole("JEFE_DE_DEPARTAMENTO")
+                        .requestMatchers("/api/v1/pases/jefe", "/api/v1/pases/revisar").hasRole("JEFE_DE_DEPARTAMENTO")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/usuarios").hasRole("JEFE_DE_DEPARTAMENTO")
 
-                        // ADMINISTRADOR / SEGURIDAD
+                        // 5. RUTAS EXCLUSIVAS SEGURIDAD / ADMIN
                         .requestMatchers("/api/v1/pases/{qr}").hasAnyRole("ADMINISTRADOR", "SEGURIDAD")
                         .requestMatchers("/api/v1/departamentos/**").hasRole("ADMINISTRADOR")
-                        .requestMatchers("/api/v1/usuarios/**").hasRole("ADMINISTRADOR")
+                        .requestMatchers("/api/v1/usuarios/**").hasRole("ADMINISTRADOR") // Este actúa como "catch-all" para el resto de rutas de usuarios
 
                         .anyRequest().authenticated()
                 )
