@@ -44,7 +44,6 @@ public class JwtProviderAdapter implements JwtProviderPort {
                 .claim("departamentoId", usuario.getDepartamentoId())
                 .claim("nombreDepartamento", usuario.getNombreDepartamento())
                 .claim("roles", rolesStr) // ¡Súperimportante para los permisos después!
-                .claim("easter", "Luis Travesti")
                 .issuedAt(new Date()) // Fecha de emisión
                 .expiration(new Date(System.currentTimeMillis() + tiempoExpiracion)) // Fecha de caducidad
                 .signWith(key) // Sellamos el gafete con la firma del Chef
