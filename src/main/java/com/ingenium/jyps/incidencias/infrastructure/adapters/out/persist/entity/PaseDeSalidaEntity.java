@@ -67,4 +67,7 @@ public class PaseDeSalidaEntity {
     @Column(name = "comentario")
     private String comentario;
 
+    @Column(name = "hora_retorno")
+    private LocalDateTime horaRetornoReal;
+
 }

@@ -17,6 +17,7 @@ public record PaseDeSalidaResponse(
         String QR,
         String estado,
         LocalDateTime horaSalidaReal,
-        LocalDateTime horaEsperada
+        LocalDateTime horaEsperada,
+        LocalDateTime horaRetornoReal
         ) {
 }
