@@ -18,6 +18,7 @@ public class PaseDeSalida extends Incidencia {
     private LocalDateTime horaSolicitada;
     private LocalDateTime horaEsperada;
     private LocalDateTime horaSalidaReal;
+    private LocalDateTime horaRetornoReal;
     private String QR;
 
 
@@ -133,7 +134,11 @@ public class PaseDeSalida extends Incidencia {
             checkOut();
         } else if (this.estado == EstadosIncidencia.FUERA) {
             checkIn();
+        } else {
+            throw new IllegalStateException("El pase aún está PENDIENTE o en un estado inválido para check.");
         }
+
+
 
     }
 
@@ -146,8 +151,8 @@ public class PaseDeSalida extends Incidencia {
 
 
     public void checkIn() {
-        this.horaSalidaReal = LocalDateTime.now();
-        if (horaEsperada.toLocalDate().isAfter(LocalDate.now())) {
+        this.horaRetornoReal = LocalDateTime.now();
+        if (horaRetornoReal.isAfter(horaEsperada.plusMinutes(5))) {
             this.estado = EstadosIncidencia.RETARDO;
         } else {
             this.estado = EstadosIncidencia.A_TIEMPO;
