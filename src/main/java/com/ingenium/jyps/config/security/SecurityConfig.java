@@ -56,6 +56,7 @@ public class SecurityConfig {
 
                         // 5. RUTAS EXCLUSIVAS SEGURIDAD / ADMIN
                         .requestMatchers("/api/v1/pases/{qr}").hasRole("GUARDIA")
+                        .requestMatchers("/api/v1/departamentos").hasAnyRole("ADMINISTRADOR", "AUDITOR")
                         .requestMatchers("/api/v1/departamentos/**").hasRole("ADMINISTRADOR")
                         .requestMatchers("/api/v1/usuarios/**").hasRole("ADMINISTRADOR") // Este actúa como "catch-all" para el resto de rutas de usuarios
 

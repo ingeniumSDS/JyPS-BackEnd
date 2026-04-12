@@ -18,14 +18,15 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
 
+@EnableWebSecurity
 @RequiredArgsConstructor
 @RestController
-@CrossOrigin("*")
 @RequestMapping("api/v1/departamentos")
 @Tag(name = "1 - Departamentos", description = "Operaciones relacionadas con la gestión de departamentos")
 public class DepartamentoController {
