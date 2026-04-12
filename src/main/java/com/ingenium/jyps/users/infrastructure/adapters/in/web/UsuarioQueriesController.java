@@ -26,7 +26,7 @@ public class UsuarioQueriesController {
 
     // Obtiene los usuarios por Departamento
     @GetMapping("/{departamentoId}/usuarios")
-    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'JEFE_DE_DEPARTAMENTO')")
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Filtra usuarios por depatamento", description = "Recopila a todos los usuarios de un departamento.")
     public ResponseEntity<List<UsuarioResponse>> filtrarPorDepartamento(@PathVariable Long departamentoId) {
@@ -42,6 +42,8 @@ public class UsuarioQueriesController {
     }
 
     @GetMapping("/usuarios/jefes")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Filtro Jefes de Departamento", description = "Recopila a todos los usuarios que sean jefes de departamento.")
     public ResponseEntity<List<UsuarioResponse>> filtrarJefes() {
 
