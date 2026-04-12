@@ -3,8 +3,8 @@ package com.ingenium.jyps.config.security;
 import com.ingenium.jyps.users.infrastructure.adapters.in.web.filter.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -22,6 +22,7 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 @Component
+@EnableMethodSecurity
 public class SecurityConfig {
 
     @Bean
@@ -34,6 +35,7 @@ public class SecurityConfig {
                         // 1. PUBLICAS (Siempre arriba)
                         .requestMatchers("/api/v1/usuarios/login", "/swagger-ui/**", "/v3/api-docs/**",
                                 "/api/v1/usuarios/token", "/api/v1/usuarios/setup/**").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
