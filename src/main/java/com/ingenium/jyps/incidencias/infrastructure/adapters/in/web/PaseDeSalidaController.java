@@ -44,8 +44,8 @@ public class PaseDeSalidaController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Nuevo Pase de Salida", description = "Permite a un empleado solicitar un nuevo Pase de Salida, adjuntando archivos relacionados.")
     @SecurityRequirement(name = "bearerAuth")
-    @PreAuthorize("hasRole('EMPLEADO')") // Solo el jefe puede acceder a esta ruta
-    @SecurityRequirement(name = "bearerAuth")public ResponseEntity<PaseDeSalidaResponse> solicitar(
+    @PreAuthorize("hasRole('EMPLEADO')") // Solo el empleado puede acceder a esta ruta
+    public ResponseEntity<PaseDeSalidaResponse> solicitar(
             @RequestPart("data") SolicitarPaseDeSalidaRequest request,
             @RequestPart(value = "archivos", required = false) List<MultipartFile> archivos) {
 
@@ -90,7 +90,7 @@ public class PaseDeSalidaController {
     @GetMapping("/jefe")
     @PreAuthorize("hasRole('JEFE_DE_DEPARTAMENTO')") // Solo el jefe puede acceder a esta ruta
     @SecurityRequirement(name = "bearerAuth")
-    @Operation(summary = "¨Pases por Jefe", description = "Obtiene la lista de pases de salida asociados a un jefe específico.")
+    @Operation(summary = "Pases por Jefe", description = "Obtiene la lista de pases de salida asociados a un jefe específico.")
     public ResponseEntity<List<PaseDeSalidaResponse>> obtenerPasesPorJefe(@RequestParam Long jefeId) {
         List<PaseDeSalida> pases = obtenerPasesPorJefe.ejecutar(jefeId);
         List<PaseDeSalidaResponse> responses = pases.stream()

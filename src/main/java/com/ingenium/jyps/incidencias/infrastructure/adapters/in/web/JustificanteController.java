@@ -112,7 +112,7 @@ public class JustificanteController {
     @PreAuthorize("hasRole('AUDITOR')")
     @SecurityRequirement(name = "bearerAuth")
     @PostMapping("/rango-fechas")
-    @Operation(summary = "Justificantes de por Rango de Fechas", description = "Obtiene la lista de justificantes dentro de un rango de fechas específico y con estado A_TIEMPO o RETARDO")
+    @Operation(summary = "Justificantes por Rango de Fechas", description = "Obtiene la lista de justificantes dentro de un rango de fechas específico y con estado A_TIEMPO o RETARDO")
     public ResponseEntity<List<JustificanteResponse>> obtenerJustificantesPorRangoDeFechas(
             @RequestBody @Valid RangoDeFechasRequest request) {
         RangoDeFechasCommand command = justificanteMapper.toRangoDeFechasCommand(request);
