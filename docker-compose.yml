@@ -5,10 +5,13 @@ services:
     ports:
       - "8081:8081"
     volumes:
-      - ./mis-archivos-reales:/data/justificantes # <--- LA MAGIA
+      - ./mis-archivos-reales:/data/justificantes
+      # Opcional: Montar localtime ayuda a que el SO del contenedor esté en hora
+      - /etc/localtime:/etc/localtime:ro
     env_file:
       - .env
     environment:
+      - TZ=America/Mexico_City # <--- Configura la zona horaria de MX
       - SERVER_PORT=${SERVER_PORT}
       - DB_URL=${DOCKER_DB_URL}
       - DB_USERNAME=${DB_USERNAME}
