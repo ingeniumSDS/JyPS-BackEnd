@@ -10,11 +10,13 @@ import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.response.PaseDeSalidaResponse;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.out.persist.mapper.PaseDeSalidaMapper;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -108,6 +110,8 @@ public class PaseDeSalidaController {
     }
 
     @GetMapping("/rango-fechas")
+    @PreAuthorize("hasRole('AUDITOR')")
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Pases de Salida por Rango de Fechas", description = "Obtiene la lista de justificantes dentro de un rango de fechas específico y con estado A_TIEMPO o RETARDO")
     public ResponseEntity<List<PaseDeSalidaResponse>> obtenerJustificantesPorRangoDeFechas(
             @RequestBody @Valid RangoDeFechasRequest request) {
