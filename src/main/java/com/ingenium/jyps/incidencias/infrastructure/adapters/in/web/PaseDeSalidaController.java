@@ -121,7 +121,7 @@ public class PaseDeSalidaController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/rango-fechas")
+    @PostMapping("/rango-fechas")
     @PreAuthorize("hasRole('AUDITOR')")
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Pases de Salida por Rango de Fechas", description = "Obtiene la lista de justificantes dentro de un rango de fechas específico y con estado A_TIEMPO o RETARDO")
