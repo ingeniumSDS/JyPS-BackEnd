@@ -22,7 +22,6 @@ public class PaseDeSalida extends Incidencia {
     private String QR;
 
 
-
     // Constructor para mandar a crear un nuevo pasa de salida, sin el ID que se genera automáticamente.
     public PaseDeSalida(
             Long empleadoId,
@@ -67,6 +66,7 @@ public class PaseDeSalida extends Incidencia {
 
             // Se calcula en funición de la hora de salida real
             LocalDateTime horaEsperada,
+            LocalDateTime horaRetornoReal,
             EstadosIncidencia estado,
             String QR,
             String comentario,
@@ -85,6 +85,7 @@ public class PaseDeSalida extends Incidencia {
         this.QR = QR;
         this.comentario = comentario;
         this.nombreCompleto = nombreCompletoEmpleado;
+        this.horaRetornoReal = horaRetornoReal;
     }
 
 
@@ -139,7 +140,6 @@ public class PaseDeSalida extends Incidencia {
         }
 
 
-
     }
 
     // Registra la hora de salida REAL del empleado al pasar por caseta de vigilancia.
@@ -160,7 +160,7 @@ public class PaseDeSalida extends Incidencia {
     }
 
     public void generarQR() {
-        this.QR = UUID.randomUUID().toString().substring(0,6).toUpperCase();
+        this.QR = UUID.randomUUID().toString().substring(0, 6).toUpperCase();
     }
 
 
