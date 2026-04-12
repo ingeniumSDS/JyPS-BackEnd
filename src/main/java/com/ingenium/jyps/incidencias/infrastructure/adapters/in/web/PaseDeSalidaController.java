@@ -43,7 +43,9 @@ public class PaseDeSalidaController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Nuevo Pase de Salida", description = "Permite a un empleado solicitar un nuevo Pase de Salida, adjuntando archivos relacionados.")
-    public ResponseEntity<PaseDeSalidaResponse> solicitar(
+    @SecurityRequirement(name = "bearerAuth")
+    @PreAuthorize("hasRole('EMPLEADO')") // Solo el jefe puede acceder a esta ruta
+    @SecurityRequirement(name = "bearerAuth")public ResponseEntity<PaseDeSalidaResponse> solicitar(
             @RequestPart("data") SolicitarPaseDeSalidaRequest request,
             @RequestPart(value = "archivos", required = false) List<MultipartFile> archivos) {
 
@@ -63,6 +65,8 @@ public class PaseDeSalidaController {
     }
 
     @PutMapping("/revisar")
+    @PreAuthorize("hasRole('JEFE_DE_DEPARTAMENTO')") // Solo el jefe puede acceder a esta ruta
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Revisar Pase de Salida", description = "Permite a un jefe revisar un pase de salida pendiente, " +
             "aprobándolo (estado = APROBADO) o rechazándolo (estado = RECHAZADO) con una observación (mensaje).")
     public ResponseEntity<PaseDeSalidaResponse> revisarPaseDeSalida(
@@ -72,6 +76,8 @@ public class PaseDeSalidaController {
     }
 
     @GetMapping("/empleado")
+    @SecurityRequirement(name = "bearerAuth")
+    @PreAuthorize("hasAnyRole('EMPLEADO', 'JEFE_DE_DEPARTAMENTO')") // Solo el empleado puede acceder a esta ruta
     @Operation(summary = "Pases de Salida por Empleado", description = "Obtiene la lista de pases de salida asociados a un empleado específico.")
     public ResponseEntity<List<PaseDeSalidaResponse>> obtenerPasesPorEmpleado(@RequestParam Long empleadoId) {
         List<PaseDeSalida> pases = obtenerPasesPorEmpleado.ejecutar(empleadoId);
@@ -82,6 +88,8 @@ public class PaseDeSalidaController {
     }
 
     @GetMapping("/jefe")
+    @PreAuthorize("hasRole('JEFE_DE_DEPARTAMENTO')") // Solo el jefe puede acceder a esta ruta
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "¨Pases por Jefe", description = "Obtiene la lista de pases de salida asociados a un jefe específico.")
     public ResponseEntity<List<PaseDeSalidaResponse>> obtenerPasesPorJefe(@RequestParam Long jefeId) {
         List<PaseDeSalida> pases = obtenerPasesPorJefe.ejecutar(jefeId);
@@ -92,6 +100,8 @@ public class PaseDeSalidaController {
     }
 
     @GetMapping("/{id}/detalles")
+    @PreAuthorize("hasAnyRole('AUDITOR', 'JEFE_DE_DEPARTAMENTO', 'EMPLEADO')") // Permite acceso a múltiples roles
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Detalles del Pase de Salida", description = "Muestra los detalles del pase del pase de salida.")
     public ResponseEntity<PaseDeSalidaResponse> obtenerDetallesJustificante(@PathVariable Long id) {
         PaseDeSalida paseDeSalida = detallesPaseUseCase.ejecutar(id);
@@ -99,6 +109,8 @@ public class PaseDeSalidaController {
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasRole('GUARDIA')")
+    @SecurityRequirement(name = "bearerAuth")
     @PatchMapping("/{qr}")
     @Operation(summary = "Check IN/OUT del Pase de Salida", description = "Permite validar un pase de salida escaneando su código QR, actualizando su estado a 'FUERA' o 'A_TIEMPO'")
     public ResponseEntity<PaseDeSalidaResponse> check(

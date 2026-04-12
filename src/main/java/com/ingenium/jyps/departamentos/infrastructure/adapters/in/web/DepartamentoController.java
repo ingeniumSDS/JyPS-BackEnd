@@ -14,10 +14,12 @@ import com.ingenium.jyps.departamentos.infrastructure.adapters.out.persist.mappe
 import com.ingenium.jyps.users.application.ports.in.usecases.ConsultarUsuariosUseCase;
 import com.ingenium.jyps.users.domain.model.Usuario;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,6 +44,8 @@ public class DepartamentoController {
 
     @Operation(summary = "Crear un nuevo departamento", description = "Crea un nuevo departamento con la información proporcionada (Ej. Nombre, descripción y jefe) y devuelve los datos del departamento registrado junto con la ubicación del recurso creado")
     @PostMapping("")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<DepartamentoResponse> crear(@Valid @RequestBody CrearDepartamentoRequest request) {
 
 
@@ -62,6 +66,8 @@ public class DepartamentoController {
 
     @Operation(summary = "Actualizar departamento", description = "Actualiza el departamento con la información proporcionada (Ej. Nombre, descripción y jefe) y devuelve los datos del departamento registrado junto con la ubicación del recurso creado")
     @PutMapping("")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<DepartamentoResponse> actualizar(@Valid @RequestBody UpdateDepartamentoRequest request) {
 
 
@@ -81,6 +87,8 @@ public class DepartamentoController {
 
 
     @GetMapping("")
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'JEFE_DEPARTAMENTO')") // Permitir acceso a todos los roles
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Listar departamentos", description = "Obtiene una lista de todos los departamentos registrados en el sistema, incluyendo su nombre, descripción y jefe")
     public ResponseEntity<List<DepartamentoResponse>> findAll() {
 
@@ -100,6 +108,8 @@ public class DepartamentoController {
     }
 
     @PatchMapping("/{id}/asignar-jefe")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Asignar jefe a departamento", description = "Asigna un jefe a un departamento existente, lo que activa el departamento si no estaba activo previamente")
     public ResponseEntity<DepartamentoResponse> asignarJefe(@PathVariable Long id, @RequestParam Long jefeId) {
         AsignarJefeCommand command = new AsignarJefeCommand(id, jefeId);
@@ -113,6 +123,8 @@ public class DepartamentoController {
     }
 
     @PatchMapping("/estado")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Activar/Inactivar", description = "Permite activar o desactivar un departamento. Un departamento activo es aquel que tiene un jefe asignado, mientras que un departamento inactivo no tiene jefe asignado.")
     public ResponseEntity<DepartamentoResponse> cambiarEstado(@Valid @RequestBody CambiarEstadoRequest request) {
         CambiarEstadoCommand command = departamentoMapper.toCambiarEstadoCommand(request);

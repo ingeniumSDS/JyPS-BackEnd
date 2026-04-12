@@ -41,6 +41,8 @@ public class JustificanteController {
     private final BuscarJustificantePorRangoDeFechas buscarJustificantePorRangoDeFechas;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @SecurityRequirement(name = "bearerAuth")
+    @PreAuthorize("hasRole('EMPLEADO')")
     @Operation(summary = "Nuevo Justificante", description = "Permite a un empleado solicitar un nuevo justificante, adjuntando archivos relacionados.")
     public ResponseEntity<JustificanteResponse> solicitarJustificante(
 
@@ -64,6 +66,8 @@ public class JustificanteController {
     }
 
     @PutMapping("/revisar")
+    @PreAuthorize("hasRole('JEFE_DE_DEPARTAMENTO')") // Solo el jefe puede acceder a esta ruta
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Revisar Justificante", description = "Permite a un jefe revisar un justificante pendiente, aprobándolo o rechazándolo con una observación.")
     public ResponseEntity<JustificanteResponse> revisarJustificante(
             @Valid @RequestBody RevisarJustificanteRequest request) {
@@ -71,7 +75,9 @@ public class JustificanteController {
         return ResponseEntity.ok(justificanteMapper.toResponse(revisarJustificanteUseCase.ejecutar(command)));
     }
 
+    @PreAuthorize("hasAnyRole('EMPLEADO', 'JEFE_DE_DEPARTAMENTO')") // Solo el empleado puede acceder a esta ruta
     @GetMapping("/empleado")
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Justificantes por Empleado", description = "Obtiene la lista de justificantes asociados a un empleado específico.")
     public ResponseEntity<List<JustificanteResponse>> obtenerJustificantesPorEmpleado(@RequestParam Long empleadoId) {
         List<Justificante> justificantes = obtenerJustificantesPorEmpleado.ejecutar(empleadoId);
@@ -82,6 +88,8 @@ public class JustificanteController {
     }
 
     @GetMapping("/jefe")
+    @PreAuthorize("hasRole('JEFE_DE_DEPARTAMENTO')") // Solo el jefe puede acceder a esta ruta
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Justificantes por Jefe", description = "Obtiene la lista de justificantes asociados a un jefe específico.")
     public ResponseEntity<List<JustificanteResponse>> obtenerJustificantesPorJefe(@RequestParam Long jefeId) {
         List<Justificante> justificantes = obtenerJustificantesPorJefe.ejecutar(jefeId);
@@ -92,6 +100,8 @@ public class JustificanteController {
     }
 
     @GetMapping("/{id}/detalles")
+    @PreAuthorize("hasAnyRole('AUDITOR', 'JEFE_DE_DEPARTAMENTO', 'EMPLEADO')") // Permite acceso a múltiples roles
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Detalles del Justificante", description = "Muestra los detalles del pase del justificante.")
     public ResponseEntity<JustificanteResponse> obtenerDetallesJustificante(@PathVariable Long id) {
         Justificante justificante = detallesJustificanteUseCase.ejecutar(id);

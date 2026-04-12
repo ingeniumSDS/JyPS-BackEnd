@@ -39,11 +39,10 @@ public class UsuarioController {
     private final JwtProviderPort jwtProviderPort;
     private final ConsultarUsuariosUseCase consultarUsuariosUseCase;
 
-    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'JEFE_DE_DEPARTAMENTO')")
     @PostMapping("")
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Registra un nuevo usuario", description = "Crea un nuevo usuario con la información proporcionada (Ej. Nombre, apellidos, correo, teléfono, horarios, roles y departamento) y devuelve los datos del usuario registrado junto con la ubicación del recurso creado")
-
     public ResponseEntity<UsuarioResponse> registrarUsuario(@Valid @RequestBody CrearUsuarioRequest request) {
 
         List<Roles> roles = request.roles().stream()
@@ -104,6 +103,8 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'JEFE_DE_DEPARTAMENTO')")
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Actualizar los datos personales del usuario", description = "Realiza un update de la información del usuario (Ej. Nombre, apellidos, correo, teléfono, horarios, roles y departamento) según su ID y retorna el objeto actualizado con su ubicación")
     public ResponseEntity<UsuarioResponse> actualizarUsuario(@RequestBody UpdateUsuarioRequest request, @PathVariable Long id) {
 
@@ -132,6 +133,8 @@ public class UsuarioController {
 
     //Activa/Inactiva cuenta del usuario según su ID
     @PatchMapping("/{id}/estado")
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'JEFE_DE_DEPARTAMENTO')")
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Actualizar estado de la cuenta", description = "Realiza un toggle del estado (Activo/Inactivo) de la cuenta del usuario")
     public ResponseEntity<EstadoCuentaResponse> cambiarEstado(@PathVariable Long id) {
 
@@ -151,6 +154,8 @@ public class UsuarioController {
     }
 
     @GetMapping("/{id}/cuenta")
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'JEFE_DE_DEPARTAMENTO')")
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Obtener datos de la cuenta del usuario", description = "Recupera los datos de la cuenta de un usuario específico según su ID")
     public ResponseEntity<CuentaResponse> getCuenta(@Valid @PathVariable Long id) {
         Usuario usuario = consultarUsuariosUseCase.obtenerPorId(id).map(u -> {
