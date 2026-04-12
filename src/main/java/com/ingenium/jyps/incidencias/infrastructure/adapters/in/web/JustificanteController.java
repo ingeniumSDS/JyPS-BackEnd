@@ -63,7 +63,7 @@ public class JustificanteController {
     @PutMapping("/revisar")
     @Operation(summary = "Revisar Justificante", description = "Permite a un jefe revisar un justificante pendiente, aprobándolo o rechazándolo con una observación.")
     public ResponseEntity<JustificanteResponse> revisarJustificante(
-            @RequestBody RevisarJustificanteRequest request) {
+            @Valid @RequestBody RevisarJustificanteRequest request) {
         RevisarJustificanteCommand command = justificanteMapper.toRevisarJustificanteCommand(request);
         return ResponseEntity.ok(justificanteMapper.toResponse(revisarJustificanteUseCase.ejecutar(command)));
     }

@@ -15,6 +15,7 @@ import com.ingenium.jyps.users.application.ports.in.usecases.ConsultarUsuariosUs
 import com.ingenium.jyps.users.domain.model.Usuario;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,7 +41,7 @@ public class DepartamentoController {
 
     @Operation(summary = "Crear un nuevo departamento", description = "Crea un nuevo departamento con la información proporcionada (Ej. Nombre, descripción y jefe) y devuelve los datos del departamento registrado junto con la ubicación del recurso creado")
     @PostMapping("")
-    public ResponseEntity<DepartamentoResponse> crear(@RequestBody CrearDepartamentoRequest request) {
+    public ResponseEntity<DepartamentoResponse> crear(@Valid @RequestBody CrearDepartamentoRequest request) {
 
 
         CrearDepartamentoCommand command = departamentoMapper.toCreateCommand(request);
@@ -60,7 +61,7 @@ public class DepartamentoController {
 
     @Operation(summary = "Actualizar departamento", description = "Actualiza el departamento con la información proporcionada (Ej. Nombre, descripción y jefe) y devuelve los datos del departamento registrado junto con la ubicación del recurso creado")
     @PutMapping("")
-    public ResponseEntity<DepartamentoResponse> actualizar(@RequestBody UpdateDepartamentoRequest request) {
+    public ResponseEntity<DepartamentoResponse> actualizar(@Valid @RequestBody UpdateDepartamentoRequest request) {
 
 
         UpdateDepartamentoCommand command = departamentoMapper.toUpdateCommand(request);
@@ -112,7 +113,7 @@ public class DepartamentoController {
 
     @PatchMapping("/estado")
     @Operation(summary = "Activar/Inactivar", description = "Permite activar o desactivar un departamento. Un departamento activo es aquel que tiene un jefe asignado, mientras que un departamento inactivo no tiene jefe asignado.")
-    public ResponseEntity<DepartamentoResponse> cambiarEstado(@RequestBody CambiarEstadoRequest request) {
+    public ResponseEntity<DepartamentoResponse> cambiarEstado(@Valid @RequestBody CambiarEstadoRequest request) {
         CambiarEstadoCommand command = departamentoMapper.toCambiarEstadoCommand(request);
         Departamento departamentoActualizado = cambiarEstadoUseCase.ejecutar(command);
         return ResponseEntity.ok(DepartamentoResponse.desdeDominio(departamentoActualizado, "", 0L));

@@ -63,7 +63,7 @@ public class PaseDeSalidaController {
     @Operation(summary = "Revisar Pase de Salida", description = "Permite a un jefe revisar un pase de salida pendiente, " +
             "aprobándolo (estado = APROBADO) o rechazándolo (estado = RECHAZADO) con una observación (mensaje).")
     public ResponseEntity<PaseDeSalidaResponse> revisarPaseDeSalida(
-            @RequestBody RevisarPaseDeSalidaRequest request) {
+            @Valid @RequestBody RevisarPaseDeSalidaRequest request) {
         RevisarPaseDeSalidaCommand command = mapper.toRevisarPaseDeSalidaCommand(request);
         return ResponseEntity.ok(mapper.toResponse(revisarPaseDeSalida.ejecutar(command)));
     }

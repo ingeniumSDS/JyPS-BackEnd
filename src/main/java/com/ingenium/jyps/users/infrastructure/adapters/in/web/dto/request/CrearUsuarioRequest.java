@@ -1,7 +1,7 @@
 package com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.request;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 
@@ -9,28 +9,40 @@ import java.time.LocalTime;
 import java.util.List;
 
 public record CrearUsuarioRequest(
-        @NotNull
-        @NotBlank
+        @NotNull(message = "El nombre es obligatorio")
+        @NotBlank(message = "El nombre no puede estar vacío")
         String nombre,
-        @NotNull
-        @NotBlank
+
+        @NotNull(message = "El apellido paterno es obligatorio")
+        @NotBlank(message = "El apellido paterno no puede estar vacío")
         String apellidoPaterno,
-        @NotNull
-        @NotBlank
+
+        @NotNull(message = "El apellido materno es obligatorio")
+        @NotBlank(message = "El apellido materno no puede estar vacío")
         String apellidoMaterno,
-        @NotNull
-        @NotBlank
+
+        @NotNull(message = "El correo es obligatorio")
+        @NotBlank(message = "El correo no puede estar vacío")
+        @Email(message = "El correo debe ser una dirección de correo electrónico válida")
         String correo,
-        @NotNull
-        @NotBlank
+
+        @NotNull(message = "El teléfono es obligatorio")
+        @NotBlank(message = "El teléfono no puede estar vacío")
         String telefono,
-        @NotBlank
+
+        @NotNull(message = "El campo 'hora de entrada' es obligatorio")
+        @NotBlank(message = "El campo 'hora de entrada' no puede estar vacío")
         LocalTime horaEntrada,
-        @NotBlank
+
+        @NotNull(message = "El campo 'hora de salida' es obligatorio")
+        @NotBlank(message = "El campo 'hora de salida' no puede estar vacío")
         LocalTime horaSalida,
-        @NotBlank
-        @Length(min = 1)
+
+        @Length(min = 1, message = "El usuario debe tener al menos un rol")
         List<String> roles,
-        @NotBlank
+
+        @NotBlank(message = "El id del departamento es obligatorio")
+        @NotNull(message = "El id del departamento no puede ser nulo")
         Long departamentoId
-) {}
+) {
+}

@@ -13,6 +13,7 @@ import com.ingenium.jyps.users.infrastructure.adapters.in.web.dto.response.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -43,7 +44,7 @@ public class UsuarioController {
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Registra un nuevo usuario", description = "Crea un nuevo usuario con la información proporcionada (Ej. Nombre, apellidos, correo, teléfono, horarios, roles y departamento) y devuelve los datos del usuario registrado junto con la ubicación del recurso creado")
 
-    public ResponseEntity<UsuarioResponse> registrarUsuario(@RequestBody CrearUsuarioRequest request) {
+    public ResponseEntity<UsuarioResponse> registrarUsuario(@Valid @RequestBody CrearUsuarioRequest request) {
 
         List<Roles> roles = request.roles().stream()
                 .map(Roles::valueOf)
@@ -151,7 +152,7 @@ public class UsuarioController {
 
     @GetMapping("/{id}/cuenta")
     @Operation(summary = "Obtener datos de la cuenta del usuario", description = "Recupera los datos de la cuenta de un usuario específico según su ID")
-    public ResponseEntity<CuentaResponse> getCuenta(@PathVariable Long id) {
+    public ResponseEntity<CuentaResponse> getCuenta(@Valid @PathVariable Long id) {
         Usuario usuario = consultarUsuariosUseCase.obtenerPorId(id).map(u -> {
             u.setNombreDepartamento(consultarUsuariosUseCase.obtenerPorId(u.getId())
                     .map(Usuario::getNombreDepartamento)
@@ -171,7 +172,7 @@ public class UsuarioController {
 
     @PostMapping("/setup")
     @Operation(summary = "Ruta que recibe la nueva contraseña", description = "Valida el token de acceso proporcionado, establece la contraseña para la cuenta del usuario asociado al token y devuelve los datos actualizados de la cuenta. Este endpoint se utiliza tanto para configurar la contraseña por primera vez después del registro como para restablecerla en caso de olvido.")
-    public ResponseEntity<CuentaResponse> establecerPassword(@RequestBody EstablecerPasswordRequest request) {
+    public ResponseEntity<CuentaResponse> establecerPassword(@Valid @RequestBody EstablecerPasswordRequest request) {
 
         EstablecerPasswordCommand command = new EstablecerPasswordCommand(
                 request.token(),
@@ -185,7 +186,7 @@ public class UsuarioController {
 
     @PostMapping("/token")
     @Operation(summary = "Token para recuperar contraseña", description = "Genera un nuevo token de acceso para el usuario asociado al correo proporcionado y lo envía por correo electrónico. Este token es de un solo uso y recuperar la contraseña.")
-    public ResponseEntity<GenerarTokenResponse> generarToken(@RequestBody GenerarTokenRequest request) {
+    public ResponseEntity<GenerarTokenResponse> generarToken(@Valid @RequestBody GenerarTokenRequest request) {
 
         if (request.correo() == null || request.correo().isEmpty()) {
             return ResponseEntity.badRequest().body(new GenerarTokenResponse("El correo es obligatorio"));
@@ -198,7 +199,7 @@ public class UsuarioController {
 
     @PostMapping("/login")
     @Operation(summary = "Login de usuario", description = "Valida las credenciales proporcionadas (correo y contraseña) y devuelve los datos del usuario junto con un token de acceso si las credenciales son correctas. Este endpoint se utiliza para autenticar a los usuarios y permitirles acceder a los recursos protegidos del sistema.")
-    public ResponseEntity<JWTResponse> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<JWTResponse> login(@Valid @RequestBody LoginRequest request) {
 
         LoginCommand command = new LoginCommand(
                 request.correo(),
