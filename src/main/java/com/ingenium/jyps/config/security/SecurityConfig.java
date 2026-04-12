@@ -54,7 +54,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/v1/usuarios").hasRole("JEFE_DE_DEPARTAMENTO")
 
                         // 5. RUTAS EXCLUSIVAS SEGURIDAD / ADMIN
-                        .requestMatchers("/api/v1/pases/{qr}").hasAnyRole("ADMINISTRADOR", "SEGURIDAD")
+                        .requestMatchers("/api/v1/pases/{qr}").hasRole("GUARDIA")
                         .requestMatchers("/api/v1/departamentos/**").hasRole("ADMINISTRADOR")
                         .requestMatchers("/api/v1/usuarios/**").hasRole("ADMINISTRADOR") // Este actúa como "catch-all" para el resto de rutas de usuarios
 
