@@ -32,9 +32,15 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults()) // ¡Ojo! No olvides activar el CORS en el chain
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // 1. PUBLICAS (Siempre arriba)
-                        .requestMatchers("/api/v1/usuarios/login", "/swagger-ui/**", "/v3/api-docs/**",
-                                "/api/v1/usuarios/token", "/api/v1/usuarios/setup/**").permitAll()
+                        .requestMatchers(
+                                        "/api/v1/usuarios/login",
+                                        "/api/v1/usuarios/token",
+                                        "/api/v1/usuarios/setup/**",
+                                        "/swagger-ui/**",
+                                        "/swagger-ui.html",     // 💡 Añadido para evitar rebotes en la redirección
+                                        "/v3/api-docs/**",
+                                        "/favicon.ico"          // 💡 Opcional: evita logs de error 403 en el navegador
+                                ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
