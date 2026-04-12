@@ -22,6 +22,7 @@ public class Incidencia {
     protected String nombreCompleto;
 
 
+
     //==============//
     // VALIDACIONES //
     //==============//

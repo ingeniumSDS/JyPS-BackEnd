@@ -1,5 +1,6 @@
 package com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.response;
 
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -13,6 +14,6 @@ public record JustificanteResponse(
         String descripcion,
         String estado,
         String comentario,
-        List<String> archivos
+        List<ArchivoResponse> archivos
 ) {
 }

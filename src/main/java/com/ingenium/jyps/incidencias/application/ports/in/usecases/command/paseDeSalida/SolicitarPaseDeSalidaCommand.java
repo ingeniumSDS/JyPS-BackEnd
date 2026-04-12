@@ -1,6 +1,6 @@
 package com.ingenium.jyps.incidencias.application.ports.in.usecases.command.paseDeSalida;
 
-import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.ArchivoAdjunto;
+import com.ingenium.jyps.incidencias.domain.model.ArchivoAdjunto;
 import com.ingenium.jyps.users.domain.model.Usuario;
 
 import java.time.LocalDateTime;

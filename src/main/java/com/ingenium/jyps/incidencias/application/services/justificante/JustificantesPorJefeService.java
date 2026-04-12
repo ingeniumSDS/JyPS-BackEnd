@@ -1,6 +1,7 @@
 package com.ingenium.jyps.incidencias.application.services.justificante;
 
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.justificante.JustificantesPorJefeUseCase;
+import com.ingenium.jyps.incidencias.application.ports.out.StoragePort;
 import com.ingenium.jyps.incidencias.domain.model.Justificante;
 import com.ingenium.jyps.incidencias.domain.repository.JustificanteRepositoryPort;
 import lombok.RequiredArgsConstructor;

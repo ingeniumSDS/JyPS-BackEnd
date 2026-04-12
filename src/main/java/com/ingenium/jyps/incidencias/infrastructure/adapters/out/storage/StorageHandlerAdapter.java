@@ -1,6 +1,6 @@
 package com.ingenium.jyps.incidencias.infrastructure.adapters.out.storage;
 
-import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.ArchivoAdjunto;
+import com.ingenium.jyps.incidencias.domain.model.ArchivoAdjunto;
 import com.ingenium.jyps.incidencias.application.ports.out.StoragePort;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -46,4 +46,16 @@ public class StorageHandlerAdapter implements StoragePort {
             throw new RuntimeException("Error al persistir archivos en disco", e);
         }
     }
+
+    // En StorageHandlerAdapter
+    @Override
+    public byte[] leerArchivo(Long empleadoId, String nombreArchivo) {
+        Path ruta = Path.of(rootPath, empleadoId.toString()).resolve(nombreArchivo).normalize();
+        try {
+            return Files.readAllBytes(ruta);
+        } catch (IOException e) {
+            throw new RuntimeException("Archivo no encontrado", e);
+        }
+    }
+
 }

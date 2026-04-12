@@ -1,6 +1,6 @@
 package com.ingenium.jyps.incidencias.infrastructure.adapters.out.persist.mapper;
 
-import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.ArchivoAdjunto;
+import com.ingenium.jyps.incidencias.domain.model.ArchivoAdjunto;
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.RangoDeFechasCommand;
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.paseDeSalida.RevisarPaseDeSalidaCommand;
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.paseDeSalida.SolicitarPaseDeSalidaCommand;
@@ -11,7 +11,6 @@ import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.response.PaseDeSalidaResponse;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.out.persist.entity.PaseDeSalidaEntity;
 import com.ingenium.jyps.users.infrastructure.adapters.out.persist.entity.UsuarioEntity;
-import jakarta.validation.Valid;
 import org.mapstruct.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -44,7 +43,6 @@ public interface PaseDeSalidaMapper {
         try {
             return new ArchivoAdjunto(
                     file.getOriginalFilename(), // Aquí rescatamos el nombre que viste en el debugger
-                    file.getContentType(),      // El tipo (application/pdf)
                     file.getBytes()             // Los bytes reales
             );
         } catch (IOException e) {
