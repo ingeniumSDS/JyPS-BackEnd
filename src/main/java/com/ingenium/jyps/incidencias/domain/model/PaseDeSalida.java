@@ -123,7 +123,7 @@ public class PaseDeSalida extends Incidencia {
     }
 
     public void check() {
-        if (this.estado == EstadosIncidencia.CADUCADO || this.estado == EstadosIncidencia.USADO) {
+        if (this.estado == EstadosIncidencia.CADUCADO || this.estado == EstadosIncidencia.A_TIEMPO || this.estado == EstadosIncidencia.RETARDO) {
             throw new IllegalStateException("El pase de salida ya ha sido usado o ha caducado, no se puede usar nuevamente.");
         }
 

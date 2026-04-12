@@ -21,7 +21,6 @@ public class JwtProviderAdapter implements JwtProviderPort {
 
     public JwtProviderAdapter(@Value("${jwt.secret.key}") String secretKey) {
         this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
-
     }
 
     @Override
