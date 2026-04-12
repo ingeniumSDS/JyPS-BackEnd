@@ -119,6 +119,8 @@ public class PaseDeSalida extends Incidencia {
         if (empleado.getHoraSalida().equals(horaEsperada.toLocalTime())
                 || empleado.getHoraSalida().isBefore(horaEsperada.toLocalTime())) {
             this.estado = EstadosIncidencia.A_TIEMPO;
+        } else {
+            this.estado = EstadosIncidencia.FUERA;
         }
     }
 
