@@ -44,7 +44,7 @@ public class DepartamentoController {
 
     @Operation(summary = "Crear un nuevo departamento", description = "Crea un nuevo departamento con la información proporcionada (Ej. Nombre, descripción y jefe) y devuelve los datos del departamento registrado junto con la ubicación del recurso creado")
     @PostMapping("")
-    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'AUDITOR')")
     @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<DepartamentoResponse> crear(@Valid @RequestBody CrearDepartamentoRequest request) {
 
