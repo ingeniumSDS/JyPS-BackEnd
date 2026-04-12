@@ -4,6 +4,7 @@ import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.Rango
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.justificante.RevisarJustificanteCommand;
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.justificante.*;
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.justificante.SolicitarJustificanteCommand;
+import com.ingenium.jyps.incidencias.application.ports.out.StoragePort;
 import com.ingenium.jyps.incidencias.domain.model.Justificante;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.RangoDeFechasRequest;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.RevisarJustificanteRequest;
@@ -13,8 +14,11 @@ import com.ingenium.jyps.incidencias.infrastructure.adapters.out.persist.mapper.
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.core.io.Resource;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -39,6 +43,8 @@ public class JustificanteController {
     private final JustificantesPorJefeUseCase obtenerJustificantesPorJefe;
     private final DetallesJustificanteUseCase detallesJustificanteUseCase;
     private final BuscarJustificantePorRangoDeFechas buscarJustificantePorRangoDeFechas;
+
+    private final StoragePort storagePort;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @SecurityRequirement(name = "bearerAuth")
@@ -121,6 +127,33 @@ public class JustificanteController {
                 .map(justificanteMapper::toResponse)
                 .toList();
         return ResponseEntity.ok(responses);
+    }
+
+    @GetMapping("/{empleadoId}/{nombreArchivo}")
+    @PreAuthorize("hasAnyRole('AUDITOR', 'JEFE_DE_DEPARTAMENTO', 'EMPLEADO')") // Permite acceso a múltiples roles
+    @SecurityRequirement(name = "bearerAuth")
+    @Operation(summary = "Descargar Archivo Adjunto", description = "Permite descargar un archivo adjunto asociado a un justificante.")
+    public ResponseEntity<Resource> descargarArchivo(
+            @PathVariable Long empleadoId,
+            @PathVariable String nombreArchivo) {
+
+
+        // Obtenemos el archivo desde el storage (necesitarás un método en el port que devuelva Resource o bytes)
+        byte[] contenido = storagePort.leerArchivo(empleadoId, nombreArchivo);
+        Resource resource = new ByteArrayResource(contenido);
+
+        String extension = nombreArchivo.substring(nombreArchivo.lastIndexOf(".") + 1).toLowerCase();
+        MediaType mediaType = switch (extension) {
+            case "pdf" -> MediaType.APPLICATION_PDF;
+            case "jpg", "jpeg" -> MediaType.IMAGE_JPEG;
+            case "png" -> MediaType.IMAGE_PNG;
+            default -> MediaType.APPLICATION_OCTET_STREAM;
+        };
+
+        return ResponseEntity.ok()
+                .contentType(mediaType) // En lugar de forzar siempre OCTET_STREAM
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + nombreArchivo + "\"")
+                .body(resource);
     }
 
 }
