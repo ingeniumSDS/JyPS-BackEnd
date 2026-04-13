@@ -3,6 +3,7 @@ package com.ingenium.jyps.incidencias.domain.repository;
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.RangoDeFechasCommand;
 import com.ingenium.jyps.incidencias.domain.model.PaseDeSalida;
 
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -10,7 +11,7 @@ public interface PaseDeSalidaRepositoryPort {
 
     PaseDeSalida solicitar(PaseDeSalida paseDeSalida);
 
-    boolean solicitudEnCurso();
+    boolean solicitudEnCurso(Long idEmpleado, LocalDate fechaActual);
 
     PaseDeSalida buscarPorId(long paseDeSalidaId);
 

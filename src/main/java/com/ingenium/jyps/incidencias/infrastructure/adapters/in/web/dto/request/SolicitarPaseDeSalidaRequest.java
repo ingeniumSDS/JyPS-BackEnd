@@ -8,7 +8,6 @@ import java.util.List;
 
 public record SolicitarPaseDeSalidaRequest(
         // Dominio de la incidencia
-        Long id,
         Long empleadoId,
         Long jefeId,
         String descripcion,
