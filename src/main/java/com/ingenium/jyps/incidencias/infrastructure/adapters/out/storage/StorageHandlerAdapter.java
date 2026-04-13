@@ -2,10 +2,13 @@ package com.ingenium.jyps.incidencias.infrastructure.adapters.out.storage;
 
 import com.ingenium.jyps.incidencias.domain.model.ArchivoAdjunto;
 import com.ingenium.jyps.incidencias.application.ports.out.StoragePort;
+import org.springframework.core.io.Resource;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -49,12 +52,18 @@ public class StorageHandlerAdapter implements StoragePort {
 
     // En StorageHandlerAdapter
     @Override
-    public byte[] leerArchivo(Long empleadoId, String nombreArchivo) {
-        Path ruta = Path.of(rootPath, empleadoId.toString()).resolve(nombreArchivo).normalize();
+    public Resource leerArchivo(Long empleadoId, String nombreArchivo) {
         try {
-            return Files.readAllBytes(ruta);
-        } catch (IOException e) {
-            throw new RuntimeException("Archivo no encontrado", e);
+            Path ruta = Path.of(rootPath, empleadoId.toString()).resolve(nombreArchivo).normalize();
+            Resource recurso = new UrlResource(ruta.toUri());
+
+            if (recurso.exists() || recurso.isReadable()) {
+                return recurso;
+            } else {
+                throw new RuntimeException("No se pudo leer el archivo: " + nombreArchivo);
+            }
+        } catch (MalformedURLException e) {
+            throw new RuntimeException("Error en la ruta del archivo", e);
         }
     }
 

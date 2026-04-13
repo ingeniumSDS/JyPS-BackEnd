@@ -17,7 +17,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.core.io.Resource;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -140,8 +139,8 @@ public class JustificanteController {
 
 
         // Obtenemos el archivo desde el storage (necesitarás un método en el port que devuelva Resource o bytes)
-        byte[] contenido = storagePort.leerArchivo(empleadoId, nombreArchivo);
-        Resource resource = new ByteArrayResource(contenido);
+
+        Resource resource = storagePort.leerArchivo(empleadoId, nombreArchivo);
 
         String extension = nombreArchivo.substring(nombreArchivo.lastIndexOf(".") + 1).toLowerCase();
         MediaType mediaType = switch (extension) {
