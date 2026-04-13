@@ -9,6 +9,7 @@ import com.ingenium.jyps.incidencias.infrastructure.adapters.out.persist.reposit
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Component
@@ -34,8 +35,8 @@ public class PaseDeSalidaRepositoryAdapter implements PaseDeSalidaRepositoryPort
     }
 
     @Override
-    public boolean solicitudEnCurso() {
-        return false;
+    public boolean solicitudEnCurso(Long idEmpleado, LocalDate fechaActual) {
+        return jpaPaseDeSalidaRepository.encontrarPendiente(idEmpleado, fechaActual).isPresent();
     }
 
     @Override

@@ -10,6 +10,8 @@ import com.ingenium.jyps.users.domain.repository.UsuarioRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -24,7 +26,7 @@ public class SolicitarPaseDeSalidaService implements SolicitarPaseDeSalidaUseCas
     @Override
     public PaseDeSalida ejecutar(SolicitarPaseDeSalidaCommand command) {
 
-        if (paseDeSalidaRepository.solicitudEnCurso()) {
+        if (paseDeSalidaRepository.solicitudEnCurso(command.empleadoId(), LocalDate.now())) {
             throw new IllegalArgumentException("Aún cuentas con una solicitud en curso.");
         }
 
