@@ -16,4 +16,6 @@ public interface JustificanteRepositoryPort {
     List<Justificante> buscarPorJefe(Long usuarioId);
 
     List<Justificante> buscarPorRangoDeFechas(RangoDeFechasCommand command);
+
+    void borrar(Long idPaseDeSalida);
 }
