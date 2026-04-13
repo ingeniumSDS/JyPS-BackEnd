@@ -67,4 +67,9 @@ public class JustificanteRepositoryAdapter implements JustificanteRepositoryPort
                 .toList();
     }
 
+    @Override
+    public void borrar(Long idPaseDeSalida) {
+        jpaJustificanteRepositoy.deleteById(idPaseDeSalida);
+    }
+
 }

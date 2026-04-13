@@ -43,6 +43,7 @@ public class JustificanteController {
     private final JustificantesPorJefeUseCase obtenerJustificantesPorJefe;
     private final DetallesJustificanteUseCase detallesJustificanteUseCase;
     private final BuscarJustificantePorRangoDeFechas buscarJustificantePorRangoDeFechas;
+    private final EliminarIncidenciaPendiente eliminarJustificanteUseCase;
 
     private final StoragePort storagePort;
 
@@ -156,4 +157,12 @@ public class JustificanteController {
                 .body(resource);
     }
 
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Elminar Justificante", description = "Permite eliminar un justificante específico.")
+    @PreAuthorize("hasRole('EMPLEADO')") // Solo el empleado puede eliminar su justificante
+    @SecurityRequirement(name = "bearerAuth")
+    public ResponseEntity<Void> eliminarJustificante(@PathVariable Long id) {
+        eliminarJustificanteUseCase.eliminarJustificante(id);
+        return ResponseEntity.noContent().build();
+    }
 }

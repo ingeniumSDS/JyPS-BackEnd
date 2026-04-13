@@ -2,6 +2,7 @@ package com.ingenium.jyps.incidencias.infrastructure.adapters.in.web;
 
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.RangoDeFechasCommand;
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.paseDeSalida.RevisarPaseDeSalidaCommand;
+import com.ingenium.jyps.incidencias.application.ports.in.usecases.justificante.EliminarIncidenciaPendiente;
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.paseDeSalida.*;
 import com.ingenium.jyps.incidencias.domain.model.PaseDeSalida;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.RangoDeFechasRequest;
@@ -39,6 +40,7 @@ public class PaseDeSalidaController {
     private final DetallesPaseUseCase detallesPaseUseCase;
     private final BuscarPasePorRangoDeFechas buscarPasePorRangoDeFechas;
     private final CheckUseCase checkUseCase;
+    private final EliminarIncidenciaPendiente eliminarPaseDeSalidaUseCase;
     private final PaseDeSalidaMapper mapper;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -135,5 +137,15 @@ public class PaseDeSalidaController {
         return ResponseEntity.ok(responses);
     }
 
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Eliminar Pase de Salida", description = "Permite eliminar un pase de salida pendiente.")
+    @PreAuthorize("hasRole('EMPLEADO')") // Solo el empleado puede acceder a esta ruta
+    @SecurityRequirement(name = "bearerAuth")
 
-}
+    public ResponseEntity<Void> eliminarPaseDeSalida(@PathVariable Long id) {
+        eliminarPaseDeSalidaUseCase.eliminarPaseDeSalida(id);
+        return ResponseEntity.noContent().build();
+    }
+
+
+    }

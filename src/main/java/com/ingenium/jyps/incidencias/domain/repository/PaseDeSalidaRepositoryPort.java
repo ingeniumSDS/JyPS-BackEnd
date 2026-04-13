@@ -3,7 +3,6 @@ package com.ingenium.jyps.incidencias.domain.repository;
 import com.ingenium.jyps.incidencias.application.ports.in.usecases.command.RangoDeFechasCommand;
 import com.ingenium.jyps.incidencias.domain.model.PaseDeSalida;
 
-import java.time.LocalDate;
 import java.util.List;
 
 
@@ -22,4 +21,6 @@ public interface PaseDeSalidaRepositoryPort {
     PaseDeSalida buscarPorQR(String qr);
 
     List<PaseDeSalida> buscarPorRangoDeFechas(RangoDeFechasCommand command);
+
+    void borrar(Long idJustificante);
 }
