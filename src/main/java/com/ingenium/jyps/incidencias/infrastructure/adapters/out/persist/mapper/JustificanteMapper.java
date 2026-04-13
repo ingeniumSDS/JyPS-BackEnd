@@ -54,6 +54,7 @@ public abstract class JustificanteMapper {
                 .map(nombreUnico -> {
                     // Genera la URL dinámica: http://host:port/api/v1/justificantes/{id}/archivos/{nombre}
                     String url = ServletUriComponentsBuilder.fromCurrentContextPath()
+                            .scheme("https")
                             .path("/api/v1/justificantes/")
                             .path(justificante.getEmpleadoId().toString())
                             .path("/")
