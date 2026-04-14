@@ -7,12 +7,14 @@ import com.ingenium.jyps.users.domain.repository.UsuarioRepositoryPort;
 import com.ingenium.jyps.users.domain.model.Usuario;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ConsultarUsuariosService implements ConsultarUsuariosUseCase {
 
     private final UsuarioRepositoryPort usuarioRepositoryPort;
@@ -66,9 +68,7 @@ public class ConsultarUsuariosService implements ConsultarUsuariosUseCase {
     @Override
     public List<Usuario> filtrarJefes() {
 
-        List<Usuario> jefes = usuarioRepositoryPort.buscarJefes();
-
-        return jefes;
+        return usuarioRepositoryPort.buscarJefes();
     }
 
 

@@ -7,9 +7,11 @@ import com.ingenium.jyps.users.domain.model.Usuario;
 import com.ingenium.jyps.users.domain.repository.UsuarioRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(rollbackFor = IllegalArgumentException.class)
 public class UpdateEstadoCuentaService implements UpdateEstadoCuentaUseCase {
 
     private final UsuarioRepositoryPort usuarioRepositoryPort;

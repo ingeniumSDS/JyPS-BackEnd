@@ -14,7 +14,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(rollbackFor = IllegalArgumentException.class)
 public class SolicitarJustificanteService implements SolicitarJustificanteUseCase {
 
     private final JustificanteRepositoryPort justificanteRepositoryPort;

@@ -11,11 +11,13 @@ import com.ingenium.jyps.users.domain.repository.UsuarioRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(rollbackFor = IllegalArgumentException.class)
 public class GuardarUsuarioService implements GuardarUsuarioUseCase {
 
     private final UsuarioRepositoryPort usuarioRepositoryPort;

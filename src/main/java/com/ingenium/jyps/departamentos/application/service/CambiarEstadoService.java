@@ -7,9 +7,11 @@ import com.ingenium.jyps.departamentos.domain.ports.out.DepartamentoRepositoryPo
 import com.ingenium.jyps.users.domain.repository.UsuarioRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(rollbackFor = IllegalArgumentException.class)
 public class CambiarEstadoService implements CambiarEstadoUseCase {
 
     private final DepartamentoRepositoryPort departamentoRepository;
@@ -23,7 +25,7 @@ public class CambiarEstadoService implements CambiarEstadoUseCase {
         long totalEmpleados = usuarioRepositoryPort.contarPorDepartamento(departamento.getId());
 
         if (totalEmpleados > 0 && departamento.isActivo()) {
-            throw new RuntimeException("No se puede desactivar el departamento porque tiene empleados asignados");
+            throw new IllegalArgumentException("No se puede desactivar el departamento porque tiene empleados asignados");
         }
 
        departamento.cambiarEstado();
