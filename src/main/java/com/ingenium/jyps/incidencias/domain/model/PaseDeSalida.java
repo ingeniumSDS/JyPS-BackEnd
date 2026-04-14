@@ -144,6 +144,9 @@ public class PaseDeSalida extends Incidencia {
 
     // Registra la hora de salida REAL del empleado al pasar por caseta de vigilancia.
     public void checkOut() {
+        if (horaSalidaReal.isBefore(horaSolicitada)) {
+            throw new IllegalArgumentException("El empleado no puede hacer check-out antes de la hora esperada.");
+        }
         this.horaSalidaReal = LocalDateTime.now();
         this.horaEsperada = horaSalidaReal.plusHours(3);
         debeVolver();
