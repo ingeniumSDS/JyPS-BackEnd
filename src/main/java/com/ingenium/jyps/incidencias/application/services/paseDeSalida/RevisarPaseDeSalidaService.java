@@ -6,9 +6,11 @@ import com.ingenium.jyps.incidencias.domain.model.PaseDeSalida;
 import com.ingenium.jyps.incidencias.domain.repository.PaseDeSalidaRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(rollbackFor = IllegalArgumentException.class)
 public class RevisarPaseDeSalidaService implements RevisarPaseDeSalidaUseCase {
 
     private final PaseDeSalidaRepositoryPort paseDeSalidaRepositoryPort;

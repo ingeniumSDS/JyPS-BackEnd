@@ -5,9 +5,11 @@ import com.ingenium.jyps.incidencias.domain.model.Justificante;
 import com.ingenium.jyps.incidencias.domain.repository.JustificanteRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class DetallesJustificanteService implements DetallesJustificanteUseCase {
 
     private final JustificanteRepositoryPort justificanteRepositoryPort;

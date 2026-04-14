@@ -8,9 +8,11 @@ import com.ingenium.jyps.incidencias.domain.repository.JustificanteRepositoryPor
 import com.ingenium.jyps.incidencias.domain.repository.PaseDeSalidaRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(rollbackFor = IllegalArgumentException.class)
 public class EliminarIncidenciaPendienteService implements EliminarIncidenciaPendiente {
 
     private final JustificanteRepositoryPort justificanteRepositoryPort;
@@ -23,7 +25,7 @@ public class EliminarIncidenciaPendienteService implements EliminarIncidenciaPen
         if (justificante.getEstado() == EstadosIncidencia.PENDIENTE) {
             justificanteRepositoryPort.borrar(idJustificante);
         } else {
-            throw new IllegalStateException("No se puede eliminar un Justificante que no está en estado PENDIENTE.");
+            throw new IllegalArgumentException("No se puede eliminar un Justificante que no está en estado PENDIENTE.");
         }
     }
 
@@ -35,7 +37,7 @@ public class EliminarIncidenciaPendienteService implements EliminarIncidenciaPen
         if (paseDeSalida.getEstado() == EstadosIncidencia.PENDIENTE) {
             paseDeSalidaRepositoryPort.borrar(idPaseDeSalida);
         } else {
-            throw new IllegalStateException("No se puede eliminar un Pase de Salida que no está en estado PENDIENTE.");
+            throw new IllegalArgumentException("No se puede eliminar un Pase de Salida que no está en estado PENDIENTE.");
         }
     }
 

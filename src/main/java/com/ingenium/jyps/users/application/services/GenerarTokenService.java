@@ -7,10 +7,12 @@ import com.ingenium.jyps.users.domain.model.Usuario;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
 @RequiredArgsConstructor
+@Transactional(rollbackFor = IllegalArgumentException.class)
 public class GenerarTokenService implements GenerarTokenUseCase {
 
     private final UsuarioRepositoryPort usuarioRepository;

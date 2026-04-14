@@ -16,7 +16,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(rollbackFor = IllegalArgumentException.class)
 public class SolicitarPaseDeSalidaService implements SolicitarPaseDeSalidaUseCase {
 
     private final StoragePort storagePort;

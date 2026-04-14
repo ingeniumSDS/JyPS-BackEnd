@@ -7,10 +7,12 @@ import com.ingenium.jyps.users.domain.repository.UsuarioRepositoryPort;
 import com.ingenium.jyps.users.domain.model.Usuario;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly =  true)
 public class LoginService implements com.ingenium.jyps.users.application.ports.in.usecases.LoginUseCase {
 
     private final UsuarioRepositoryPort usuarioRepositoryPort;
