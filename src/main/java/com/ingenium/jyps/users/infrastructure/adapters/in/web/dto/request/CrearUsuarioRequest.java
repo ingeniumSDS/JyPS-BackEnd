@@ -31,17 +31,13 @@ public record CrearUsuarioRequest(
         String telefono,
 
         @NotNull(message = "El campo 'hora de entrada' es obligatorio")
-        @NotBlank(message = "El campo 'hora de entrada' no puede estar vacío")
         LocalTime horaEntrada,
 
         @NotNull(message = "El campo 'hora de salida' es obligatorio")
-        @NotBlank(message = "El campo 'hora de salida' no puede estar vacío")
         LocalTime horaSalida,
 
-        @Length(min = 1, message = "El usuario debe tener al menos un rol")
         List<String> roles,
 
-        @NotBlank(message = "El id del departamento es obligatorio")
         @NotNull(message = "El id del departamento no puede ser nulo")
         Long departamentoId
 ) {

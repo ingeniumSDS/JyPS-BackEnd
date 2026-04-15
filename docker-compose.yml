@@ -30,6 +30,42 @@ services:
       - MAIL_SMTP_STARTTLS_ENABLE=${MAIL_SMTP_STARTTLS_ENABLE}
 
       - JWT_SECRET_KEY=${JWT_SECRET_KEY}
-
+  
       - DISCORD_WEBHOOK_URL=${DISCORD_WEBHOOK_URL}
       - FRONTEND_URL=${FRONT_END_URL}
+
+
+  jyps-front:
+    build:
+      context: ../JyPS-Front-Web
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: /api/v1
+    container_name: jyps_frontend
+    expose:
+      - "80"
+    depends_on:
+      - jyps-api
+
+  jyps-tailscale:
+    image: tailscale/tailscale:stable
+    container_name: jyps_tailscale
+    profiles:
+      - container-funnel
+    environment:
+      - TS_AUTHKEY=${TS_AUTHKEY}
+      - TS_HOSTNAME=${TS_HOSTNAME:-jyps-front}
+      - TS_ENABLE_FUNNEL=${TS_ENABLE_FUNNEL:-false}
+      - TS_FUNNEL_TARGET=${TS_FUNNEL_TARGET:-http://jyps-front:80}
+      - TS_TAILNET_HTTP_PORT=${TS_TAILNET_HTTP_PORT:-10000}
+      - TS_FUNNEL_HTTPS_PORT=${TS_FUNNEL_HTTPS_PORT:-443}
+    volumes:
+      - tailscale-state:/var/lib/tailscale
+      - ./tailscale/start-tailscale.sh:/usr/local/bin/start-tailscale.sh:ro
+    entrypoint: ["/bin/sh", "/usr/local/bin/start-tailscale.sh"]
+    depends_on:
+      - jyps-front
+    restart: unless-stopped
+
+volumes:
+  tailscale-state:

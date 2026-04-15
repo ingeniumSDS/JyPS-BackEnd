@@ -53,3 +53,46 @@ Gestiona los permisos y ausencias del personal.
 * **Persistencia:** Spring Data JPA / Hibernate
 * **Base de Datos:** Oracle DB
 * **Herramientas Adicionales:** Lombok, ngrok (para pruebas locales de integración).
+
+---
+
+## 🐳 Despliegue con Docker + Tailscale
+
+Este repositorio ya incluye un `docker-compose.yml` que integra:
+
+* `jyps-api` (backend Spring Boot)
+* `jyps-front` (frontend React servido con Nginx)
+* `jyps-tailscale` (publicación del frontend en la tailnet por el puerto `10000`)
+
+### 1) Variables necesarias en `.env`
+
+Agrega estas variables en el `.env` del backend:
+
+```env
+TS_AUTHKEY=tskey-auth-xxxxxxxxxxxxxxxx
+TS_HOSTNAME=jyps-front
+TS_ENABLE_FUNNEL=false
+```
+
+> Si quieres exponerlo públicamente por Tailscale Funnel, cambia `TS_ENABLE_FUNNEL=true`.
+
+### 2) Levantar contenedores
+
+Desde la carpeta del backend:
+
+```bash
+docker compose up --build -d
+```
+
+### 3) Acceso
+
+* API local: `http://localhost:8081`
+* Frontend por tailnet: `http://<tu-hostname-tailnet>:10000`
+
+### 4) Verificación rápida de Tailscale
+
+```bash
+docker logs -f jyps_tailscale
+```
+
+Debes ver que el comando `tailscale serve` se aplica sobre el puerto `10000` apuntando a `jyps-front:80`.

@@ -78,6 +78,10 @@ public class Justificante extends Incidencia {
             diasAtras = 5;
         }
 
+        if (fechaSolicitada.getDayOfWeek() == DayOfWeek.SUNDAY) {
+            throw new IllegalArgumentException("El justificante no puede ser solicitado para un día no laborable.");
+        }
+
         if (fechaSolicitada.isBefore(LocalDate.now().minusDays(diasAtras))) {
             throw new IllegalArgumentException("El justificante no puede ser anterior a 3 días hábiles.");
         }
