@@ -10,6 +10,7 @@ build/
 **/main/resources/application-dev.yml
 **/main/java/infrastructure/config/CorsConfig.java
 **/main/java/com/ingenium/jyps/config/data/DataInitializer.java
+mis-archivos-reales/
 
 ### STS ###
 .apt_generated
