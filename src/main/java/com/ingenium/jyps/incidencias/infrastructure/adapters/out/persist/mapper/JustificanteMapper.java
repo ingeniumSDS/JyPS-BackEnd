@@ -30,6 +30,7 @@ public abstract class JustificanteMapper {
     @Mapping(target = "empleadoId", source = "empleado.id")
     @Mapping(target = "jefeId", source = "jefe.id")
     @Mapping(target = "nombreCompleto", expression = "java(mapNombreCompleto(justificanteEntity.getEmpleado()))")
+    @Mapping(target = "correoEmpleado", source = "empleado.correo")
     public abstract Justificante toDomain(JustificanteEntity justificanteEntity);
 
     @InheritInverseConfiguration
@@ -43,6 +44,7 @@ public abstract class JustificanteMapper {
      * en una lista de DTOs con URLs de descarga.
      */
     @Mapping(target = "archivos", expression = "java(mapNombresToUrls(justificante))")
+    @Mapping(target = "correo", source = "correoEmpleado")
     public abstract JustificanteResponse toResponse(Justificante justificante);
 
     protected List<ArchivoResponse> mapNombresToUrls(Justificante justificante) {

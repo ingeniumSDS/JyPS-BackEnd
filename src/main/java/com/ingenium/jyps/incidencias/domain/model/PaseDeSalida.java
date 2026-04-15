@@ -22,6 +22,8 @@ public class PaseDeSalida extends Incidencia {
     private String QR;
 
 
+
+
     // Constructor para mandar a crear un nuevo pasa de salida, sin el ID que se genera automáticamente.
     public PaseDeSalida(
             Long empleadoId,
@@ -70,7 +72,8 @@ public class PaseDeSalida extends Incidencia {
             EstadosIncidencia estado,
             String QR,
             String comentario,
-            String nombreCompletoEmpleado
+            String nombreCompletoEmpleado,
+            String correoEmpleado
     ) {
         this.id = id;
         this.empleadoId = empleadoId;
@@ -86,6 +89,7 @@ public class PaseDeSalida extends Incidencia {
         this.comentario = comentario;
         this.nombreCompleto = nombreCompletoEmpleado;
         this.horaRetornoReal = horaRetornoReal;
+        this.correoEmpleado = correoEmpleado;
     }
 
 

@@ -84,7 +84,6 @@ public class Usuario {
         this.roles = roles;
         this.departamentoId = departamentoId;
         this.cuenta = cuenta;
-
     }
 
 

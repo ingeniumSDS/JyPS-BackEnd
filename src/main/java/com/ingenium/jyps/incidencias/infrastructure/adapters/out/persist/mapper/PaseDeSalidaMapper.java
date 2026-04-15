@@ -29,7 +29,9 @@ public interface PaseDeSalidaMapper {
     @Mapping(target = "empleadoId", source = "empleado.id")
     @Mapping(target = "jefeId", source = "jefe.id")
     @Mapping(target = "nombreCompletoEmpleado", expression = "java(mapNombreCompleto(paseDeSalidaEntity.getEmpleado()))")
+    @Mapping(target = "correoEmpleado", source = "empleado.correo")
     PaseDeSalida toDomain(PaseDeSalidaEntity paseDeSalidaEntity);
+
 
     @InheritInverseConfiguration
     PaseDeSalidaEntity toEntity(PaseDeSalida paseDeSalida);
@@ -52,6 +54,7 @@ public interface PaseDeSalidaMapper {
     }
 
     @Mapping(target = "nombreCompleto", source = "nombreCompleto")
+    @Mapping(target = "correo", source = "correoEmpleado")
     PaseDeSalidaResponse toResponse(PaseDeSalida paseDeSalida);
 
     default String mapNombreCompleto(UsuarioEntity empleado) {

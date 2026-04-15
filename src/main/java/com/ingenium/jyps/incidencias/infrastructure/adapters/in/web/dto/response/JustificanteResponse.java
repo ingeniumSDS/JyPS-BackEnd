@@ -8,6 +8,7 @@ public record JustificanteResponse(
         Long id,
         Long empleadoId,
         String nombreCompleto,
+        String correo,
         Long jefeId,
         LocalDate fechaSolicitada,
         LocalDate fechaSolicitud,

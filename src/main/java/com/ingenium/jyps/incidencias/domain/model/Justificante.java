@@ -48,7 +48,8 @@ public class Justificante extends Incidencia {
             List<String> archivos,
             String comentario,
             EstadosIncidencia estado,
-            String nombreCompleto
+            String nombreCompleto,
+            String correoEmpleado
 
     ) {
         this.id = id;
@@ -61,6 +62,7 @@ public class Justificante extends Incidencia {
         this.estado = estado;
         this.comentario = comentario;
         this.nombreCompleto = nombreCompleto;
+        this.correoEmpleado = correoEmpleado;
     }
 
     // Valida que no se hayan excedido los 3 días HÁBILES permitidos para

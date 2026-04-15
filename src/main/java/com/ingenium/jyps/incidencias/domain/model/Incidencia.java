@@ -21,6 +21,8 @@ public class Incidencia {
     protected String comentario;
     protected String nombreCompleto;
 
+    protected String correoEmpleado;
+
 
 
     //==============//

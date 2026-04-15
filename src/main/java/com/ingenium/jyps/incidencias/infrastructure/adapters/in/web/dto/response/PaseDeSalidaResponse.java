@@ -8,6 +8,7 @@ public record PaseDeSalidaResponse(
         Long id,
         Long empleadoId,
         String nombreCompleto,
+        String correo,
         Long jefeId,
         LocalDateTime horaSolicitada,
         LocalDate fechaSolicitud,
