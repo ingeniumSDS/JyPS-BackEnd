@@ -47,7 +47,8 @@ public class PaseDeSalidaController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Nuevo Pase de Salida", description = "Permite a un empleado solicitar un nuevo Pase de Salida, adjuntando archivos relacionados.")
     @SecurityRequirement(name = "bearerAuth")
-    @PreAuthorize("hasRole('EMPLEADO')") // Solo el empleado puede acceder a esta ruta
+    @PreAuthorize("hasAnyRole('EMPLEADO', 'JEFE_DE_DEPARTAMENTO', 'AUDITOR', 'ADMINISTRADOR')")
+    // Permite acceso a ambos roles
     public ResponseEntity<PaseDeSalidaResponse> solicitar(
             @RequestPart("data") SolicitarPaseDeSalidaRequest request,
             @RequestPart(value = "archivos", required = false) List<MultipartFile> archivos) {
@@ -152,7 +153,7 @@ public class PaseDeSalidaController {
     @Operation(summary = "Revocar Justificante", description = "Permite revocar un justificante aprobado, cambiando su estado a CADUCADO.")
     @PreAuthorize("hasRole('EMPLEADO')") // Solo el empleado puede revocar su justificante
     @SecurityRequirement(name = "bearerAuth")
-    public ResponseEntity<String> revocarJustificante(@PathVariable Long id){
+    public ResponseEntity<String> revocarJustificante(@PathVariable Long id) {
         String resultado = revocarPaseUseCase.ejecutar(id);
         return ResponseEntity.ok(resultado);
     }

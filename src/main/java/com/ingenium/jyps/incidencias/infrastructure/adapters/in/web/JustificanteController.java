@@ -49,7 +49,7 @@ public class JustificanteController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @SecurityRequirement(name = "bearerAuth")
-    @PreAuthorize("hasRole('EMPLEADO')")
+    @PreAuthorize("hasAnyRole('EMPLEADO', 'JEFE_DE_DEPARTAMENTO', 'AUDITOR', 'ADMINISTRADOR')") // Permite acceso a ambos roles
     @Operation(summary = "Nuevo Justificante", description = "Permite a un empleado solicitar un nuevo justificante, adjuntando archivos relacionados.")
     public ResponseEntity<JustificanteResponse> solicitarJustificante(
 
