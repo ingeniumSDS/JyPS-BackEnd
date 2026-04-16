@@ -75,9 +75,12 @@ public class DepartamentoController {
 
         Departamento departamentoActualizado = actualizarDepartamentoUseCase.ejecutar(command);
 
-        String nombreJefe = consultarUsuariosUseCase.obtenerPorId(departamentoActualizado.getJefeId())
-                .map(Usuario::nombreCompleto)
-                .orElse("Sin jefe asignado");
+        String nombreJefe;
+        if (request.jefeId() != null) {
+            nombreJefe = consultarUsuariosUseCase.obtenerPorId(departamentoActualizado.getJefeId())
+                    .map(Usuario::nombreCompleto)
+                    .orElse("Sin jefe asignado");
+        } else nombreJefe = "Sin jefe asignado";
 
         DepartamentoResponse response = DepartamentoResponse.desdeDominio(departamentoActualizado, nombreJefe, 0L);
 
