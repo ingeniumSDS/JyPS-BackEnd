@@ -111,6 +111,10 @@ public class PaseDeSalida extends Incidencia {
             throw new IllegalArgumentException("La hora solicitada no puede ser para un día distinto al actual.");
         }
 
+        if (horaSolicitada.toLocalTime().isAfter(empleado.getHoraSalida())) {
+            throw new IllegalArgumentException("La hora solicitada no puede ser después de la hora de salida del empleado.");
+        }
+
         this.horaSolicitada = horaSolicitada;
 
     }
