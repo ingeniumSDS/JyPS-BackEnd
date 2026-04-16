@@ -29,7 +29,6 @@ public class ActualizarDepartamentoService implements ActualizarDepartamentoUseC
         departamento.actualizarDatos(
                 command.nombre(),
                 command.descripcion(),
-                command.activo(),
                 command.jefeId()
         );
 

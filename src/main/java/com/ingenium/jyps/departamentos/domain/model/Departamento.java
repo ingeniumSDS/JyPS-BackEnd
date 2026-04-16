@@ -61,12 +61,10 @@ public class Departamento {
     public void actualizarDatos(
             String nombre,
             String descripcion,
-            boolean activo,
             long jefeId
     ) {
         this.nombre = nombre;
         this.descripcion = descripcion;
-        this.activo = activo;
         this.jefeId = jefeId;
     }
 

@@ -5,7 +5,6 @@ public record UpdateDepartamentoCommand(
         Long id,
         String nombre,
         String descripcion,
-        boolean activo,
         Long jefeId
 ) {
 
