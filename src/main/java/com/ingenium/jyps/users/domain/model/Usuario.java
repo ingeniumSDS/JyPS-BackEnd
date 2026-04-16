@@ -30,7 +30,7 @@ public class Usuario {
     // Busca cualquier cosa que NO sea una letra de cualquier alfabeto o un espacio
     private static final Pattern ESPECIALES_PATTERN = Pattern.compile("[^\\p{L}\\s]", Pattern.UNICODE_CHARACTER_CLASS);
 
-    // Constructor para crear un nuevo usuario, no se incluye ID ya que es generado automáticamente por la base de datos, y no se incluye la Cuenta ya que se asigna posteriormente.
+    // Constructor para guardar un nuevo usuario, no se incluye ID ya que es generado automáticamente por la base de datos, y no se incluye la Cuenta ya que se asigna posteriormente.
     public Usuario(String nombre,
                    String apellidoPaterno,
                    String apellidoMaterno,

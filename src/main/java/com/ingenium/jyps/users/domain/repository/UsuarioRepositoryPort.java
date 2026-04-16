@@ -16,7 +16,7 @@ import java.util.Optional;
 
 public interface UsuarioRepositoryPort {
 
-    Usuario crear(Usuario usuario);
+    Usuario guardar(Usuario usuario);
     List<Usuario> buscarTodos();
     Optional<Usuario> buscarPorId(Long id);
     Optional<Usuario> buscarPorCorreo(String email);
@@ -30,4 +30,5 @@ public interface UsuarioRepositoryPort {
     List<Usuario> filtrarPorDepartamento(Long idDepartamento);
 
     List<Usuario> buscarJefes();
+
 }

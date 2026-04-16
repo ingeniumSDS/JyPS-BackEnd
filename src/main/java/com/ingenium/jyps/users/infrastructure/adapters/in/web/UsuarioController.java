@@ -36,6 +36,7 @@ public class UsuarioController {
     private final EstablecerPasswordUseCase establecerPasswordUseCase;
     private final GenerarTokenUseCase generarTokenUseCase;
     private final LoginUseCase loginUseCase;
+    private final ResetearCuentaUseCase resetearCuentaUseCase;
     private final JwtProviderPort jwtProviderPort;
     private final ConsultarUsuariosUseCase consultarUsuariosUseCase;
 
@@ -228,5 +229,11 @@ public class UsuarioController {
         return ResponseEntity.ok(response);
     }
 
+    @PatchMapping("/reset/{id}")
+    @Operation(summary = "Resetear cuenta de usuario", description = "Resetea la cuenta del usuario según su ID, restableciendo la contraseña a un valor predeterminado (Ej. 'admin'), desbloqueando la cuenta y eliminando cualquier token de recuperación o acceso asociado. Este endpoint se utiliza para restablecer la cuenta de un usuario en caso de bloqueo o pérdida de acceso. - ADMINISTRADOR")
+    public ResponseEntity<String> resetearCuenta(@PathVariable Long id) {
+        String resultado = resetearCuentaUseCase.ejecutar(id);
+        return ResponseEntity.ok(resultado);
+    }
 
 }

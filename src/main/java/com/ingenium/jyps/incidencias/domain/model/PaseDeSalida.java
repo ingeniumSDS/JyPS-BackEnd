@@ -24,7 +24,7 @@ public class PaseDeSalida extends Incidencia {
 
 
 
-    // Constructor para mandar a crear un nuevo pasa de salida, sin el ID que se genera automáticamente.
+    // Constructor para mandar a guardar un nuevo pasa de salida, sin el ID que se genera automáticamente.
     public PaseDeSalida(
             Long empleadoId,
             Long jefeId,

@@ -9,7 +9,7 @@ import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.RevisarJustificanteRequest;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.request.SolicitarJustificanteRequest;
 import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.response.JustificanteResponse;
-import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.response.ArchivoResponse; // Necesitas crear este DTO
+import com.ingenium.jyps.incidencias.infrastructure.adapters.in.web.dto.response.ArchivoResponse; // Necesitas guardar este DTO
 import com.ingenium.jyps.incidencias.infrastructure.adapters.out.persist.entity.JustificanteEntity;
 import com.ingenium.jyps.users.infrastructure.adapters.out.persist.entity.UsuarioEntity;
 import org.mapstruct.InheritInverseConfiguration;

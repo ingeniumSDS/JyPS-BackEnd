@@ -15,7 +15,7 @@ public class Justificante extends Incidencia {
     private LocalDate fechaSolicitada;
 
 
-    // Constructor para mandar a crear un nuevo justificante, sin el ID que se genera automáticamente.
+    // Constructor para mandar a guardar un nuevo justificante, sin el ID que se genera automáticamente.
     public Justificante(
             Long empleadoId,
             Long jefeId,

@@ -24,7 +24,7 @@ public class GenerarTokenService implements GenerarTokenUseCase {
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
         usuario.getCuenta().generarTokenAcceso();
-        usuarioRepository.crear(usuario);
+        usuarioRepository.guardar(usuario);
 
         publisher.publishEvent(new TokenSolicitadoEvent(
                 usuario.getNombre() + " " + usuario.getApellidoPaterno() +  " " + usuario.getApellidoMaterno(),

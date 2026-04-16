@@ -10,7 +10,7 @@ public class Departamento {
     private boolean activo;
     private Long jefeId;
 
-    // CONSTRUCTOR 1: Para crear un nuevo departamento (Nacimiento)
+    // CONSTRUCTOR 1: Para guardar un nuevo departamento (Nacimiento)
     public Departamento(String nombre, String descripcion, Long jefeId) {
 
         validarCampoObligatorio(nombre);
