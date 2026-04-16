@@ -72,6 +72,6 @@ public class UpdateUsuarioService implements UpdateUsuarioUseCase {
 
 
         // 6. Guardar los cambios
-        return usuarioRepositoryPort.crear(u);
+        return usuarioRepositoryPort.guardar(u);
     }
 }

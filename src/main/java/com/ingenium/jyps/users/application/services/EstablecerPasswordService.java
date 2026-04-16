@@ -27,7 +27,7 @@ public class EstablecerPasswordService implements EstablecerPasswordUseCase {
 
         usuario.getCuenta().establecerPassword(passwordEncoderPort.codificar(command.password()));
 
-        usuarioRepositoryPort.crear(usuario);
+        usuarioRepositoryPort.guardar(usuario);
 
         return usuario;
     }

@@ -20,7 +20,7 @@ public class UsuarioRepositoryAdapter implements UsuarioRepositoryPort {
     private final UsuarioMapper usuarioMapper;
 
     @Override
-    public Usuario crear(Usuario usuario) {
+    public Usuario guardar(Usuario usuario) {
         UsuarioEntity uE = usuarioMapper.toEntity(usuario);
         UsuarioEntity entidadGuardada = jpaUsuarioRepository.save(uE);
         return usuarioMapper.toDomain(entidadGuardada);
@@ -77,4 +77,6 @@ public class UsuarioRepositoryAdapter implements UsuarioRepositoryPort {
         List<UsuarioEntity> jefes = jpaUsuarioRepository.findByRoles(List.of(Roles.JEFE_DE_DEPARTAMENTO));
         return jefes.stream().map(usuarioMapper::toDomain).toList();
     }
+
+
 }

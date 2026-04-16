@@ -43,7 +43,7 @@ public class LoginService implements com.ingenium.jyps.users.application.ports.i
 
         if (!esPasswordCorrecta) {
             usuario.getCuenta().registrarIntentoFallido();
-            usuarioRepositoryPort.crear(usuario);
+            usuarioRepositoryPort.guardar(usuario);
             throw new IllegalArgumentException("Credenciales incorrectas.");
         }
 
@@ -51,7 +51,7 @@ public class LoginService implements com.ingenium.jyps.users.application.ports.i
         // 3. Ejecutamos las reglas de negocio del Dominio (Revisa que esté activa, no bloqueada, etc.)
         usuario.getCuenta().login();
 
-        usuarioRepositoryPort.crear(usuario);
+        usuarioRepositoryPort.guardar(usuario);
 
         usuario.setNombreDepartamento(
                 departamentoRepositoryPort.buscarPorId(usuario.getDepartamentoId())
