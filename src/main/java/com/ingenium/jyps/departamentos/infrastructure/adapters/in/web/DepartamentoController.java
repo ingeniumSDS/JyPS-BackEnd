@@ -90,7 +90,7 @@ public class DepartamentoController {
 
 
     @GetMapping("")
-    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'JEFE_DEPARTAMENTO')") // Permitir acceso a todos los roles
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'JEFE_DE_DEPARTAMENTO')") // Permitir acceso a todos los roles
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Listar departamentos", description = "Obtiene una lista de todos los departamentos registrados en el sistema, incluyendo su nombre, descripción y jefe")
     public ResponseEntity<List<DepartamentoResponse>> findAll() {
