@@ -37,6 +37,10 @@ public class GuardarUsuarioService implements GuardarUsuarioUseCase {
             throw new IllegalArgumentException("El teléfono: " + command.telefono() + " ya se encuentra registrado.");
         }
 
+        if (departamento.getJefeId() == null) {
+            throw new IllegalArgumentException("El departamento con ID: " + command.departamentoId() + " no tiene un jefe asignado.");
+        }
+
         Usuario nuevoUsuario = new Usuario(
                 command.nombre(),
                 command.apellidoPaterno(),
