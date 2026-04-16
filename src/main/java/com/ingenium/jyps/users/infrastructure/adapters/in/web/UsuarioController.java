@@ -231,6 +231,8 @@ public class UsuarioController {
 
     @PatchMapping("/reset/{id}")
     @Operation(summary = "Resetear cuenta de usuario", description = "Resetea la cuenta del usuario según su ID, restableciendo la contraseña a un valor predeterminado (Ej. 'admin'), desbloqueando la cuenta y eliminando cualquier token de recuperación o acceso asociado. Este endpoint se utiliza para restablecer la cuenta de un usuario en caso de bloqueo o pérdida de acceso. - ADMINISTRADOR")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<String> resetearCuenta(@PathVariable Long id) {
         String resultado = resetearCuentaUseCase.ejecutar(id);
         return ResponseEntity.ok(resultado);
