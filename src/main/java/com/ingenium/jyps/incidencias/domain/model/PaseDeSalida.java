@@ -182,5 +182,10 @@ public class PaseDeSalida extends Incidencia {
             throw new IllegalArgumentException("El estado debe ser APROBADO o RECHAZADO.");
         }
     }
+
+    public void revocar() {
+        this.estado = EstadosIncidencia.CADUCADO;
+        this.comentario = "Pase de salida revocado por el empleado.";
+    }
 }
 

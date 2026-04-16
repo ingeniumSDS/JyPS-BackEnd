@@ -7,6 +7,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +34,29 @@ public class GlobalExceptionHandler {
         );
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(HandlerMethodValidationException.class)
+    public ResponseEntity<ErrorResponse> handleValidationException(HandlerMethodValidationException ex) {
+        Map<String, String> errores = new HashMap<>();
+
+        // Spring 4 maximiza el uso de ValidationResult
+        ex.getParameterValidationResults().forEach(result -> {
+            String parametro = result.getMethodParameter().getParameterName();
+
+            result.getResolvableErrors().forEach(error -> {
+                // Buscamos el mensaje amigable
+                String mensaje = error.getDefaultMessage();
+                errores.put(parametro, mensaje);
+            });
+        });
+
+        return ResponseEntity.badRequest().body(new ErrorResponse(
+                "Error de validación",
+                400,
+                System.currentTimeMillis(),
+                errores
+        ));
     }
 
     // 2. Atrapa errores de lógica (Como el isAfter que pusimos manual)

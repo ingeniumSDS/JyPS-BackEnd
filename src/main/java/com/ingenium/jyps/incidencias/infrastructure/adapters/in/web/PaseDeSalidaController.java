@@ -41,6 +41,7 @@ public class PaseDeSalidaController {
     private final BuscarPasePorRangoDeFechas buscarPasePorRangoDeFechas;
     private final CheckUseCase checkUseCase;
     private final EliminarIncidenciaPendiente eliminarPaseDeSalidaUseCase;
+    private final RevocarPaseUseCase revocarPaseUseCase;
     private final PaseDeSalidaMapper mapper;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -147,5 +148,13 @@ public class PaseDeSalidaController {
         return ResponseEntity.noContent().build();
     }
 
-
+    @PatchMapping("/{id}/revocar")
+    @Operation(summary = "Revocar Justificante", description = "Permite revocar un justificante aprobado, cambiando su estado a CADUCADO.")
+    @PreAuthorize("hasRole('EMPLEADO')") // Solo el empleado puede revocar su justificante
+    @SecurityRequirement(name = "bearerAuth")
+    public ResponseEntity<String> revocarJustificante(@PathVariable Long id){
+        String resultado = revocarPaseUseCase.ejecutar(id);
+        return ResponseEntity.ok(resultado);
     }
+
+}

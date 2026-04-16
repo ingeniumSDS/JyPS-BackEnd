@@ -14,6 +14,7 @@ import com.ingenium.jyps.incidencias.infrastructure.adapters.out.persist.mapper.
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Size;
 import org.springframework.core.io.Resource;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -53,7 +54,7 @@ public class JustificanteController {
     public ResponseEntity<JustificanteResponse> solicitarJustificante(
 
             @RequestPart("data") SolicitarJustificanteRequest request,
-            @RequestPart("archivos") List<MultipartFile> archivos) {
+            @Size(max = 3, message = "No se admiten más de 3 evidencias.") @RequestPart("archivos") List<MultipartFile> archivos) {
 
         SolicitarJustificanteCommand command = justificanteMapper.toCommand(request, archivos);
 
