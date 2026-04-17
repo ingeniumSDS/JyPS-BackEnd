@@ -25,7 +25,6 @@ public class UsuarioEntity {
     private String nombre;
     @Column(nullable = false)
     private String apellidoPaterno;
-    @Column(nullable = false)
     private String apellidoMaterno;
     @Column(unique = true, nullable = false)
     private String correo;

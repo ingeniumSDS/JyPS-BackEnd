@@ -19,8 +19,6 @@ public record UpdateUsuarioRequest(
         @NotBlank(message = "El apellido paterno no puede estar vacío")
         String apellidoPaterno,
 
-        @NotNull(message = "El apellido materno es obligatorio")
-        @NotBlank(message = "El  apellido materno no puede estar vacío")
         String apellidoMaterno,
 
         @NotNull(message = "El campo 'correo' es obligatorio")

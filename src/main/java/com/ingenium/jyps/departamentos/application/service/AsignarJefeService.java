@@ -23,13 +23,20 @@ public class AsignarJefeService implements AsignarJefeUseCase {
     public Departamento ejecutar(AsignarJefeCommand command) {
 
 
-        Usuario usuario = usuarioRepositoryPort.buscarPorId(command.idJefe()).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        Usuario usuario;
+        Roles rolJefe;
 
-        Roles rolJefe = Roles.JEFE_DE_DEPARTAMENTO;
+        if (command.idJefe() != null && command.idJefe() > 0) {
 
-        if (!usuario.getRoles().contains(rolJefe)) {
-            throw new IllegalArgumentException("El usuario no tiene el rol de Jefe de Departamento");
+            usuario = usuarioRepositoryPort.buscarPorId(command.idJefe()).orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+
+            rolJefe = Roles.JEFE_DE_DEPARTAMENTO;
+
+            if (!usuario.getRoles().contains(rolJefe)) {
+                throw new IllegalArgumentException("El usuario no tiene el rol de Jefe de Departamento");
+            }
         }
+
 
         Departamento departamento = repositoryPort.buscarPorId(command.id());
 

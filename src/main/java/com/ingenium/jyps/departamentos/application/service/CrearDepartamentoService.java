@@ -42,7 +42,6 @@ public class CrearDepartamentoService implements CrearDepartamentoUseCase {
             if (!usuario.getRoles().contains(rolJefe)) {
                 throw new IllegalArgumentException("El usuario no tiene el rol de Jefe de Departamento");
             }
-
         }
 
         Departamento departamento = new Departamento(

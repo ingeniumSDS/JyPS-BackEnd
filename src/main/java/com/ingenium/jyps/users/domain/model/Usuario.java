@@ -44,7 +44,6 @@ public class Usuario {
 
         validarCampoTexto(nombre, "nombre", 50);
         validarCampoTexto(apellidoPaterno, "apellido paterno", 50);
-        validarCampoTexto(apellidoMaterno, "apellido materno", 50);
         validarCorreo(correo);
         validarTelefono(telefono);
         validarDepartamento(departamentoId);
@@ -59,14 +58,23 @@ public class Usuario {
             this.horaSalida = null;
         }
 
+        if (apellidoMaterno == null || apellidoMaterno.trim().isEmpty()) {
+            this.apellidoMaterno = "";
+        } else {
+            validarCampoTexto(apellidoMaterno, "apellido materno", 50);
+            this.apellidoMaterno = apellidoMaterno.trim();
+        }
+
         this.nombre = nombre.trim();
         this.apellidoPaterno = apellidoPaterno.trim();
-        this.apellidoMaterno = apellidoMaterno.trim();
+
         this.correo = correo.trim().toLowerCase();
         this.telefono = telefono.trim();
         this.roles = roles;
         this.departamentoId = departamentoId;
     }
+
+
 
     @Default
     public Usuario(Long id, String nombre, String apellidoPaterno, String apellidoMaterno,
@@ -180,7 +188,12 @@ public class Usuario {
 
         validarCampoTexto(nombre, "nombre", 50);
         validarCampoTexto(apellidoPaterno, "apellido paterno", 50);
-        validarCampoTexto(apellidoMaterno, "apellido materno", 50);
+        if (apellidoMaterno == null || apellidoMaterno.trim().isEmpty()) {
+            this.apellidoMaterno = "";
+        } else {
+            validarCampoTexto(apellidoMaterno, "apellido materno", 50);
+            this.apellidoMaterno = apellidoMaterno.trim();
+        }
         validarCorreo(correo);
         validarTelefono(telefono);
         validarJornada(horaEntrada, horaSalida);
@@ -198,7 +211,7 @@ public class Usuario {
         this.departamentoId = departamentoId;
     }
 
-    public String getNombreCompleto(){
+    public String getNombreCompleto() {
         return this.nombre + " " + this.apellidoPaterno + " " + this.apellidoMaterno;
     }
 }
