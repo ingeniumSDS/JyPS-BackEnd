@@ -17,7 +17,7 @@ services:
       - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_DRIVER_CLASS_NAME=${DB_DRIVER_CLASS_NAME}
-      - APP_STORAGE_LOCATION=/data/justificantes
+      - STORAGE_LOCATION=/data/justificantes
 
       - JPA_SHOW_SQL=${JPA_SHOW_SQL}
       - JPA_HIBERNATE_DDL_AUTO=${SPRING_JPA_HIBERNATE_DDL_AUTO}
@@ -36,6 +36,8 @@ services:
 
 
   jyps-front:
+    volumes:
+      - ./JyPS-Front-Web:/app
     build:
       context: ../JyPS-Front-Web
       dockerfile: Dockerfile
