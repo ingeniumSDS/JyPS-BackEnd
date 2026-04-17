@@ -51,7 +51,7 @@ public class PaseDeSalidaRepositoryAdapter implements PaseDeSalidaRepositoryPort
 
     @Override
     public List<PaseDeSalida> buscarPorIdEmpleado(Long empleadoId) {
-        List<PaseDeSalidaEntity> paseDeSalidaEntities = jpaPaseDeSalidaRepository.findByEmpleado_Id(empleadoId);
+        List<PaseDeSalidaEntity> paseDeSalidaEntities = jpaPaseDeSalidaRepository.findByEmpleado_IdOrderByFechaSolicitudDesc(empleadoId);
         return paseDeSalidaEntities.stream()
                 .map(paseDeSalidaMapper::toDomain)
                 .toList();
@@ -59,7 +59,7 @@ public class PaseDeSalidaRepositoryAdapter implements PaseDeSalidaRepositoryPort
 
     @Override
     public List<PaseDeSalida> buscarPorIdJefe(Long jefeId) {
-        List<PaseDeSalidaEntity> paseDeSalidaEntities = jpaPaseDeSalidaRepository.findByJefe_Id(jefeId);
+        List<PaseDeSalidaEntity> paseDeSalidaEntities = jpaPaseDeSalidaRepository.findByJefe_IdOrderByFechaSolicitudAsc(jefeId);
         return paseDeSalidaEntities.stream()
                 .map(paseDeSalidaMapper::toDomain)
                 .toList();

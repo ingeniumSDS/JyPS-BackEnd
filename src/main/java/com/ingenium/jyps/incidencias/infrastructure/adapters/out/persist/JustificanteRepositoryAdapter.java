@@ -44,7 +44,7 @@ public class JustificanteRepositoryAdapter implements JustificanteRepositoryPort
 
     @Override
     public List<Justificante> buscarPorEmpleado(Long usuarioId) {
-        List<JustificanteEntity> justificantesEntity = jpaJustificanteRepositoy.findByEmpleado_Id(usuarioId);
+        List<JustificanteEntity> justificantesEntity = jpaJustificanteRepositoy.findByEmpleado_IdOrderByFechaSolicitudDesc(usuarioId);
         return justificantesEntity.stream()
                 .map(justificanteMapper::toDomain)
                 .toList();
@@ -52,7 +52,7 @@ public class JustificanteRepositoryAdapter implements JustificanteRepositoryPort
 
     @Override
     public List<Justificante> buscarPorJefe(Long usuarioId) {
-        List<JustificanteEntity> justificanteEntities = jpaJustificanteRepositoy.findByJefe_Id(usuarioId);
+        List<JustificanteEntity> justificanteEntities = jpaJustificanteRepositoy.findByJefe_IdOrderByFechaSolicitudAsc(usuarioId);
         return justificanteEntities.stream()
                 .map(justificanteMapper::toDomain)
                 .toList();

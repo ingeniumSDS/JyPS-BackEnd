@@ -1,7 +1,6 @@
 package com.ingenium.jyps.incidencias.infrastructure.adapters.out.persist.repository;
 
 import com.ingenium.jyps.incidencias.infrastructure.adapters.out.persist.entity.JustificanteEntity;
-import jakarta.persistence.OrderBy;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -14,12 +13,12 @@ public interface JpaJustificanteRepositoy extends JpaRepository<JustificanteEnti
 
     Optional<JustificanteEntity> findById(long id);
 
-    @OrderBy("fechaSolicitud DESC")
-    List<JustificanteEntity> findByEmpleado_Id(Long empleadoId);
-
-    @OrderBy("fechaSolicitud ASC")
-    List<JustificanteEntity> findByJefe_Id(Long jefeId);
 
     @Query("SELECT J FROM JustificanteEntity J WHERE (J.fechaSolicitud >= :fechaSolicitudAfter AND J.fechaSolicitud <= :fechaSolicitudBefore) AND J.estado = 'APROBADO' ORDER BY J.fechaSolicitud ASC")
     List<JustificanteEntity> findByFechaSolicitudBetween(LocalDate fechaSolicitudAfter, LocalDate fechaSolicitudBefore);
+
+    List<JustificanteEntity> findByEmpleado_IdOrderByFechaSolicitudDesc(Long empleadoId);
+
+
+    List<JustificanteEntity> findByJefe_IdOrderByFechaSolicitudAsc(Long jefeId);
 }
